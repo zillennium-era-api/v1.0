@@ -41,7 +41,7 @@ public class APIController {
             String grant_type = "password";
             String email = user.getEmail();
             String password = user.getPassword();
-            String url = "http://localhost:8080/oauth/token";
+            String url = "https://eraapi.herokuapp.com/oauth/token";
             String access_token_url = url + "?grant_type=" + grant_type + "&username=" + email + "&password=" + password;
             RestTemplate restTemplate = new RestTemplate();
             ResponseEntity<String> responseEntity = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
