@@ -33,7 +33,6 @@ public interface UserRepository {
     @Select("SELECT * FROM authority WHERE id=#{id}")
     Authority findAuthById(int id);
 
-
     @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card) values (#{username},#{email},#{password},#{gender},#{dob},#{phonenumber},#{idcard})")
     void register(User user);
 

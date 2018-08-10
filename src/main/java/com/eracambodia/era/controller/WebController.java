@@ -31,20 +31,5 @@ public class WebController {
     public String swagger() {
         return "redirect:/swagger-ui.html";
     }
-
-    @GetMapping(value = "/register")
-    public String register(){
-        return "register";
-    }
-    @PostMapping(value = "/register/create")
-    public String register(@ModelAttribute User user){
-        return "";
-    }
-
-    @GetMapping(value = "/login")
-    public String login(){
-        return "login";
-    }
-
 }
 

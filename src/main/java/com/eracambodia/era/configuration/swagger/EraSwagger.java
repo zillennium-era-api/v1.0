@@ -25,6 +25,7 @@ import static com.google.common.collect.Lists.newArrayList;
 @Configuration
 @EnableSwagger2
 public class EraSwagger {
+    //private String accessTokenUri="http://localhost:8080/oauth/token";
     private String accessTokenUri="https://eraapi.herokuapp.com/oauth/token";
     @Bean
     public Docket api() {
@@ -34,19 +35,8 @@ public class EraSwagger {
                 .paths(PathSelectors.regex("/api.*"))
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
-                .securitySchemes(Arrays.asList(securitySchema(), apiKey(), apiCookieKey()))
-                .apiInfo(apiInfo())
-                .useDefaultResponseMessages(false)
-                .globalResponseMessage(RequestMethod.GET,
-                        newArrayList(new ResponseMessageBuilder()
-                                        .code(500)
-                                        .message("500 message")
-                                        .responseModel(new ModelRef("Error"))
-                                        .build(),
-                                new ResponseMessageBuilder()
-                                        .code(403)
-                                        .message("Forbidden!")
-                                        .build()));
+                .securitySchemes(Arrays.asList(securitySchema(), apiKey(), apiCookieKey()));
+
     }
 
     @Bean
@@ -92,16 +82,5 @@ public class EraSwagger {
     private SecurityContext securityContext() {
         return SecurityContext.builder().securityReferences(defaultAuth())
                 .build();
-    }
-
-    private ApiInfo apiInfo() {
-        return new ApiInfo(
-                "My REST API",
-                "Some custom description of API.",
-                "API TOS",
-                "Terms of service",
-                new Contact("John Doe", "www.example.com", "myeaddress@company.com"),
-                "License of API", "API license URL", Collections.emptyList())
-                ;
     }
 }

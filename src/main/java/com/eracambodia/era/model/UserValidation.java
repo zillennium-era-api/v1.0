@@ -32,4 +32,22 @@ public class UserValidation {
             return null;
         }
     }
+    public static UserLogin checkUserLoginFields(UserLogin userLogin){
+        if(userLogin.getPassword()!=null && userLogin.getEmail()!=null){
+            return new UserLogin();
+        }else {
+            return null;
+        }
+    }
+    public static UserRegister checkUserRegisterFields(UserRegister userRegister){
+        if(userRegister!=null){
+            if(userRegister.getUsername()!=null && userRegister.getEmail()!=null && userRegister.getPassword()!=null && userRegister.getDob()!=null && userRegister.getGender()!=null && userRegister.getIdcard()!=null && userRegister.getPhonenumber()!=null){
+                return new UserRegister();
+            }else {
+                return null;
+            }
+        }else {
+            return null;
+        }
+    }
 }

@@ -13,6 +13,11 @@ public class User {
     private Date dob;
     private String phonenumber;
     private String idcard;
+    private String enable;
+    private String uuid;
+    private String image;
+    private String createAt;
+    private String updateAt;
     private Authority authority;
 
     public int getId() {
@@ -87,6 +92,46 @@ public class User {
         this.idcard = idcard;
     }
 
+    public String getEnable() {
+        return enable;
+    }
+
+    public void setEnable(String enable) {
+        this.enable = enable;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public String getCreateAt() {
+        return createAt;
+    }
+
+    public void setCreateAt(String createAt) {
+        this.createAt = createAt;
+    }
+
+    public String getUpdateAt() {
+        return updateAt;
+    }
+
+    public void setUpdateAt(String updateAt) {
+        this.updateAt = updateAt;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -95,9 +140,14 @@ public class User {
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", gender='" + gender + '\'' +
-                ", dob='" + dob + '\'' +
+                ", dob=" + dob +
                 ", phonenumber='" + phonenumber + '\'' +
                 ", idcard='" + idcard + '\'' +
+                ", enable='" + enable + '\'' +
+                ", uuid='" + uuid + '\'' +
+                ", image='" + image + '\'' +
+                ", createAt='" + createAt + '\'' +
+                ", updateAt='" + updateAt + '\'' +
                 ", authority=" + authority +
                 '}';
     }
