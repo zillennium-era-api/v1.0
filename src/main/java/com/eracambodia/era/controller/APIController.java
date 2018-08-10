@@ -1,6 +1,7 @@
 package com.eracambodia.era.controller;
 
 import com.eracambodia.era.model.*;
+import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.UserService;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +12,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api")
@@ -25,9 +30,6 @@ public class APIController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private TokenStore tokenStore;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserLogin userLogin) {
@@ -78,6 +80,7 @@ public class APIController {
             user.setIdcard(userRegister.getIdcard());
             user.setPhonenumber(userRegister.getPhonenumber());
             user.setUsername(userRegister.getUsername());
+            user.setUuid(UUID.randomUUID()+"");
             if (UserValidation.checkUserFields(user) != null && UserValidation.checkUserExistOrNot(user, userService) == null) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 response = new Response<User>(200, userService.register(user));
@@ -92,9 +95,26 @@ public class APIController {
         }
     }
 
-    @GetMapping(value = "/user")
+    @GetMapping("/user")
     public ResponseEntity userByToken(@ApiIgnore Principal principal){
         Response response=new Response(200,userService.findUserByEmail(principal.getName()));
         return new ResponseEntity(response.getResponse(),HttpStatus.OK);
+    }
+
+    @Autowired
+    private FileStorageService fileStorageService;
+
+    @PostMapping("/user/uldpfimg")
+    public ResponseEntity userUpload(@RequestParam("file")MultipartFile file,@ApiIgnore Principal principal){
+        String fileName=fileStorageService.storeFile(file);
+        if(fileName!=null) {
+            userService.updateImageProfile(fileName, principal.getName());
+            Response response = new Response(200, fileName);
+            return new ResponseEntity(response.getResponse(),HttpStatus.OK);
+        }else {
+            Response response = new Response(401, null);
+            return new ResponseEntity(response.getResponse(), HttpStatus.OK);
+        }
+
     }
 }

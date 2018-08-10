@@ -24,6 +24,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void updateImageProfile(String image,String email) {
+        userRepository.updateImageProfile(image,email);
+    }
+
+    @Override
     public User userAvailable(User user) {
         return userRepository.userAvailable(user);
     }

@@ -33,8 +33,11 @@ public interface UserRepository {
     @Select("SELECT * FROM authority WHERE id=#{id}")
     Authority findAuthById(int id);
 
-    @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card) values (#{username},#{email},#{password},#{gender},#{dob},#{phonenumber},#{idcard})")
+    @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card,uuid) values (#{username},#{email},#{password},#{gender},#{dob},#{phonenumber},#{idcard},#{uuid})")
     void register(User user);
+
+    @Update("UPDATE users set image=#{image} where email=#{email}")
+    void updateImageProfile(@Param("image") String image,@Param("email") String email);
 
 
 

@@ -10,4 +10,5 @@ public interface UserService {
     User userAvailable(User user);
     User findUserByName(String username);
     User findUserByEmail(String email);
+    void updateImageProfile(String image,String email);
 }
