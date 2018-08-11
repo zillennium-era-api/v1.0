@@ -36,7 +36,6 @@ public class EraSwagger {
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Arrays.asList(securitySchema(), apiKey(), apiCookieKey()));
-
     }
 
     @Bean

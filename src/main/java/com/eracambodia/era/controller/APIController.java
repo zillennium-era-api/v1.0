@@ -1,24 +1,30 @@
 package com.eracambodia.era.controller;
 
 import com.eracambodia.era.model.*;
+import com.eracambodia.era.model.swagger.ChangePassword;
+import com.eracambodia.era.model.swagger.UpdateUserInfo;
+import com.eracambodia.era.model.swagger.UserLogin;
+import com.eracambodia.era.model.swagger.UserRegister;
 import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.UserService;
+import com.eracambodia.era.util.UserValidation;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.security.Principal;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -30,6 +36,8 @@ public class APIController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private UserService userService;
+    @Autowired
+    private FileStorageService fileStorageService;
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody UserLogin userLogin) {
@@ -49,28 +57,33 @@ public class APIController {
                 String grant_type = "password";
                 String email = user.getEmail();
                 String password = user.getPassword();
-                String url = "https://eraapi.herokuapp.com/oauth/token";
+                String url="https://eraapi.herokuapp.com/oauth/token";
+                //String url = "http://localhost:8080/oauth/token";
                 String access_token_url = url + "?grant_type=" + grant_type + "&username=" + email + "&password=" + password;
                 RestTemplate restTemplate = new RestTemplate();
+                //request token from /oauth/token
                 ResponseEntity<String> responseEntity = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
+
+                //oauth string body response convert to json
                 JsonParser springParser = JsonParserFactory.getJsonParser();
                 Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
+
                 response = new Response<Map>(200, token);
-                return new ResponseEntity<>(response.getResponse(), HttpStatus.OK);
+                return response.getResponseEntity(HttpStatus.OK);
             } else {
                 response = new Response<>(401, null);
-                return new ResponseEntity<>(response.getResponse(), HttpStatus.UNAUTHORIZED);
+                return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
             }
         } else {
             response = new Response(401, null);
-            return new ResponseEntity<>(response.getResponse(), HttpStatus.UNAUTHORIZED);
+            return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
 
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody UserRegister userRegister) {
-        Response<User> response = null;
+        Response response = null;
         if (UserValidation.checkUserRegisterFields(userRegister) != null) {
             User user = new User();
             user.setEmail(userRegister.getEmail());
@@ -84,37 +97,114 @@ public class APIController {
             if (UserValidation.checkUserFields(user) != null && UserValidation.checkUserExistOrNot(user, userService) == null) {
                 user.setPassword(passwordEncoder.encode(user.getPassword()));
                 response = new Response<User>(200, userService.register(user));
-                return new ResponseEntity<Map<String, Object>>(response.getResponse(), HttpStatus.OK);
+                return response.getResponseEntity(HttpStatus.OK);
             } else {
                 response = new Response<>(401, null);
-                return new ResponseEntity<>(response.getResponse(), HttpStatus.UNAUTHORIZED);
+                return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
             }
         } else {
             response = new Response<>(401, null);
-            return new ResponseEntity<>(response.getResponse(), HttpStatus.UNAUTHORIZED);
+            return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
 
     @GetMapping("/user")
-    public ResponseEntity userByToken(@ApiIgnore Principal principal){
+    public ResponseEntity viewUserInformation(@ApiIgnore Principal principal){
         Response response=new Response(200,userService.findUserByEmail(principal.getName()));
-        return new ResponseEntity(response.getResponse(),HttpStatus.OK);
+        return response.getResponseEntity(HttpStatus.OK);
     }
 
-    @Autowired
-    private FileStorageService fileStorageService;
-
-    @PostMapping("/user/uldpfimg")
-    public ResponseEntity userUpload(@RequestParam("file")MultipartFile file,@ApiIgnore Principal principal){
-        String fileName=fileStorageService.storeFile(file);
-        if(fileName!=null) {
-            userService.updateImageProfile(fileName, principal.getName());
-            Response response = new Response(200, fileName);
-            return new ResponseEntity(response.getResponse(),HttpStatus.OK);
-        }else {
-            Response response = new Response(401, null);
-            return new ResponseEntity(response.getResponse(), HttpStatus.OK);
+    @PostMapping("/agent/profile/upload")
+    public ResponseEntity uploadProfileImage(@RequestParam("file")MultipartFile file,@ApiIgnore Principal principal){
+        //remove old image file
+        User user=userService.findUserByEmail(principal.getName());
+        if(user!=null){
+            fileStorageService.deleteFile(user.getImage());
         }
 
+        //store image in directory uploads
+        String fileName=fileStorageService.storeFile(file);
+
+        //provide url for view image
+        if(fileName!=null) {
+            String downloadUri=ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/api/user/image/")
+                    .path(fileName)
+                    .toUriString();
+            userService.updateImageProfile(fileName, principal.getName());
+            Response response = new Response(200, downloadUri);
+            return response.getResponseEntity(HttpStatus.OK);
+        }else {
+            Response response = new Response(401, null);
+            return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
     }
+    @GetMapping("/user/image}")
+    public ResponseEntity<Resource> viewImage(@ApiIgnore Principal principal,HttpServletRequest request){
+        User user=userService.findUserByEmail(principal.getName());
+
+        //load image
+        Resource resource=fileStorageService.loadFileAsResource(user.getImage());
+
+        //content type as image for view
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            System.out.println("Could not determine file type.");
+        }
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        //return image view on brownser
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+    }
+    @DeleteMapping("/user/image/delete")
+    public ResponseEntity deleteImage(@ApiIgnore Principal principal){
+        User user= userService.findUserByEmail(principal.getName());
+
+        //delete image file and set column image to null
+        if(fileStorageService.deleteFile(user.getImage())){
+            user.setImage(null);
+            userService.updateImageProfile(null,principal.getName());
+            Response response=new Response(200,null);
+            return  response.getResponseEntity(HttpStatus.OK);
+        }else {
+            Response response = new Response(401, null);
+            return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+    @PutMapping("/agent/account/password")
+    public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal){
+        User user=userService.findUserByEmail(principal.getName());
+        if(passwordEncoder.matches(changePassword.getOldpassword(),user.getPassword())){
+            user.setPassword(passwordEncoder.encode(changePassword.getNewpassword()));
+            userService.updateUserPassword(user);
+            Response response=new Response(200,null);
+            return response.getResponseEntity(HttpStatus.OK);
+        }else {
+            Response response=new Response(401,null);
+            return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    @PutMapping("/agent/account/update")
+    public ResponseEntity updateAccountInformation(UpdateUserInfo updateUserInfo,@ApiIgnore Principal principal){
+        if(!UserValidation.checkUpdateUserInfo(updateUserInfo)) {
+            User user = userService.findUserByEmail(principal.getName());
+            user.setUsername(updateUserInfo.getUsername());
+            user.setPhonenumber(updateUserInfo.getPhonenumber());
+            userService.updateUserInformation(user);
+            Response response = new Response(200, userService.findUserByEmail(principal.getName()));
+            return response.getResponseEntity(HttpStatus.OK);
+        }else{
+            Response response = new Response(401, null);
+            return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+
 }

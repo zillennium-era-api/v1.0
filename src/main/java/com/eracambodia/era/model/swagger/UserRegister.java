@@ -1,4 +1,4 @@
-package com.eracambodia.era.model;
+package com.eracambodia.era.model.swagger;
 
 import java.util.Date;
 

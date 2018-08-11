@@ -39,6 +39,10 @@ public interface UserRepository {
     @Update("UPDATE users set image=#{image} where email=#{email}")
     void updateImageProfile(@Param("image") String image,@Param("email") String email);
 
+    @Update("UPDATE users set password=#{password} where email=#{email}")
+    void updateUserPassword(User user);
 
+    @Update("UPDATE users set username=#{username},phonenumber=#{phonenumber} where email=#{email}")
+    void updateUserInformation(User user);
 
 }

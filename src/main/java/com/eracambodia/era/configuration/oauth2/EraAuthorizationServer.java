@@ -77,6 +77,5 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
                 .authenticationManager(authenticationManager)
                 .userDetailsService(userDetailsService)
                 .accessTokenConverter(accessTokenConverter());
-
     }
 }

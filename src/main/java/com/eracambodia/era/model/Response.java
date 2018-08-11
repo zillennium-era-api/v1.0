@@ -1,5 +1,8 @@
 package com.eracambodia.era.model;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
 import javax.xml.bind.annotation.XmlType;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,13 +55,13 @@ public class Response<T> {
                 '}';
     }
 
-    public Map<String,Object> getResponse(){
+    public ResponseEntity<T> getResponseEntity(HttpStatus httpStatus){
         Map<String,Object> map=new HashMap<>();
         map.put("code",getCode());
         map.put("message",getMessage());
         if(getData()!=null) {
             map.put("data", getData());
         }
-        return map;
+        return new ResponseEntity(map, httpStatus);
     }
 }

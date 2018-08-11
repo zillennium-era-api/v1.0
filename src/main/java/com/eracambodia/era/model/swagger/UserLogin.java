@@ -1,4 +1,4 @@
-package com.eracambodia.era.model;
+package com.eracambodia.era.model.swagger;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 

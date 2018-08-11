@@ -11,4 +11,6 @@ public interface UserService {
     User findUserByName(String username);
     User findUserByEmail(String email);
     void updateImageProfile(String image,String email);
+    void updateUserPassword(User user);
+    void updateUserInformation(User user);
 }

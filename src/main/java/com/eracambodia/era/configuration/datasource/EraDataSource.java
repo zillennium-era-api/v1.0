@@ -19,4 +19,14 @@ public class EraDataSource {
                 .driverClassName("org.postgresql.Driver")
                 .build();
     }
+    /*@Bean(name = "dataSource")
+    public DataSource dataSource(){
+        return DataSourceBuilder
+                .create()
+                .url("jdbc:postgresql://localhost:5432/era")
+                .username("postgres")
+                .password("123")
+                .driverClassName("org.postgresql.Driver")
+                .build();
+    }*/
 }

@@ -3,7 +3,7 @@ package com.eracambodia.era.service;
 import com.eracambodia.era.configuration.fileupload.FileStorageProperty;
 import com.eracambodia.era.exception.FileNotFoundException;
 import com.eracambodia.era.exception.FileStorageException;
-import com.eracambodia.era.exception.ImageExtensionException;
+import com.eracambodia.era.util.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -34,13 +35,8 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-        String imageExtension[]={"jpg","png","jpge"};
-        String extension=com.google.common.io.Files.getFileExtension(file.getOriginalFilename());
-        for(int i=0;i<imageExtension.length;i++){
-            if(!extension.equalsIgnoreCase(imageExtension[i])){
-                return null;
-            }
-        }
+        if(!UserValidation.checkImageExtension(file))
+            return null;
         String fileName = UUID.randomUUID()+StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if(fileName.contains("..")) {
@@ -67,5 +63,14 @@ public class FileStorageService {
         } catch (MalformedURLException ex) {
             throw new FileNotFoundException("File not found " + fileName, ex);
         }
+    }
+
+    public boolean deleteFile(String fileName){
+        Path filePath = this.path.resolve(fileName).normalize();
+        File file=new File(filePath.toString());
+        if(file.exists())
+            return file.delete();
+        else
+            return false;
     }
 }
