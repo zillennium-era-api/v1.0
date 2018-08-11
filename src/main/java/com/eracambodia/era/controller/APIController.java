@@ -192,7 +192,7 @@ public class APIController {
     }
 
     @PutMapping("/agent/account/update")
-    public ResponseEntity updateAccountInformation(UpdateUserInfo updateUserInfo,@ApiIgnore Principal principal){
+    public ResponseEntity updateAccountInformation(@RequestBody UpdateUserInfo updateUserInfo,@ApiIgnore Principal principal){
         if(!UserValidation.checkUpdateUserInfo(updateUserInfo)) {
             User user = userService.findUserByEmail(principal.getName());
             user.setUsername(updateUserInfo.getUsername());
