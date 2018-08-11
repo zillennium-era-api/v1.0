@@ -139,7 +139,7 @@ public class APIController {
             return response.getResponseEntity(HttpStatus.UNAUTHORIZED);
         }
     }
-    @GetMapping("/user/image}")
+    @GetMapping("/user/image")
     public ResponseEntity<Resource> viewImage(@ApiIgnore Principal principal,HttpServletRequest request){
         User user=userService.findUserByEmail(principal.getName());
 

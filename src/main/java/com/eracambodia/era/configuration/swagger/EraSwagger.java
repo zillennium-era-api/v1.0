@@ -35,10 +35,10 @@ public class EraSwagger {
                 .paths(PathSelectors.regex("/api.*"))
                 .build()
                 .securityContexts(Collections.singletonList(securityContext()))
-                .securitySchemes(Arrays.asList(securitySchema(), apiKey(), apiCookieKey()));
+                .securitySchemes(Arrays.asList(securitySchema()/*, apiKey(), apiCookieKey()*/));
     }
 
-    @Bean
+   /* @Bean
     public SecurityScheme apiKey() {
         return new ApiKey(HttpHeaders.AUTHORIZATION, "apiKey", "header");
     }
@@ -47,12 +47,21 @@ public class EraSwagger {
     public SecurityScheme apiCookieKey() {
         return new ApiKey(HttpHeaders.COOKIE, "apiKey", "cookie");
     }
+*/
 
-
-    @Bean
+    /*@Bean
     public SecurityConfiguration security() {
         return new SecurityConfiguration
                 ("client", "123", "", "", "Bearer access token", ApiKeyVehicle.HEADER, HttpHeaders.AUTHORIZATION,"");
+    }*/
+    @Bean
+    public SecurityConfiguration security() {
+        return SecurityConfigurationBuilder.builder()
+                .clientId("client")
+                .clientSecret("123")
+                .scopeSeparator(" ")
+                .useBasicAuthenticationWithAccessCodeGrant(true)
+                .build();
     }
 
     private List<SecurityReference> defaultAuth() {
