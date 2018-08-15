@@ -1,6 +1,6 @@
-package com.eracambodia.era.model;
+package com.eracambodia.era.model.user;
 
-import io.swagger.annotations.ApiModelProperty;
+import com.eracambodia.era.model.user.Authority;
 
 import java.util.Date;
 

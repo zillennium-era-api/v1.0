@@ -1,7 +1,7 @@
-package com.eracambodia.era.service;
+package com.eracambodia.era.service.user;
 
-import com.eracambodia.era.model.Authority;
-import com.eracambodia.era.model.User;
+import com.eracambodia.era.model.user.Authority;
+import com.eracambodia.era.model.user.User;
 import com.eracambodia.era.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

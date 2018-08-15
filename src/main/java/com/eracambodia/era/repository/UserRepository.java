@@ -1,11 +1,9 @@
 package com.eracambodia.era.repository;
 
-import com.eracambodia.era.model.Authority;
-import com.eracambodia.era.model.User;
+import com.eracambodia.era.model.user.Authority;
+import com.eracambodia.era.model.user.User;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 
 @Repository
@@ -15,6 +13,8 @@ public interface UserRepository {
     @Select("SELECT * FROM users where email=#{email}")
     User userAvailable(User user);
 
+    @Select("select id from users where id=#{id}")
+    Integer findUserIdById(int id);
 
     @Select("SELECT * FROM users WHERE username=#{username}")
     @Results({

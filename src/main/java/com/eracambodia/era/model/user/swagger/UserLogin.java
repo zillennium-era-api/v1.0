@@ -1,10 +1,4 @@
-package com.eracambodia.era.model.swagger;
-
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+package com.eracambodia.era.model.user.swagger;
 
 
 public class UserLogin {

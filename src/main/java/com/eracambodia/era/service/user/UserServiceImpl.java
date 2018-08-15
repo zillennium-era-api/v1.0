@@ -1,12 +1,10 @@
-package com.eracambodia.era.service;
+package com.eracambodia.era.service.user;
 
-import com.eracambodia.era.model.Authority;
-import com.eracambodia.era.model.User;
+import com.eracambodia.era.model.user.User;
 import com.eracambodia.era.repository.UserRepository;
+import com.eracambodia.era.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -26,6 +24,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateUserPassword(User user) {
         userRepository.updateUserPassword(user);
+    }
+
+    @Override
+    public Integer findUserIdById(int agentId) {
+        return userRepository.findUserIdById(agentId);
     }
 
     @Override

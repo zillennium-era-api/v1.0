@@ -1,4 +1,4 @@
-package com.eracambodia.era.model;
+package com.eracambodia.era.model.user;
 
 import org.springframework.security.core.GrantedAuthority;
 

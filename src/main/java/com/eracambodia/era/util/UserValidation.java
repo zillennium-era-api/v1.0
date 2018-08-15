@@ -1,11 +1,10 @@
 package com.eracambodia.era.util;
 
-import com.eracambodia.era.model.User;
-import com.eracambodia.era.model.swagger.UpdateUserInfo;
-import com.eracambodia.era.model.swagger.UserLogin;
-import com.eracambodia.era.model.swagger.UserRegister;
-import com.eracambodia.era.service.UserService;
-import org.apache.ibatis.annotations.Update;
+import com.eracambodia.era.model.user.User;
+import com.eracambodia.era.model.user.swagger.UpdateUserInfo;
+import com.eracambodia.era.model.user.swagger.UserLogin;
+import com.eracambodia.era.model.user.swagger.UserRegister;
+import com.eracambodia.era.service.user.UserService;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.multipart.MultipartFile;
 

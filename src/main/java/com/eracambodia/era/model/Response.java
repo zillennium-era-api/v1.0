@@ -8,25 +8,35 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Response<T> {
-    private T data;
+    private T[] data;
     private String message;
     private int code;
+    private HttpStatus httpStatus;
 
-    public Response(int code,T data){
+    public Response(int code,T... data){
         this.code=code;
         this.data=data;
         switch (code){
             case 200 : setMessage("Successful");break;
             case 401 : setMessage("Unauthorized");break;
+            case 404 : setMessage("Not Found");break;
             default : setMessage("status s'ey ke a nhop.");
         }
     }
 
-    public T getData() {
+    public T[] getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public HttpStatus getHttpStatus() {
+        return httpStatus;
+    }
+
+    public void setHttpStatus(HttpStatus httpStatus) {
+        this.httpStatus = httpStatus;
+    }
+
+    public void setData(T[] data) {
         this.data = data;
     }
 
@@ -49,19 +59,30 @@ public class Response<T> {
     @Override
     public String toString() {
         return "Response{" +
-                "data=" + data +
+                "data=" + data  +
                 ", message='" + message + '\'' +
                 ", code=" + code +
                 '}';
     }
 
-    public ResponseEntity<T> getResponseEntity(HttpStatus httpStatus){
+    public ResponseEntity<T> getResponseEntity(){
         Map<String,Object> map=new HashMap<>();
         map.put("code",getCode());
         map.put("message",getMessage());
         if(getData()!=null) {
-            map.put("data", getData());
+            for(int i=0;i<data.length;i++){
+                if(i==0){
+                    map.put("data",data[i]);
+                }else {
+                    map.put(data[i].getClass().getSimpleName(), data[i]);
+                }
+            }
         }
-        return new ResponseEntity(map, httpStatus);
+        switch (getCode()){
+            case 200 : setHttpStatus(HttpStatus.OK);break;
+            case 401 : setHttpStatus(HttpStatus.UNAUTHORIZED);break;
+            case 404 : setHttpStatus(HttpStatus.NOT_FOUND);break;
+        }
+        return new ResponseEntity(map, getHttpStatus());
     }
 }
