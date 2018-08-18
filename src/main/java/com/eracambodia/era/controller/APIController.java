@@ -84,7 +84,8 @@ public class APIController {
         String grant_type = "refresh_token";
         String client_id="client";
         String refresh_token=refreshToken.getRefreshToken();
-        String url = "http://localhost:8080/oauth/token";
+        String url="https://eraapi.herokuapp.com/oauth/token";
+        //String url = "http://localhost:8080/oauth/token";
         String refresh_token_url = url + "?grant_type=" + grant_type + "&client_id=" + client_id + "&refresh_token=" + refresh_token;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity=null;
