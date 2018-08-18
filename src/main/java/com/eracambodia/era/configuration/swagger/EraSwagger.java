@@ -25,8 +25,8 @@ import static com.google.common.collect.Lists.newArrayList;
 @Configuration
 @EnableSwagger2
 public class EraSwagger {
-    private String accessTokenUri="http://localhost:8080/oauth/token";
-    //private String accessTokenUri="https://eraapi.herokuapp.com/oauth/token";
+    //private String accessTokenUri="http://localhost:8080/oauth/token";
+    private String accessTokenUri="https://eraapi.herokuapp.com/oauth/token";
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
