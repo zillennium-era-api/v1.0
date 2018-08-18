@@ -65,17 +65,13 @@ public class Response<T> {
                 '}';
     }
 
-    public ResponseEntity<T> getResponseEntity(){
+    public ResponseEntity<T> getResponseEntity(String... type){
         Map<String,Object> map=new HashMap<>();
         map.put("code",getCode());
         map.put("message",getMessage());
-        if(getData()!=null) {
+        if(getData()!=null && data.length>0) {
             for(int i=0;i<data.length;i++){
-                if(i==0){
-                    map.put("data",data[i]);
-                }else {
-                    map.put(data[i].getClass().getSimpleName(), data[i]);
-                }
+                 map.put(type[i],data[i]);
             }
         }
         switch (getCode()){

@@ -21,9 +21,14 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 public class EraWebSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
-    @Qualifier("userAuthority")
+
+    /*@Qualifier("userAuthority")
+    @Autowired
+    private UserDetailsService userDetailsService;*/
+
     @Autowired
     private UserDetailsService userDetailsService;
+
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {

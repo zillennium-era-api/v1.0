@@ -3,7 +3,6 @@ package com.eracambodia.era.service;
 import com.eracambodia.era.configuration.fileupload.FileStorageProperty;
 import com.eracambodia.era.exception.FileNotFoundException;
 import com.eracambodia.era.exception.FileStorageException;
-import com.eracambodia.era.util.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -35,15 +34,14 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-        if(!UserValidation.checkImageExtension(file))
-            return null;
+       /* if(!UserValidation.checkImageExtension(file))
+            return null;*/
         String fileName = UUID.randomUUID()+StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if(fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             Path targetLocation = this.path.resolve(fileName);
-            System.out.println(this.path);
             Files.copy(file.getInputStream(), targetLocation, StandardCopyOption.REPLACE_EXISTING);
 
             return fileName;

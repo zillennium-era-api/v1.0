@@ -32,7 +32,10 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
     private DataSource dataSource;
     @Autowired
     private AuthenticationManager authenticationManager;
-    @Qualifier("userAuthority")
+    /*@Qualifier("userAuthority")
+    @Autowired
+    private UserDetailsService userDetailsService;*/
+
     @Autowired
     private UserDetailsService userDetailsService;
     @Autowired

@@ -1,9 +1,6 @@
 
 package com.eracambodia.era.controller;
 
-import com.eracambodia.era.repository.BuildingRepository;
-import com.eracambodia.era.service.user.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
