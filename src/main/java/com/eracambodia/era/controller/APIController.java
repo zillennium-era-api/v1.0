@@ -1,5 +1,6 @@
 package com.eracambodia.era.controller;
 
+import com.eracambodia.era.configuration.setting.Default;
 import com.eracambodia.era.model.*;
 import com.eracambodia.era.model.api_agent_account_password.request.ChangePassword;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
@@ -58,9 +59,8 @@ public class APIController {
         String grant_type = "password";
         String email = login.getEmail();
         String password = login.getPassword();
-        //String url="https://eraapi.herokuapp.com/oauth/token";
-        String url = "http://localhost:8080/oauth/token";
-        String access_token_url = url + "?grant_type=" + grant_type + "&username=" + email + "&password=" + password;
+
+        String access_token_url = Default.oauthTokenUrl + "?grant_type=" + grant_type + "&username=" + email + "&password=" + password;
         RestTemplate restTemplate = new RestTemplate();
         //request token from /oauth/token
         ResponseEntity<String> responseEntity = restTemplate.exchange(access_token_url, HttpMethod.POST, request, String.class);
@@ -84,9 +84,8 @@ public class APIController {
         String grant_type = "refresh_token";
         String client_id="client";
         String refresh_token=refreshToken.getRefreshToken();
-        //String url="https://eraapi.herokuapp.com/oauth/token";
-        String url = "http://localhost:8080/oauth/token";
-        String refresh_token_url = url + "?grant_type=" + grant_type + "&client_id=" + client_id + "&refresh_token=" + refresh_token;
+
+        String refresh_token_url = Default.oauthTokenUrl + "?grant_type=" + grant_type + "&client_id=" + client_id + "&refresh_token=" + refresh_token;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity=null;
         try {

@@ -1,5 +1,6 @@
 package com.eracambodia.era.configuration.swagger;
 
+import com.eracambodia.era.configuration.setting.Default;
 import org.hibernate.validator.internal.util.CollectionHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +26,7 @@ import static com.google.common.collect.Lists.newArrayList;
 @Configuration
 @EnableSwagger2
 public class EraSwagger {
-    private String accessTokenUri="http://localhost:8080/oauth/token";
-    //private String accessTokenUri="https://eraapi.herokuapp.com/oauth/token";
+
     @Bean
     public Docket api() {
         return new Docket(DocumentationType.SWAGGER_2)
@@ -81,7 +81,7 @@ public class EraSwagger {
         authorizationScopeList.add(new AuthorizationScope("write", "access all"));
 
         List<GrantType> grantTypes = CollectionHelper.newArrayList();
-        GrantType passwordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant(accessTokenUri);
+        GrantType passwordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant(Default.oauthTokenUrl);
         grantTypes.add(passwordCredentialsGrant);
 
         return new OAuth("oauth2", authorizationScopeList, grantTypes);

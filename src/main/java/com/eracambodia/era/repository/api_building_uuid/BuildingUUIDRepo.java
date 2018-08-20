@@ -35,7 +35,7 @@ public interface BuildingUUIDRepo {
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
             "INNER JOIN building ON building.id=transaction.owner_id " +
-            "WHERE transaction.owner_id=#{id} AND transaction.table_name = 'building' AND transaction.status=building.status " +
+            "WHERE transaction.owner_id=#{id} AND transaction.table_name = 'Building' AND transaction.status=building.status " +
             "ORDER BY transaction.create_date LIMIT 1")
     @Results({
             @Result(property = "name",column = "username"),
@@ -55,7 +55,16 @@ public interface BuildingUUIDRepo {
     })
     List<File> findFilesOfBuildingUUID();
     @Select("SELECT * FROM feature WHERE building_id=#{id}")
+    @Results({
+            @Result(property = "ownerId" ,column = "building_id"),
+            @Result(property = "amenities",column = "amenity"),
+            @Result(property = "includeService",column = "include_service"),
+            @Result(property = "excludeService",column = "exclude_service")
+    })
     Feature findFeatureOfBuildingUUID();
     @Select("SELECT * FROM neighborhood WHERE owner_id=#{id}")
+    @Results({
+            @Result(property = "ownerId",column = "owner_id")
+    })
     List<Neighborhood> findNeighborhoodOfBuildingUUID();
 }

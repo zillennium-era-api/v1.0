@@ -50,7 +50,11 @@ public class ServiceImpl implements Service {
     private BuildingUUIDRepo buildingUUIDRepo;
     @Override
     public BuildingUUID findBuildingByUUID(String uuid) {
-        return buildingUUIDRepo.findBuildingByUUID(uuid);
+        BuildingUUID buildingUUID=buildingUUIDRepo.findBuildingByUUID(uuid);
+        if(buildingUUID==null){
+            throw new CustomException(404,"Can not found this Building");
+        }
+        return buildingUUID;
     }
 
     // api/building
