@@ -104,6 +104,7 @@ public class APIController {
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody Register register) {
         service.getEmail(register.getEmail(),register.getIdCard(),register.getPhone());//check email available
+        register.setPassword(passwordEncoder.encode(register.getPassword()));
         service.register(register);
         Response response=new Response(200);
         return response.getResponseEntity();
@@ -210,20 +211,16 @@ public class APIController {
         List<Buildings> buildings=service.findBuildings(pagination);
 
         Response response = new Response(200, buildings,pagination);
-        return response.getResponseEntity("building","pagination");
+        return response.getResponseEntity("data","pagination");
 
     }
 
     @GetMapping("/building/{uuid}")
-    public ResponseEntity buildingDetail(@PathVariable("uuid")String uuid){
-        BuildingUUID buildingUUID=service.findBuildingByUUID(uuid);
-        if(buildingUUID!=null) {
-            Response response = new Response(200, service.findBuildingByUUID(uuid));
-            return response.getResponseEntity("building");
-        }else {
-            Response response = new Response(404);
-            return response.getResponseEntity();
-        }
+    public ResponseEntity buildingDetail(@PathVariable("uuid")String uuid,@ApiIgnore Principal principal){
+        BuildingUUID buildingUUID=service.findBuildingByUUID(uuid,principal.getName());
+
+        Response response = new Response(200, buildingUUID);
+        return response.getResponseEntity("data");
     }
 
     @PostMapping("/building/status/update")

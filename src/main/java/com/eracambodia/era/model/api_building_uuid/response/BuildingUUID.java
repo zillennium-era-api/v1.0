@@ -21,6 +21,7 @@ public class BuildingUUID {
     private String buildingHeight;
     private double latitude;
     private double longitude;
+    private boolean ifFavorite;
     private Agent agent;
     private List<File> files;
     private Feature feature;
@@ -178,6 +179,14 @@ public class BuildingUUID {
         this.agent = agent;
     }
 
+    public boolean isIfFavorite() {
+        return ifFavorite;
+    }
+
+    public void setIfFavorite(boolean ifFavorite) {
+        this.ifFavorite = ifFavorite;
+    }
+
     public List<File> getFiles() {
         return files;
     }
@@ -219,10 +228,11 @@ public class BuildingUUID {
                 ", village='" + village + '\'' +
                 ", streetNameOrNumber='" + streetNameOrNumber + '\'' +
                 ", detail='" + detail + '\'' +
-                ", numberOfFloor='" + numberOfFloor + '\'' +
+                ", numberOfFloor=" + numberOfFloor +
                 ", buildingHeight='" + buildingHeight + '\'' +
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
+                ", ifFavorite=" + ifFavorite +
                 ", agent=" + agent +
                 ", files=" + files +
                 ", feature=" + feature +

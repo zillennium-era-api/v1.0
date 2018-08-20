@@ -19,7 +19,9 @@ public interface Service {
     String checkLogin(Login login);
 
     // api/building/uuid
-    BuildingUUID findBuildingByUUID(String uuid);
+    BuildingUUID findBuildingByUUID(String uuid,String email);
+    void favoriteEnable(BuildingUUID buildingUUID,int userId,int buildingId);
+    Integer getIdFromUser(String email);
 
     // api/building
     List<Buildings> findBuildings(Pagination pagination);

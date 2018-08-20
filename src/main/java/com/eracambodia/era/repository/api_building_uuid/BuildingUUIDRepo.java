@@ -2,6 +2,7 @@ package com.eracambodia.era.repository.api_building_uuid;
 
 import com.eracambodia.era.model.api_building_uuid.response.*;
 import org.apache.ibatis.annotations.*;
+import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -67,4 +68,15 @@ public interface BuildingUUIDRepo {
             @Result(property = "ownerId",column = "owner_id")
     })
     List<Neighborhood> findNeighborhoodOfBuildingUUID();
+
+    @Select("SELECT count(*) " +
+            "FROM favorite " +
+            "INNER JOIN users ON favorite.user_id=#{userId} " +
+            "INNER JOIN building ON favorite.owner_id = #{buildingId}")
+    Integer favoriteEnable(@Param("userId")int userId,@Param("buildingId")int buildingId);
+
+    @Select("SELECT id " +
+            "FROM users " +
+            "WHERE email=#{email}")
+    Integer getIdFromUser(String email);
 }

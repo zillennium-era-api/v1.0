@@ -49,12 +49,26 @@ public class ServiceImpl implements Service {
     @Autowired
     private BuildingUUIDRepo buildingUUIDRepo;
     @Override
-    public BuildingUUID findBuildingByUUID(String uuid) {
+    public BuildingUUID findBuildingByUUID(String uuid,String email) {
         BuildingUUID buildingUUID=buildingUUIDRepo.findBuildingByUUID(uuid);
+        favoriteEnable(buildingUUID,getIdFromUser(email),buildingUUID.getId());
         if(buildingUUID==null){
             throw new CustomException(404,"Can not found this Building");
         }
         return buildingUUID;
+    }
+    @Override
+    public void favoriteEnable(BuildingUUID buildingUUID,int userId,int buildingId) {
+        Integer count=buildingUUIDRepo.favoriteEnable(userId,buildingId);
+        if(count>0){
+            buildingUUID.setIfFavorite(true);
+        }else {
+            buildingUUID.setIfFavorite(false);
+        }
+    }
+    @Override
+    public Integer getIdFromUser(String email) {
+        return buildingUUIDRepo.getIdFromUser(email);
     }
 
     // api/building
