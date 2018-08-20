@@ -24,7 +24,7 @@ public interface BuildingsRepo {
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
             "INNER JOIN building ON building.id=transaction.owner_id " +
-            "WHERE transaction.owner_id=#{id} AND transaction.table_name = 'building' AND transaction.status=building.status " +
+            "WHERE transaction.owner_id=#{id} AND transaction.table_name = 'Building' AND transaction.status=building.status " +
             "ORDER BY transaction.create_date LIMIT 1")
     @Results({
             @Result(property = "name",column = "username"),
@@ -40,8 +40,6 @@ public interface BuildingsRepo {
             "WHERE owner_id=#{id} " +
             "ORDER BY id DESC LIMIT 1")
     String findFilePathOfBuildings();
-
-
 
     @Select("select count(id) from building")
     int countBuildingsRecord();

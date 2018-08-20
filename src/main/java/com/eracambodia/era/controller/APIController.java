@@ -58,8 +58,8 @@ public class APIController {
         String grant_type = "password";
         String email = login.getEmail();
         String password = login.getPassword();
-        String url="https://eraapi.herokuapp.com/oauth/token";
-        //String url = "http://localhost:8080/oauth/token";
+        //String url="https://eraapi.herokuapp.com/oauth/token";
+        String url = "http://localhost:8080/oauth/token";
         String access_token_url = url + "?grant_type=" + grant_type + "&username=" + email + "&password=" + password;
         RestTemplate restTemplate = new RestTemplate();
         //request token from /oauth/token
@@ -84,8 +84,8 @@ public class APIController {
         String grant_type = "refresh_token";
         String client_id="client";
         String refresh_token=refreshToken.getRefreshToken();
-        String url="https://eraapi.herokuapp.com/oauth/token";
-        //String url = "http://localhost:8080/oauth/token";
+        //String url="https://eraapi.herokuapp.com/oauth/token";
+        String url = "http://localhost:8080/oauth/token";
         String refresh_token_url = url + "?grant_type=" + grant_type + "&client_id=" + client_id + "&refresh_token=" + refresh_token;
         RestTemplate restTemplate = new RestTemplate();
         ResponseEntity<String> responseEntity=null;
@@ -104,7 +104,7 @@ public class APIController {
 
     @PostMapping("/register")
     public ResponseEntity<Map<String, Object>> register(@RequestBody Register register) {
-        service.getEmail(register.getEmail());//check email available
+        service.getEmail(register.getEmail(),register.getIdCard(),register.getPhone());//check email available
         service.register(register);
         Response response=new Response(200);
         return response.getResponseEntity();
@@ -209,13 +209,10 @@ public class APIController {
         Pagination pagination=new Pagination(page,10,count);
 
         List<Buildings> buildings=service.findBuildings(pagination);
-        if(buildings!=null && buildings.size()>0) {
-            Response response = new Response(200, buildings,pagination);
-            return response.getResponseEntity("building","pagination");
-        }else {
-            Response response = new Response(404);
-            return response.getResponseEntity();
-        }
+
+        Response response = new Response(200, buildings,pagination);
+        return response.getResponseEntity("building","pagination");
+
     }
 
     @GetMapping("/building/{uuid}")

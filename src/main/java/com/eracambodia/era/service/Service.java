@@ -34,7 +34,7 @@ public interface Service {
 
     // api/register
     void register(Register register);
-    String getEmail(String email);
+    List<Register> getEmail(String email,String idCard,String phonenumber);
 
     // api/user
     com.eracambodia.era.model.api_usesr.response.User findUserByUsernameOfUser(String username);

@@ -58,11 +58,18 @@ public class ServiceImpl implements Service {
     private BuildingsRepo buildingsRepo;
     @Override
     public List<Buildings> findBuildings(Pagination pagination) {
+        if(pagination.getPage()>pagination.getTotalPage()){
+            throw new CustomException(404,"Page not Found.");
+        }
         return buildingsRepo.findBuildings(pagination);
     }
     @Override
     public int countBuildingsRecord() {
-        return buildingsRepo.countBuildingsRecord();
+        int countAllBuildings =buildingsRepo.countBuildingsRecord();
+        if(countAllBuildings<1){
+            throw new CustomException(404,"No record of building ");
+        }
+        return countAllBuildings;
     }
 
     // api building/status/update
@@ -96,12 +103,26 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public String getEmail(String email) {
-        String mail=registerRepo.getEmail(email);
-        if(mail!=null){
-            throw new CustomException(401,"email already exist.");
+    public List<Register> getEmail(String email,String idCard,String phonenumber) {
+        List<Register> registers=registerRepo.getEmail(email,idCard,phonenumber);
+        if(registers!=null){
+            String message="";
+            for(int i=0;i<registers.size();i++){
+                if(email.equals(registers.get(i).getEmail())) {
+                    message = "email already exist ";
+                    throw new CustomException(401,message);
+                }
+                if(phonenumber.equals(registers.get(i).getPhone())) {
+                    message = "phone already exist";
+                    throw new CustomException(401,message);
+                }
+                if(idCard.equals(registers.get(i).getIdCard())) {
+                    message = "id-card already exist";
+                    throw new CustomException(401,message);
+                }
+            }
         }
-        return mail;
+       return registers;
     }
 
     // api/user

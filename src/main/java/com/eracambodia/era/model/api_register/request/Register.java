@@ -79,4 +79,18 @@ public class Register {
     public void setUuid(String uuid) {
         this.uuid = uuid;
     }
+
+    @Override
+    public String toString() {
+        return "Register{" +
+                "name='" + name + '\'' +
+                ", gender='" + gender + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", idCard='" + idCard + '\'' +
+                ", uuid='" + uuid + '\'' +
+                '}';
+    }
 }
