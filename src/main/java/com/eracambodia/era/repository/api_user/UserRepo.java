@@ -10,8 +10,9 @@ import org.springframework.stereotype.Repository;
 public interface UserRepo {
     @Select("SELECT * FROM users WHERE email=#{username}")
     @Results({
+            @Result(property = "phone",column = "phonenumber"),
             @Result(property = "name",column = "username"),
-            @Result(property = "profileImage",column = "image"),
+            @Result(property = "profilePhoto",column = "image"),
             @Result(property = "created",column = "create_at"),
             @Result(property = "updated",column = "update_at"),
             @Result(property = "role",column = "authority_id")

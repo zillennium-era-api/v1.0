@@ -140,7 +140,7 @@ public class APIController {
         Response response = new Response(200, downloadUri);
         return response.getResponseEntity("data");
     }
-    @ApiIgnore
+
     @GetMapping("/user/image/{fileName:.+}")
     public ResponseEntity<Resource> viewImage(@PathVariable String fileName,HttpServletRequest request){
         //load image

@@ -8,8 +8,8 @@ public class User {
     private int role;
     private String uuid;
     private String email;
-    private String phonenumber;
-    private String profileImage;
+    private String phone;
+    private String profilePhoto;
     private boolean enable;
     private Date created;
     private Date updated;
@@ -54,20 +54,20 @@ public class User {
         this.email = email;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
-    public String getProfileImage() {
-        return profileImage;
+    public String getProfilePhoto() {
+        return profilePhoto;
     }
 
     public void setProfileImage(String profileImage) {
-        this.profileImage = profileImage;
+        this.profilePhoto = profileImage;
     }
 
     public boolean isEnable() {
@@ -102,8 +102,8 @@ public class User {
                 ", role=" + role +
                 ", uuid='" + uuid + '\'' +
                 ", email='" + email + '\'' +
-                ", phonenumber='" + phonenumber + '\'' +
-                ", profileImage='" + profileImage + '\'' +
+                ", phone='" + phone + '\'' +
+                ", profilePhoto='" + profilePhoto + '\'' +
                 ", enable=" + enable +
                 ", created=" + created +
                 ", updated=" + updated +
