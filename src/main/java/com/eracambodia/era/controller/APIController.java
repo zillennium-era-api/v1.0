@@ -1,5 +1,6 @@
 package com.eracambodia.era.controller;
 
+import com.eracambodia.era.model.api_agent_account_password.request.ChangePassword;
 import com.eracambodia.era.setting.Default;
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.*;
@@ -164,18 +165,16 @@ public class APIController {
                 .body(resource);
     }
 
-   /* @PutMapping("/agent/account/password")
+    /*@PutMapping("/agent/account/password")
     public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal){
         String password=service.getUserPasswordByEmail(principal.getName());
-        if(passwordEncoder.matches(changePassword.getOldPassword(),password)){
-            String resetPassword=passwordEncoder.encode(changePassword.getNewPassword());
-            service.updateUserPassword(resetPassword,principal.getName());
-            Response response=new Response(200,null);
-            return response.getResponseEntity();
-        }else {
-            Response response=new Response(401,null);
-            return response.getResponseEntity();
+        if(!passwordEncoder.matches(changePassword.getOldPassword(),password)){
+
         }
+        String resetPassword=passwordEncoder.encode(changePassword.getNewPassword());
+        service.updateUserPassword(resetPassword,principal.getName());
+        Response response=new Response(200,null);
+        return response.getResponseEntity();
     }*/
 
     /*@PutMapping("/agent/account/update")

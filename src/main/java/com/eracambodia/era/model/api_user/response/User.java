@@ -8,6 +8,7 @@ public class User {
     private int role;
     private String uuid;
     private String email;
+    private String phonenumber;
     private String profileImage;
     private boolean enable;
     private Date created;
@@ -53,6 +54,14 @@ public class User {
         this.email = email;
     }
 
+    public String getPhonenumber() {
+        return phonenumber;
+    }
+
+    public void setPhonenumber(String phonenumber) {
+        this.phonenumber = phonenumber;
+    }
+
     public String getProfileImage() {
         return profileImage;
     }
@@ -93,6 +102,7 @@ public class User {
                 ", role=" + role +
                 ", uuid='" + uuid + '\'' +
                 ", email='" + email + '\'' +
+                ", phonenumber='" + phonenumber + '\'' +
                 ", profileImage='" + profileImage + '\'' +
                 ", enable=" + enable +
                 ", created=" + created +

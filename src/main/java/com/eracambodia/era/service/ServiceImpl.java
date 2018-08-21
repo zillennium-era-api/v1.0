@@ -169,6 +169,7 @@ public class ServiceImpl implements Service {
     }
 
     // api/agent/account/password
+    @Autowired
     private AgentChangePasswordRepo agentChangePasswordRepo;
     @Override
     public void updateUserPassword(String password, String email) {
