@@ -9,7 +9,6 @@ import com.eracambodia.era.model.api_building_status_update.request.BuildingStat
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_register.request.Register;
-import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -39,7 +38,7 @@ public interface Service {
     List<Register> getEmail(String email,String idCard,String phonenumber);
 
     // api/user
-    com.eracambodia.era.model.api_usesr.response.User findUserByUsernameOfUser(String username);
+    com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username);
 
     // api/agent/profile/upload
     String findImageByUsernameOfUploadProfileAgent(String email);

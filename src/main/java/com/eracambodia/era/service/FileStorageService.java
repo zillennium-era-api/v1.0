@@ -1,6 +1,7 @@
 package com.eracambodia.era.service;
 
 import com.eracambodia.era.configuration.fileupload.FileStorageProperty;
+import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.exception.FileNotFoundException;
 import com.eracambodia.era.exception.FileStorageException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +35,9 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-       /* if(!UserValidation.checkImageExtension(file))
-            return null;*/
+        if(file==null){
+            throw new CustomException(404,"File not found.");
+        }
         String fileName = UUID.randomUUID()+StringUtils.cleanPath(file.getOriginalFilename());
         try {
             if(fileName.contains("..")) {
@@ -51,16 +53,17 @@ public class FileStorageService {
     }
 
     public Resource loadFileAsResource(String fileName) {
+
         try {
             Path filePath = this.path.resolve(fileName).normalize();
             Resource resource = new UrlResource(filePath.toUri()) ;
             if(resource.exists()) {
                 return resource;
             } else {
-                throw new FileNotFoundException("File not found " + fileName);
+                throw new CustomException(404,"file not found.");
             }
         } catch (MalformedURLException ex) {
-            throw new FileNotFoundException("File not found " + fileName, ex);
+            throw new CustomException(404,"File not found " + fileName+" "+ex);
         }
     }
 

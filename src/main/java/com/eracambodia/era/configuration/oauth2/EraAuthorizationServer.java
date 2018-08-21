@@ -1,13 +1,16 @@
 package com.eracambodia.era.configuration.oauth2;
 
+import com.eracambodia.era.exception.CustomException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
@@ -32,9 +35,6 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
     private DataSource dataSource;
     @Autowired
     private AuthenticationManager authenticationManager;
-    /*@Qualifier("userAuthority")
-    @Autowired
-    private UserDetailsService userDetailsService;*/
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -44,7 +44,7 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
     @Bean
     public JwtAccessTokenConverter accessTokenConverter(){
         JwtAccessTokenConverter converter=new JwtAccessTokenConverter();
-        converter.setSigningKey("as466gf");
+        converter.setSigningKey("eracambodia");
         return converter;
     }
 
@@ -64,7 +64,7 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer){
         oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(passwordEncoder);
     }
 

@@ -1,4 +1,4 @@
-package com.eracambodia.era.model.api_usesr.response;
+package com.eracambodia.era.model.api_user.response;
 
 import java.util.Date;
 

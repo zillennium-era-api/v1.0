@@ -15,12 +15,12 @@ public interface BuildingUUIDRepo {
             "WHERE uuid=#{uuid}")
     @Results({
             @Result(property = "id",column = "id"),
-            @Result(property = "countryCode",column = "country_code"),
+            @Result(property = "countryCode",column = "country_code",one = @One(select = "getCountry")),
             @Result(property = "countryName",column = "country_name"),
             @Result(property = "cityOrProvince",column = "city_or_province"),
-            @Result(property = "village",column = "village_code"),
-            @Result(property = "commune",column = "commune_code"),
-            @Result(property = "district",column = "district_code"),
+            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
+            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
+            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
             @Result(property = "streetNameOrNumber",column = "street_number_or_name"),
             @Result(property = "numberOfFloor",column = "number_of_floor"),
             @Result(property = "countryName",column = "country"),
@@ -32,6 +32,22 @@ public interface BuildingUUIDRepo {
             @Result(property = "neighborhood",column = "id",many = @Many(select = "findNeighborhoodOfBuildingUUID"))
     })
     BuildingUUID findBuildingByUUID(String uuid);
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{district_code}")
+    String getDestrict();
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{country_code}")
+    String getCountry();
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{village_code}")
+    String getVillage();
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{commune_code}")
+    String getCommune();
     @Select("SELECT users.username,users.image,users.id,users.uuid " +
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +

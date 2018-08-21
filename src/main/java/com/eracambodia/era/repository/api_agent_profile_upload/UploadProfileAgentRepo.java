@@ -7,8 +7,10 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UploadProfileAgentRepo {
-    @Select("SELECT image FROM users WHERE username=#{username}")
-    String findImageByUsernameOfUploadProfileAgent(String username);
+    @Select("SELECT image " +
+            "FROM users " +
+            "WHERE email=#{email}")
+    String findImageByUsernameOfUploadProfileAgent(String email);
 
     @Update("UPDATE users " +
             "SET image=#{image} " +

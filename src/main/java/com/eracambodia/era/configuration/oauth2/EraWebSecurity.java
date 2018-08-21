@@ -22,10 +22,6 @@ public class EraWebSecurity extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    /*@Qualifier("userAuthority")
-    @Autowired
-    private UserDetailsService userDetailsService;*/
-
     @Autowired
     private UserDetailsService userDetailsService;
 

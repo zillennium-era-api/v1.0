@@ -16,6 +16,4 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         response.setMessage(ex.getMessage());
         return response.getResponseEntity();
     }
-
-
 }

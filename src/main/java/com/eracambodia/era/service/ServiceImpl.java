@@ -51,10 +51,10 @@ public class ServiceImpl implements Service {
     @Override
     public BuildingUUID findBuildingByUUID(String uuid,String email) {
         BuildingUUID buildingUUID=buildingUUIDRepo.findBuildingByUUID(uuid);
-        favoriteEnable(buildingUUID,getIdFromUser(email),buildingUUID.getId());
         if(buildingUUID==null){
             throw new CustomException(404,"Can not found this Building");
         }
+        favoriteEnable(buildingUUID,getIdFromUser(email),buildingUUID.getId());
         return buildingUUID;
     }
     @Override
@@ -147,11 +147,16 @@ public class ServiceImpl implements Service {
     @Autowired
     private UserRepo userRepo;
     @Override
-    public com.eracambodia.era.model.api_usesr.response.User findUserByUsernameOfUser(String username) {
-        return userRepo.findUserByUsernameOfUser(username);
+    public com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username) {
+        com.eracambodia.era.model.api_user.response.User user=userRepo.findUserByUsernameOfUser(username);
+        if(user==null){
+            throw new CustomException(404,"User not found.");
+        }
+        return user;
     }
 
     //api/agent/profile/upload
+    @Autowired
     private UploadProfileAgentRepo uploadProfileAgentRepo;
     @Override
     public String findImageByUsernameOfUploadProfileAgent(String username) {

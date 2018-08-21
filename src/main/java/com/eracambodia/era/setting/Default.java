@@ -1,4 +1,4 @@
-package com.eracambodia.era.configuration.setting;
+package com.eracambodia.era.setting;
 
 public class Default {
     //public static final String oauthTokenUrl="http://localhost:8080/oauth/token";

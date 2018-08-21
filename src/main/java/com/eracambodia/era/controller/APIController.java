@@ -1,17 +1,15 @@
 package com.eracambodia.era.controller;
 
-import com.eracambodia.era.configuration.setting.Default;
+import com.eracambodia.era.setting.Default;
+import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.*;
-import com.eracambodia.era.model.api_agent_account_password.request.ChangePassword;
-import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_building.response.Buildings;
-import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
-import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.Service;
+import com.eracambodia.era.validate.ImageValidator;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
@@ -68,7 +66,7 @@ public class APIController {
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
         Response response = new Response<Map>(200, token);
-        return  response.getResponseEntity("tokenResponse");
+        return  response.getResponseEntity("data");
     }
 
     @PostMapping("/refresh_token")
@@ -113,11 +111,16 @@ public class APIController {
     @GetMapping("/user")
     public ResponseEntity viewUserInformation(@ApiIgnore Principal principal){
         Response response=new Response(200,service.findUserByUsernameOfUser(principal.getName()));
-        return response.getResponseEntity();
+        return response.getResponseEntity("data");
     }
 
     @PostMapping("/agent/profile/upload")
-    public ResponseEntity uploadProfileImage(@RequestParam("file")MultipartFile file,@ApiIgnore Principal principal){
+    public ResponseEntity uploadProfileImage(@RequestParam("file")MultipartFile file,@ApiIgnore Principal principal) {
+        ImageValidator imageValidator=new ImageValidator();
+        boolean checkImageExtenstion=imageValidator.validate(file.getOriginalFilename());
+        if(!checkImageExtenstion){
+            throw new CustomException(401,"File type invalid");
+        }
         //remove old image file
         String imagePath=service.findImageByUsernameOfUploadProfileAgent(principal.getName());
         if(imagePath!=null){
@@ -128,28 +131,22 @@ public class APIController {
         String fileName=fileStorageService.storeFile(file);
 
         //provide url for view image
-        if(fileName!=null) {
-            String downloadUri= ServletUriComponentsBuilder.fromCurrentContextPath()
-                    .path("/api/user/image/")
-                    .path(fileName)
-                    .toUriString();
-            service.updateImageProfileOfUploadProfileAgent(fileName, principal.getName());
-            Response response = new Response(200, downloadUri);
-            return response.getResponseEntity();
-        }else {
-            Response response = new Response(401);
-            return response.getResponseEntity();
-        }
+        String downloadUri= ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/user/image/")
+                .path(fileName)
+                .toUriString();
+        service.updateImageProfileOfUploadProfileAgent(fileName, principal.getName());
+        Response response = new Response(200, downloadUri);
+        return response.getResponseEntity("data");
     }
-
-    @GetMapping("/user/image")
-    public ResponseEntity<Resource> viewImage(@ApiIgnore Principal principal,HttpServletRequest request){
-
-        String imagePath=service.findImageByUsernameOfUploadProfileAgent(principal.getName());
-
+    @ApiIgnore
+    @GetMapping("/user/image/{fileName:.+}")
+    public ResponseEntity<Resource> viewImage(@PathVariable String fileName,HttpServletRequest request){
         //load image
-        Resource resource=fileStorageService.loadFileAsResource(imagePath);
-
+        Resource resource=fileStorageService.loadFileAsResource(fileName);
+        if(resource==null){
+            throw new CustomException(404 , "File not found.");
+        }
         //content type as image for view
         String contentType = null;
         try {
@@ -167,22 +164,7 @@ public class APIController {
                 .body(resource);
     }
 
-    @DeleteMapping("/user/image/delete")
-    public ResponseEntity deleteImage(@ApiIgnore Principal principal){
-        String imagePath=service.findImageByUsernameOfUploadProfileAgent(principal.getName());
-
-        //delete image file and set column image to null
-        if(fileStorageService.deleteFile(imagePath)){
-            service.updateImageProfileOfUploadProfileAgent(null, principal.getName());
-            Response response=new Response(200,null);
-            return  response.getResponseEntity();
-        }else {
-            Response response = new Response(401, null);
-            return response.getResponseEntity();
-        }
-    }
-
-    @PutMapping("/agent/account/password")
+   /* @PutMapping("/agent/account/password")
     public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal){
         String password=service.getUserPasswordByEmail(principal.getName());
         if(passwordEncoder.matches(changePassword.getOldPassword(),password)){
@@ -194,15 +176,15 @@ public class APIController {
             Response response=new Response(401,null);
             return response.getResponseEntity();
         }
-    }
+    }*/
 
-    @PutMapping("/agent/account/update")
+    /*@PutMapping("/agent/account/update")
     public ResponseEntity updateAccountInformation(@RequestBody UpdateAgentAccount updateAgentAccount, @ApiIgnore Principal principal){
         service.updateUserInformation(updateAgentAccount,principal.getName());
         Response response = new Response(200);
         return response.getResponseEntity();
     }
-
+*/
     @GetMapping("/building")
     public ResponseEntity buildings(@RequestParam(value = "page",defaultValue = "1")int page){
         int count=service.countBuildingsRecord();
@@ -223,7 +205,7 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-    @PostMapping("/building/status/update")
+    /*@PostMapping("/building/status/update")
     public ResponseEntity updateBuildingFromAvailableToHold(@RequestBody BuildingStatusUpdate buildingStatusUpdate){
         if(service.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId())!=null){
             service.updateBuildingStatus(buildingStatusUpdate);
@@ -234,9 +216,9 @@ public class APIController {
             Response response=new Response(404);
             return response.getResponseEntity();
         }
-    }
+    }*/
 
-    @GetMapping("/building/available")
+    /*@GetMapping("/building/available")
     public ResponseEntity buildingAvailable(@RequestParam(value = "page",defaultValue = "1")int page){
         Pagination pagination=new Pagination(page,10);
         List<BuildingAvailable> buildingAvailable=service.findBuildingAvailable(pagination);
@@ -247,5 +229,5 @@ public class APIController {
             Response response = new Response(404);
             return response.getResponseEntity();
         }
-    }
+    }*/
 }
