@@ -4,7 +4,11 @@ public class RegisterUniqueFields {
     private boolean phoneExist;
     private boolean emailExist;
     private boolean idCardExist;
-
+    public RegisterUniqueFields(){
+        phoneExist=false;
+        phoneExist=false;
+        idCardExist=false;
+    }
     public boolean isPhoneExist() {
         return phoneExist;
     }
