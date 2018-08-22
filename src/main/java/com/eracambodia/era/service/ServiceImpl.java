@@ -162,7 +162,7 @@ public class ServiceImpl implements Service {
             message += "email already exist.";
         }
         if(message.length()>1)
-            throw new CustomException(409, message,registerUniqueFields);
+            throw new CustomException(404, message,registerUniqueFields);
         registerRepo.register(register);
     }
 
