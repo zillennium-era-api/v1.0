@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UpdateAgentAccountRepo {
     @Update("UPDATE users " +
-            "SET username=#{updateAgentAccount.username},phonenumber=#{updateAgentAccount.phonenumber} " +
+            "SET username=#{updateAgentAccount.name},phonenumber=#{updateAgentAccount.phone} " +
             "WHERE email=#{email}")
     void updateUserInformation(@Param("updateAgentAccount") UpdateAgentAccount updateAgentAccount,@Param("email") String email);
 }

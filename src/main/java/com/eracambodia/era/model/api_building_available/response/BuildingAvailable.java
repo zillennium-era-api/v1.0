@@ -6,7 +6,7 @@ public class BuildingAvailable {
     private String uuid;
     private String status;
     private String type;
-    private String totalCost;
+    private double totalCost;
     private String filePath;
 
     public int getId() {
@@ -49,11 +49,11 @@ public class BuildingAvailable {
         this.type = type;
     }
 
-    public String getTotalCost() {
+    public double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(String totalCost) {
+    public void setTotalCost(double totalCost) {
         this.totalCost = totalCost;
     }
 

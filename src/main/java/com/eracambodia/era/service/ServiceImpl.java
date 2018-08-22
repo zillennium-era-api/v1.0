@@ -1,6 +1,7 @@
 package com.eracambodia.era.service;
 
 import com.eracambodia.era.exception.CustomException;
+import com.eracambodia.era.model.ErrorCode;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
@@ -9,6 +10,7 @@ import com.eracambodia.era.model.api_building_available.response.BuildingAvailab
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
+import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
@@ -38,7 +40,7 @@ public class ServiceImpl implements Service {
     public String checkLogin(Login login) {
         String password=loginRepo.checkLogin(login);
         if(password==null){
-            throw new CustomException(401,"email not available.");
+            throw new CustomException(401,"email or password not available.");
         }else  if(!BCrypt.checkpw(login.getPassword(),password)){
             throw new CustomException(401,"email or password not correct.");
         }
@@ -76,10 +78,12 @@ public class ServiceImpl implements Service {
     private BuildingsRepo buildingsRepo;
     @Override
     public List<Buildings> findBuildings(Pagination pagination) {
-        if(pagination.getPage()>pagination.getTotalPage()){
+        List<Buildings> buildings=buildingsRepo.findBuildings(pagination);
+        if(buildings.size()<1){
             throw new CustomException(404,"Page not Found.");
         }
-        return buildingsRepo.findBuildings(pagination);
+        pagination.setTotalItem(buildingsRepo.countBuildingsRecord());
+        return buildings;
     }
     @Override
     public int countBuildingsRecord() {
@@ -95,6 +99,9 @@ public class ServiceImpl implements Service {
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
     @Override
     public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate) {
+        if(buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId())==null){
+            throw new CustomException(404,"Building not found");
+        }
         return buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
     }
     @Override
@@ -103,13 +110,20 @@ public class ServiceImpl implements Service {
     }
 
 
+
+    // api/building/available
     @Autowired
     private BuildingAvailableRepo buildingAvailableRepo;
-    // api/building/available
     @Override
     public List<BuildingAvailable> findBuildingAvailable(Pagination pagination) {
-        return buildingAvailableRepo.findBuildingAvailable(pagination);
+        List<BuildingAvailable> buildingAvailables=buildingAvailableRepo.findBuildingAvailable(pagination);
+        if(buildingAvailables.size()<1){
+            throw new CustomException(404,"no record");
+        }
+        pagination.setTotalItem(buildingAvailableRepo.countBuildingAvailable());
+        return buildingAvailables;
     }
+
 
     // api/register
     @Autowired
@@ -117,31 +131,26 @@ public class ServiceImpl implements Service {
 
     @Override
     public void register(Register register) {
+        String message="";
+        RegisterUniqueFields registerUniqueFields=new RegisterUniqueFields();
+        if(registerRepo.getIdCard(register.getIdCard())!=null){
+            registerUniqueFields.setIdCardExist(true);
+            message += "id-card already exist.";
+        }
+        if(registerRepo.getPhone(register.getPhone())!=null){
+            registerUniqueFields.setPhoneExist(true);
+            message += "phone already exist.";
+        }
+        if(registerRepo.getEmail(register.getEmail())!=null){
+            registerUniqueFields.setEmailExist(true);
+            message += "email already exist.";
+        }
+        if(message.length()>1)
+            throw new CustomException(409, message,registerUniqueFields);
         registerRepo.register(register);
     }
 
-    @Override
-    public List<Register> getEmail(String email,String idCard,String phonenumber) {
-        List<Register> registers=registerRepo.getEmail(email,idCard,phonenumber);
-        if(registers!=null){
-            String message="";
-            for(int i=0;i<registers.size();i++){
-                if(email.equals(registers.get(i).getEmail())) {
-                    message = "email already exist ";
-                    throw new CustomException(401,message);
-                }
-                if(phonenumber.equals(registers.get(i).getPhone())) {
-                    message = "phone already exist";
-                    throw new CustomException(401,message);
-                }
-                if(idCard.equals(registers.get(i).getIdCard())) {
-                    message = "id-card already exist";
-                    throw new CustomException(401,message);
-                }
-            }
-        }
-       return registers;
-    }
+
 
     // api/user
     @Autowired

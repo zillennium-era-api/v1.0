@@ -20,6 +20,8 @@ public class Response<T> {
             case 200 : setMessage("Successful");break;
             case 401 : setMessage("Unauthorized");break;
             case 404 : setMessage("Not Found");break;
+            case 409 : setMessage("Data already exit.");break;
+            case 500 : setMessage("Internal server error");break;
             default : setMessage("status s'ey ke a nhop.");
         }
     }
@@ -78,6 +80,8 @@ public class Response<T> {
             case 200 : setHttpStatus(HttpStatus.OK);break;
             case 401 : setHttpStatus(HttpStatus.UNAUTHORIZED);break;
             case 404 : setHttpStatus(HttpStatus.NOT_FOUND);break;
+            case 409 : setHttpStatus(HttpStatus.CONFLICT);break;
+            case 500 : setHttpStatus(HttpStatus.INTERNAL_SERVER_ERROR);break;
         }
         return new ResponseEntity(map, getHttpStatus());
     }

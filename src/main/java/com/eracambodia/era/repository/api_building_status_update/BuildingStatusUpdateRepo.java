@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BuildingStatusUpdateRepo {
 
-    @Select(value= "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{agentId},#{bookingPrice})}")
+    @Select(value= "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
     @Options(statementType = StatementType.CALLABLE)
     Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
 

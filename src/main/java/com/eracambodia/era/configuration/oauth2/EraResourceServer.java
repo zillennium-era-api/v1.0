@@ -19,9 +19,9 @@ public class EraResourceServer extends ResourceServerConfigurerAdapter {
 
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
-        resources.resourceId("resources_id");
-        /*.accessDeniedHandler(accessDeniedHandler())
-                .authenticationEntryPoint(authenticationEntryPoint());*/
+        resources.resourceId("resources_id")
+        .accessDeniedHandler(accessDeniedHandler())
+                .authenticationEntryPoint(authenticationEntryPoint());
     }
 
     @Override

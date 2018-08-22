@@ -12,8 +12,8 @@ public interface AgentChangePasswordRepo {
             "WHERE email=#{email}")
     void updateUserPassword(@Param("password")String password,@Param("email")String email);
 
-    @Select("SELECT password" +
-            "FROM users" +
+    @Select("SELECT password " +
+            "FROM users " +
             "WHERE email=#{email}")
     String getUserPasswordByEmail(String email);
 }
