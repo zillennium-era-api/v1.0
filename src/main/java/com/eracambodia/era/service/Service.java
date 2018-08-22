@@ -3,6 +3,7 @@ package com.eracambodia.era.service;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
+import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
 import com.eracambodia.era.model.api_building_held.response.BuildingHeld;
@@ -10,10 +11,13 @@ import com.eracambodia.era.model.api_building_status_update.request.BuildingStat
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_register.request.Register;
+import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 
+import java.awt.print.Pageable;
 import java.util.List;
 
 public interface Service {
+
     // api/login
     User findUserByEmailOfLogin(String email);
     String checkLogin(Login login);
@@ -53,5 +57,9 @@ public interface Service {
 
     //api/agent/account/update
     void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email);
+
+
+    // api/agent/transaction
+    List<TransactionResponse> findAgentsTransaction(String email, Pagination pagination);
 
 }

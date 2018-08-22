@@ -235,4 +235,11 @@ public class APIController {
         return response.getResponseEntity("data","pagination");
 
     }
+
+    @GetMapping("/agent/transaction")
+    public ResponseEntity agentTransaction(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.findAgentsTransaction(principal.getName(),pagination),pagination);
+        return response.getResponseEntity("data","pagination");
+    }
 }

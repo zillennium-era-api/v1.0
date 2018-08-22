@@ -4,6 +4,7 @@ import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
+import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
 import com.eracambodia.era.model.api_building_held.response.BuildingHeld;
@@ -15,6 +16,7 @@ import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
+import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_available.BuildingAvailableRepo;
 import com.eracambodia.era.repository.api_building_held.BuildingHeldRepo;
@@ -132,7 +134,7 @@ public class ServiceImpl implements Service {
     @Override
     public List<BuildingHeld> findBuildingHeld(Pagination pagination) {
         List<BuildingHeld> buildingHelds=buildingHeldRepo.findBuildingHeld(pagination);
-        if(buildingHelds.size()<0){
+        if(buildingHelds.size()<1){
             throw new CustomException(404,"Not found");
         }
         pagination.setTotalItem(buildingHeldRepo.countBuildingHeld());
@@ -211,6 +213,18 @@ public class ServiceImpl implements Service {
     @Override
     public void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email) {
         updateAgentAccountRepo.updateUserInformation(updateAgentAccount,email);
+    }
+
+    // api/agent/transaction
+    @Autowired
+    private AgentTransactionRepo agentTransactionRepo;
+    @Override
+    public List<TransactionResponse> findAgentsTransaction(String email,Pagination pagination) {
+        List<TransactionResponse> transactionResponses=agentTransactionRepo.findAgentsTransaction(email,pagination);
+        if(transactionResponses.size()<1)
+            throw new CustomException(404,"No record");
+        pagination.setTotalItem(agentTransactionRepo.countTransaction(email));
+        return transactionResponses;
     }
 }
 
