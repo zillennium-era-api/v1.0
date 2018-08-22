@@ -5,6 +5,7 @@ import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
+import com.eracambodia.era.model.api_building_held.response.BuildingHeld;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
@@ -32,6 +33,9 @@ public interface Service {
 
     // api/building/available
     List<BuildingAvailable> findBuildingAvailable(Pagination pagination);
+
+    // api/building/held
+    List<BuildingHeld> findBuildingHeld(Pagination pagination);
 
     // api/register
     void register(Register register);

@@ -1,12 +1,12 @@
 package com.eracambodia.era.service;
 
 import com.eracambodia.era.exception.CustomException;
-import com.eracambodia.era.model.ErrorCode;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
+import com.eracambodia.era.model.api_building_held.response.BuildingHeld;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
@@ -17,6 +17,7 @@ import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccoun
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_available.BuildingAvailableRepo;
+import com.eracambodia.era.repository.api_building_held.BuildingHeldRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
 import com.eracambodia.era.repository.api_login.LoginRepo;
@@ -124,6 +125,19 @@ public class ServiceImpl implements Service {
         return buildingAvailables;
     }
 
+
+    // api/building/held
+    @Autowired
+    private BuildingHeldRepo buildingHeldRepo;
+    @Override
+    public List<BuildingHeld> findBuildingHeld(Pagination pagination) {
+        List<BuildingHeld> buildingHelds=buildingHeldRepo.findBuildingHeld(pagination);
+        if(buildingHelds.size()<0){
+            throw new CustomException(404,"Not found");
+        }
+        pagination.setTotalItem(buildingHeldRepo.countBuildingHeld());
+        return buildingHelds;
+    }
 
     // api/register
     @Autowired

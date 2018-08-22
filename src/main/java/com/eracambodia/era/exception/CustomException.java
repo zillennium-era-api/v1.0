@@ -1,6 +1,5 @@
 package com.eracambodia.era.exception;
 
-import com.eracambodia.era.model.ErrorCode;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 
 public class CustomException extends RuntimeException {

@@ -4,6 +4,7 @@ import com.eracambodia.era.model.api_agent_account_password.request.ChangePasswo
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
+import com.eracambodia.era.model.api_user.response.User;
 import com.eracambodia.era.setting.Default;
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.*;
@@ -107,13 +108,18 @@ public class APIController {
     public ResponseEntity<Map<String, Object>> register(@RequestBody Register register) {
         register.setPassword(passwordEncoder.encode(register.getPassword()));
         service.register(register);
-        Response response=new Response(200);
+        Response response=new Response(201);
         return response.getResponseEntity();
     }
 
     @GetMapping("/user")
     public ResponseEntity viewUserInformation(@ApiIgnore Principal principal){
-        Response response=new Response(200,service.findUserByUsernameOfUser(principal.getName()));
+        User user=service.findUserByUsernameOfUser(principal.getName());
+        String uri= ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path("/api/user/image/")
+                .toUriString();
+        user.setProfileImage(uri+user.getProfilePhoto());
+        Response response=new Response(200,user);
         return response.getResponseEntity("data");
     }
 
@@ -184,13 +190,13 @@ public class APIController {
     @PutMapping("/agent/account/update")
     public ResponseEntity updateAccountInformation(@RequestBody UpdateAgentAccount updateAgentAccount, @ApiIgnore Principal principal){
         service.updateUserInformation(updateAgentAccount,principal.getName());
-        Response response = new Response(200);
+        Response response = new Response(201);
         return response.getResponseEntity();
     }
 
     @GetMapping("/building")
-    public ResponseEntity buildings(@RequestParam(value = "page",defaultValue = "1")int page){
-        Pagination pagination=new Pagination(page,1);
+    public ResponseEntity buildings(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
+        Pagination pagination=new Pagination(page,limit);
         List<Buildings> buildings=service.findBuildings(pagination);
 
         Response response = new Response(200, buildings,pagination);
@@ -214,10 +220,18 @@ public class APIController {
     }
 
     @GetMapping("/building/available")
-    public ResponseEntity buildingAvailable(@RequestParam(value = "page",defaultValue = "1")int page){
-        Pagination pagination=new Pagination(page,1);
+    public ResponseEntity buildingAvailable(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
+        Pagination pagination=new Pagination(page,limit);
         List<BuildingAvailable> buildingAvailable=service.findBuildingAvailable(pagination);
         Response response = new Response(200, buildingAvailable,pagination);
+        return response.getResponseEntity("data","pagination");
+
+    }
+
+    @GetMapping("/building/held")
+    public ResponseEntity buildingHeld(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.findBuildingHeld(pagination),pagination);
         return response.getResponseEntity("data","pagination");
 
     }

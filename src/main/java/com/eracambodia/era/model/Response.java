@@ -18,6 +18,7 @@ public class Response<T> {
         this.data=data;
         switch (code){
             case 200 : setMessage("Successful");break;
+            case 201 : setMessage("Create Successful");break;
             case 401 : setMessage("Unauthorized");break;
             case 404 : setMessage("Not Found");break;
             case 409 : setMessage("Data already exit.");break;
@@ -78,6 +79,7 @@ public class Response<T> {
         }
         switch (getCode()){
             case 200 : setHttpStatus(HttpStatus.OK);break;
+            case 201 : setHttpStatus(HttpStatus.CREATED);break;
             case 401 : setHttpStatus(HttpStatus.UNAUTHORIZED);break;
             case 404 : setHttpStatus(HttpStatus.NOT_FOUND);break;
             case 409 : setHttpStatus(HttpStatus.CONFLICT);break;
