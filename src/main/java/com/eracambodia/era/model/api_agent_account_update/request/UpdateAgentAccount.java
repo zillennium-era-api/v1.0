@@ -3,6 +3,7 @@ package com.eracambodia.era.model.api_agent_account_update.request;
 public class UpdateAgentAccount {
     private String name;
     private String phone;
+    private String confirmPassword;
 
     public String getName() {
         return name;
@@ -20,11 +21,20 @@ public class UpdateAgentAccount {
         this.phone = phone;
     }
 
+    public String getConfirmPassword() {
+        return confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
     @Override
     public String toString() {
         return "UpdateAgentAccount{" +
                 "name='" + name + '\'' +
                 ", phone='" + phone + '\'' +
+                ", confirmPassword='" + confirmPassword + '\'' +
                 '}';
     }
 }

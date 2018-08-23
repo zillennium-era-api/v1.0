@@ -29,11 +29,14 @@ import com.eracambodia.era.repository.api_register.RegisterRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
 @org.springframework.stereotype.Service
 public class ServiceImpl implements Service {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
     //api/login
     @Autowired
     private LoginRepo loginRepo;
@@ -213,6 +216,18 @@ public class ServiceImpl implements Service {
 
     @Override
     public void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email) {
+        String phone=registerRepo.getPhone(updateAgentAccount.getPhone());
+        if(phone!=null){
+            throw new CustomException(409,"Phose already exist");
+        }
+        String password=updateAgentAccountRepo.getUserPassword(email);
+        if(password==null){
+            throw new CustomException(404,"Account not found");
+        }
+        boolean checkPassword=passwordEncoder.matches(updateAgentAccount.getConfirmPassword(),password);
+        if(!checkPassword){
+            throw new CustomException(401,"Your password not match.");
+        }
         updateAgentAccountRepo.updateUserInformation(updateAgentAccount,email);
     }
 

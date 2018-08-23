@@ -269,4 +269,8 @@ public class APIController {
         return response.getResponseEntity("data","pagination");
     }
 
+    @GetMapping("/agent/booking/status")
+    public ResponseEntity agentBookingStatus(){
+        return null;
+    }
 }
