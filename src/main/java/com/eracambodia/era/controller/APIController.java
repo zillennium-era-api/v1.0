@@ -209,8 +209,8 @@ public class APIController {
     @PutMapping("/agent/account/update")
     public ResponseEntity updateAccountInformation(@RequestBody UpdateAgentAccount updateAgentAccount, @ApiIgnore Principal principal){
         service.updateUserInformation(updateAgentAccount,principal.getName());
-        Response response = new Response(201);
-        return response.getResponseEntity();
+        Response response = new Response(201,service.findUserByUsernameOfUser(principal.getName()));
+        return response.getResponseEntity("data");
     }
 
     @GetMapping("/building")
