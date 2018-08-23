@@ -1,8 +1,8 @@
-package com.eracambodia.era.model.api_building_available.response;
+package com.eracambodia.era.model.api_agent_booking.response;
 
 import com.eracambodia.era.setting.Default;
 
-public class BuildingAvailable {
+public class AgentBooking {
     private int id;
     private String name;
     private String uuid;
@@ -62,7 +62,7 @@ public class BuildingAvailable {
     public String getFilePath() {
         if(filePath==null)
         return filePath;
-        else return Default.buildingImage;
+        else return Default.buildingImage+filePath;
     }
 
     public void setFilePath(String filePath) {
@@ -71,13 +71,13 @@ public class BuildingAvailable {
 
     @Override
     public String toString() {
-        return "BuildingAvailable{" +
+        return "AgentBooking{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", uuid='" + uuid + '\'' +
                 ", status='" + status + '\'' +
                 ", type='" + type + '\'' +
-                ", totalCost='" + totalCost + '\'' +
+                ", totalCost=" + totalCost +
                 ", filePath='" + filePath + '\'' +
                 '}';
     }

@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_building.response;
 
+import com.eracambodia.era.setting.Default;
+
 public class Agent {
     private int id;
     private String uuid;
@@ -31,7 +33,9 @@ public class Agent {
     }
 
     public String getProfilePhoto() {
-        return profilePhoto;
+        if(profilePhoto!=null)
+            return Default.profilePhoto+profilePhoto;
+        else return profilePhoto;
     }
 
     public void setProfilePhoto(String profilePhoto) {

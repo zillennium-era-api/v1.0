@@ -41,7 +41,7 @@ public interface BuildingHeldRepo {
 
     @Select("SELECT paths " +
             "FROM file " +
-            "WHERE owner_id=#{id} " +
+            "WHERE owner_id=#{id} AND type='image' " +
             "ORDER BY id DESC LIMIT 1")
     String findFilePath();
 

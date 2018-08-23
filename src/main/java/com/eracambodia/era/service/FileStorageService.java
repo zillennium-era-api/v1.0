@@ -23,12 +23,15 @@ import java.util.UUID;
 @Service
 public class FileStorageService {
     private Path path;
+    private Path buildingImagePath;
 
     @Autowired
     public FileStorageService(FileStorageProperty fileStorageProperties) {
         this.path = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
+        this.buildingImagePath=Paths.get(fileStorageProperties.getUploadBuildingDir()).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.path);
+            Files.createDirectories((this.buildingImagePath));
         } catch (Exception ex) {
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
         }
@@ -52,21 +55,36 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName) {
+    public Resource loadFileAsResource(String fileName,String type) {
+        if(type=="user"){
+            try {
+                Path filePath = this.path.resolve(fileName).normalize();
 
-        try {
-            Path filePath = this.path.resolve(fileName).normalize();
-
-            Resource resource = new UrlResource(filePath.toUri()) ;
-            if(resource.exists()) {
-                return resource;
-            } else {
-                throw new CustomException(404,"file not found.");
+                Resource resource = new UrlResource(filePath.toUri()) ;
+                if(resource.exists()) {
+                    return resource;
+                } else {
+                    throw new CustomException(404,"file not found.");
+                }
+            } catch (MalformedURLException ex) {
+                throw new CustomException(404,"File not found " + fileName+" "+ex);
             }
-        } catch (MalformedURLException ex) {
-            throw new CustomException(404,"File not found " + fileName+" "+ex);
+        }else {
+            try {
+                Path filePath = this.buildingImagePath.resolve(fileName).normalize();
+
+                Resource resource = new UrlResource(filePath.toUri()) ;
+                if(resource.exists()) {
+                    return resource;
+                } else {
+                    throw new CustomException(404,"file not found.");
+                }
+            } catch (MalformedURLException ex) {
+                throw new CustomException(404,"File not found " + fileName+" "+ex);
+            }
         }
     }
+
 
     public boolean deleteFile(String fileName){
         Path filePath = this.path.resolve(fileName).normalize();

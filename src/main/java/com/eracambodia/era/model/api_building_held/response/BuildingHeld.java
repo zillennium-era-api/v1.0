@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_building_held.response;
 
+import com.eracambodia.era.setting.Default;
+
 public class BuildingHeld {
     private int id;
     private String name;
@@ -59,7 +61,9 @@ public class BuildingHeld {
     }
 
     public String getFilePath() {
+        if(filePath==null)
         return filePath;
+        else return Default.buildingImage+filePath;
     }
 
     public void setFilePath(String filePath) {

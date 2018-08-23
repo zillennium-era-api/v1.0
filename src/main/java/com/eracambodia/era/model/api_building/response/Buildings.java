@@ -1,6 +1,7 @@
 package com.eracambodia.era.model.api_building.response;
 
 import com.eracambodia.era.model.api_building.response.Agent;
+import com.eracambodia.era.setting.Default;
 
 public class Buildings {
     private int id;
@@ -8,6 +9,10 @@ public class Buildings {
     private String uuid;
     private String status;
     private String type;
+    private String countryName;
+    private String district;
+    private String commune;
+    private String village;
     private double totalCost;
     private String filePath;
     private Agent agent;
@@ -52,6 +57,39 @@ public class Buildings {
         this.type = type;
     }
 
+
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCommune() {
+        return commune;
+    }
+
+    public void setCommune(String commune) {
+        this.commune = commune;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
     public double getTotalCost() {
         return totalCost;
     }
@@ -61,7 +99,9 @@ public class Buildings {
     }
 
     public String getFilePath() {
-        return filePath;
+        if(filePath==null)
+            return filePath;
+        else return Default.buildingImage+filePath;
     }
 
     public void setFilePath(String filePath) {
@@ -84,6 +124,10 @@ public class Buildings {
                 ", uuid='" + uuid + '\'' +
                 ", status='" + status + '\'' +
                 ", type='" + type + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", district='" + district + '\'' +
+                ", commune='" + commune + '\'' +
+                ", village='" + village + '\'' +
                 ", totalCost=" + totalCost +
                 ", filePath='" + filePath + '\'' +
                 ", agent=" + agent +

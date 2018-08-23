@@ -3,6 +3,7 @@ package com.eracambodia.era.service;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
+import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -58,8 +59,10 @@ public interface Service {
     //api/agent/account/update
     void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email);
 
-
     // api/agent/transaction
     List<TransactionResponse> findAgentsTransaction(String email, Pagination pagination);
+
+    // api/agent/booking
+    List<AgentBooking> findAgentsBooking(String email,Pagination pagination);
 
 }

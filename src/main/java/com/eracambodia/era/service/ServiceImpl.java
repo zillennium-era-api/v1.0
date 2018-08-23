@@ -4,6 +4,7 @@ import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
+import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -15,6 +16,7 @@ import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
+import com.eracambodia.era.repository.api_agent_booking.response.AgentBookingRepo;
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
@@ -127,7 +129,6 @@ public class ServiceImpl implements Service {
         return buildingAvailables;
     }
 
-
     // api/building/held
     @Autowired
     private BuildingHeldRepo buildingHeldRepo;
@@ -162,7 +163,7 @@ public class ServiceImpl implements Service {
             message += "email already exist.";
         }
         if(message.length()>1)
-            throw new CustomException(404, message,registerUniqueFields);
+            throw new CustomException(409, message,registerUniqueFields);
         registerRepo.register(register);
     }
 
@@ -225,6 +226,20 @@ public class ServiceImpl implements Service {
             throw new CustomException(404,"No record");
         pagination.setTotalItem(agentTransactionRepo.countTransaction(email));
         return transactionResponses;
+    }
+
+    // api/agent/booking
+    @Autowired
+    private AgentBookingRepo agentBookingRepo;
+
+    @Override
+    public List<AgentBooking> findAgentsBooking(String email,Pagination pagination) {
+        List<AgentBooking> agentBookings=agentBookingRepo.findAgentsBooking(email,pagination);
+        if(agentBookings.size()<1){
+            throw new CustomException(404,"No record");
+        }
+        pagination.setTotalItem(agentBookingRepo.countAgentBooking());
+        return agentBookings;
     }
 }
 

@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_user.response;
 
+import com.eracambodia.era.setting.Default;
+
 import java.util.Date;
 
 public class User {
@@ -9,6 +11,7 @@ public class User {
     private String uuid;
     private String email;
     private String phone;
+    private String idCard;
     private String profilePhoto;
     private boolean enable;
     private Date created;
@@ -62,12 +65,22 @@ public class User {
         this.phone = phone;
     }
 
-    public String getProfilePhoto() {
-        return profilePhoto;
+    public String getIdCard() {
+        return idCard;
     }
 
-    public void setProfileImage(String profileImage) {
-        this.profilePhoto = profileImage;
+    public void setIdCard(String idCard) {
+        this.idCard = idCard;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public String getProfilePhoto() {
+        if(profilePhoto==null)
+        return profilePhoto;
+        else return Default.profilePhoto+profilePhoto;
     }
 
     public boolean isEnable() {

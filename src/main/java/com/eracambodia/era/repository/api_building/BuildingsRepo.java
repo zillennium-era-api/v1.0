@@ -12,9 +12,14 @@ import java.util.List;
 public interface BuildingsRepo {
 
     @Select("SELECT * " +
-            "FROM building LIMIT #{limit} OFFSET #{offset}")
+            "FROM building ORDER BY user_create_date DESC " +
+            "LIMIT #{limit} OFFSET #{offset} ")
     @Results({
             @Result(property = "id",column = "id"),
+            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
+            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
+            @Result(property = "countryName",column = "country"),
+            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
             @Result(property = "agent",column = "id",one = @One(select = "findAgentOfBuildings")),
             @Result(property = "totalCost",column = "id",one = @One(select = "findTotalCostOfBuildings")),
             @Result(property="filePath",column = "id",one = @One(select="findFilePathOfBuildings"))
@@ -37,9 +42,21 @@ public interface BuildingsRepo {
     Double findTotalCostOfBuildings();
     @Select("SELECT paths " +
             "FROM file " +
-            "WHERE owner_id=#{id} " +
+            "WHERE owner_id=#{id} AND type='image' " +
             "ORDER BY id DESC LIMIT 1")
     String findFilePathOfBuildings();
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{district_code}")
+    String getDestrict();
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{village_code}")
+    String getVillage();
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{commune_code}")
+    String getCommune();
 
     @Select("select count(id) from building")
     int countBuildingsRecord();

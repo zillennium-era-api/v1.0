@@ -16,7 +16,7 @@ public interface BuildingUUIDRepo {
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "countryCode",column = "country_code",one = @One(select = "getCountry")),
-            @Result(property = "countryName",column = "country_name"),
+            @Result(property = "countryName",column = "country"),
             @Result(property = "cityOrProvince",column = "city_or_province"),
             @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
             @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
@@ -65,7 +65,7 @@ public interface BuildingUUIDRepo {
     Double findTotalCostOfBuildingUUID();
     @Select("SELECT owner_id ,paths,type " +
             "FROM file " +
-            "WHERE owner_id=#{id}")
+            "WHERE owner_id=#{id} AND type='image'")
     @Results({
             @Result(property = "filePath" ,column = "paths"),
             @Result(property = "ownerId" ,column = "owner_id")

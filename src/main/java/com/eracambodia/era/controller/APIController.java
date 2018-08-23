@@ -115,10 +115,6 @@ public class APIController {
     @GetMapping("/user")
     public ResponseEntity viewUserInformation(@ApiIgnore Principal principal){
         User user=service.findUserByUsernameOfUser(principal.getName());
-        String uri= ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/user/image/")
-                .toUriString();
-        user.setProfileImage(uri+user.getProfilePhoto());
         Response response=new Response(200,user);
         return response.getResponseEntity("data");
     }
@@ -150,10 +146,33 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-    @GetMapping("/user/image/{fileName:.+}")
+    @GetMapping("/image/user/{fileName:.+}")
     public ResponseEntity<Resource> viewImage(@PathVariable String fileName,HttpServletRequest request){
         //load image
-        Resource resource=fileStorageService.loadFileAsResource(fileName);
+        Resource resource=fileStorageService.loadFileAsResource(fileName,"user");
+        if(resource==null){
+            throw new CustomException(404 , "File not found.");
+        }
+        //content type as image for view
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            System.out.println("Could not determine file type.");
+        }
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        //return image view on brownser
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .body(resource);
+    }
+
+    @GetMapping("/image/building/{fileName:.+}")
+    public ResponseEntity imageBuilding(@PathVariable String fileName,HttpServletRequest request){
+        Resource resource=fileStorageService.loadFileAsResource(fileName,"building");
         if(resource==null){
             throw new CustomException(404 , "File not found.");
         }
@@ -242,4 +261,12 @@ public class APIController {
         Response response=new Response(200,service.findAgentsTransaction(principal.getName(),pagination),pagination);
         return response.getResponseEntity("data","pagination");
     }
+
+    @GetMapping("/agent/booking")
+    public ResponseEntity agentBooking(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.findAgentsBooking(principal.getName(),pagination),pagination);
+        return response.getResponseEntity("data","pagination");
+    }
+
 }
