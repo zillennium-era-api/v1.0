@@ -197,7 +197,7 @@ public class APIController {
     public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal){
         String password=service.getUserPasswordByEmail(principal.getName());
         if(!passwordEncoder.matches(changePassword.getOldPassword(),password)){
-            throw new CustomException(500,"password not match.");
+            throw new CustomException(401,"password not match.");
         }
         String resetPassword=passwordEncoder.encode(changePassword.getNewPassword());
         service.updateUserPassword(resetPassword,principal.getName());
