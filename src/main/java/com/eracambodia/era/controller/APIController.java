@@ -2,6 +2,8 @@ package com.eracambodia.era.controller;
 
 import com.eracambodia.era.model.api_agent_account_password.request.ChangePassword;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
+import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
+import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_user.response.User;
@@ -15,6 +17,7 @@ import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.Service;
 import com.eracambodia.era.validate.ImageValidator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
@@ -31,6 +34,7 @@ import springfox.documentation.annotations.ApiIgnore;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.awt.print.Pageable;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
@@ -269,8 +273,24 @@ public class APIController {
         return response.getResponseEntity("data","pagination");
     }
 
-    @GetMapping("/agent/booking/status")
-    public ResponseEntity agentBookingStatus(){
-        return null;
+    @GetMapping("/agent/favorite")
+    public ResponseEntity agentFavorite(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.findAgentFavorite(principal.getName(),pagination),pagination);
+        return response.getResponseEntity("data","pagination");
+    }
+
+    @PostMapping("/agent/favorite/add")
+    public ResponseEntity agentAddFovorite(@RequestBody AgentAddFavorite agentAddFavorite, @ApiIgnore Principal principal){
+        service.addFavorite(agentAddFavorite,principal.getName());
+        Response response=new Response(201);
+        return response.getResponseEntity();
+    }
+
+    @PostMapping("/agent/favorite/delete")
+    public ResponseEntity agentDeleteFavorite(@RequestBody AgentDeleteFavorite agentDeleteFavorite,@ApiIgnore Principal principal){
+        service.deleteAgentFavorite(agentDeleteFavorite,principal.getName());
+        Response response=new Response(200);
+        return response.getResponseEntity();
     }
 }

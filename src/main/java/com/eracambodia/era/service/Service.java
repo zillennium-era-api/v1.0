@@ -4,6 +4,9 @@ import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
+import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
+import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
+import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -65,4 +68,13 @@ public interface Service {
     // api/agent/booking
     List<AgentBooking> findAgentsBooking(String email,Pagination pagination);
 
+
+    // api/agent/favorite
+    List<AgentFavorite> findAgentFavorite(String email,Pagination pagination);
+
+    // api/agent/favorite/add
+    void addFavorite(AgentAddFavorite agentAddFavorite,String email);
+
+    // api/agent/favorite/delete
+    void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite,String email);
 }
