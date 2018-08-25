@@ -77,4 +77,7 @@ public interface Service {
 
     // api/agent/favorite/delete
     void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite,String email);
+
+    // api/search
+    List<Buildings> search(String keyword,Pagination pagination);
 }

@@ -32,6 +32,7 @@ import com.eracambodia.era.repository.api_building_status_update.BuildingStatusU
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
 import com.eracambodia.era.repository.api_login.LoginRepo;
 import com.eracambodia.era.repository.api_register.RegisterRepo;
+import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -314,6 +315,20 @@ public class ServiceImpl implements Service {
         if(agentDeleteFavoriteRepo.deleteAgentFavorite(agentDeleteFavorite)<1){
             throw new CustomException(403,"No record have deleted");
         }
+    }
+
+    // api/search
+    @Autowired
+    private SearchRepo searchRepo;
+
+    @Override
+    public List<Buildings> search(String keyword,Pagination pagination) {
+        List<Buildings>buildings=searchRepo.search(keyword,pagination.getLimit(),pagination.getOffset());
+        if(buildings.size()<1){
+            throw new CustomException(404,"No record");
+        }
+        pagination.setTotalItem(searchRepo.countSearch(keyword));
+        return buildings;
     }
 }
 

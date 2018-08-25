@@ -293,4 +293,11 @@ public class APIController {
         Response response=new Response(200);
         return response.getResponseEntity();
     }
+
+    @GetMapping("/search")
+    public ResponseEntity search(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@RequestParam("keyword")String keyword){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.search(keyword,pagination),pagination);
+        return response.getResponseEntity("data","pagination");
+    }
 }
