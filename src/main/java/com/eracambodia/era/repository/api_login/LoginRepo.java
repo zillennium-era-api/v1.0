@@ -25,11 +25,11 @@ public interface LoginRepo {
 
     @Select("SELECT password " +
             "FROM users " +
-            "WHERE email=#{email} AND enable=true")
+            "WHERE email=#{email}")
     String checkLogin(Login login);
 
-    @Select("SELECT email " +
+    @Select("SELECT id " +
             "FROM users " +
-            "WHERE email=#{email}")
-    String checkEmail(String email);
+            "WHERE email=#{email} and enable=true")
+    Integer checkEmail(String email);
 }
