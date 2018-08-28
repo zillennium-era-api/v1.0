@@ -300,4 +300,17 @@ public class APIController {
         Response response=new Response(200,service.search(keyword,pagination),pagination);
         return response.getResponseEntity("data","pagination");
     }
+
+    @GetMapping("/agent/members/{uuid}")
+    public ResponseEntity agentMembers(@PathVariable("uuid")String uuid){
+        Response response=new Response(200,service.findAgentMember(uuid));
+        return response.getResponseEntity("data");
+    }
+
+    @GetMapping("/agent/members/direct/{uuid}")
+    public ResponseEntity agentMemberDirect(@PathVariable("uuid")String uuid,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.findAgentMemberDirect(uuid,pagination),pagination);
+        return response.getResponseEntity("data","pagination");
+    }
 }

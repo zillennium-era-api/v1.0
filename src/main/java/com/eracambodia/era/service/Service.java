@@ -7,6 +7,8 @@ import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
 import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
+import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
+import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -80,4 +82,10 @@ public interface Service {
 
     // api/search
     List<Buildings> search(String keyword,Pagination pagination);
+
+    // api/agent/members/uuid
+    List<AgentMember> findAgentMember(String uuid);
+
+    // api/agent/member/direct/uuid
+    List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination);
 }

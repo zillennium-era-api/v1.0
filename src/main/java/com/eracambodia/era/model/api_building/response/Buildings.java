@@ -13,6 +13,8 @@ public class Buildings {
     private String district;
     private String commune;
     private String village;
+    private String street;
+    private String cityOrProvince;
     private double totalCost;
     private String filePath;
     private Agent agent;
@@ -90,6 +92,22 @@ public class Buildings {
         this.village = village;
     }
 
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCityOrProvice() {
+        return cityOrProvince;
+    }
+
+    public void setCityOrProvice(String cityOrProvice) {
+        this.cityOrProvince = cityOrProvice;
+    }
+
     public double getTotalCost() {
         return totalCost;
     }
@@ -128,6 +146,8 @@ public class Buildings {
                 ", district='" + district + '\'' +
                 ", commune='" + commune + '\'' +
                 ", village='" + village + '\'' +
+                ", street='" + street + '\'' +
+                ", cityOrProvice='" + cityOrProvince + '\'' +
                 ", totalCost=" + totalCost +
                 ", filePath='" + filePath + '\'' +
                 ", agent=" + agent +

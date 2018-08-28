@@ -8,6 +8,8 @@ import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
 import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
+import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
+import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -23,6 +25,8 @@ import com.eracambodia.era.repository.api_agent_booking.response.AgentBookingRep
 import com.eracambodia.era.repository.api_agent_favorite.AgentFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_favorite_add.AgentAddFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_favorite_delete.AgentDeleteFavoriteRepo;
+import com.eracambodia.era.repository.api_agent_member_uuid.AgentMemberUUIDRepo;
+import com.eracambodia.era.repository.api_agent_members_direct_uuid.AgentMembersDirectRepo;
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
@@ -329,6 +333,36 @@ public class ServiceImpl implements Service {
         }
         pagination.setTotalItem(searchRepo.countSearch(keyword));
         return buildings;
+    }
+
+    // api/agent/members/uuid
+    @Autowired
+    private AgentMemberUUIDRepo agentMemberUUIDRepo;
+    @Override
+    public List<AgentMember> findAgentMember(String uuid) {
+        Integer userId=agentMemberUUIDRepo.getIdFromAgent(uuid);
+        if(userId==null){
+            throw new CustomException(404,"Not found.");
+        }
+        return agentMemberUUIDRepo.findAgentMember(userId);
+    }
+
+    // api/agent/member/direct/uuid
+    @Autowired
+    private AgentMembersDirectRepo agentMembersDirectRepo;
+
+    @Override
+    public List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination) {
+        Integer userId=agentMembersDirectRepo.getUserParentId(uuid);
+        if(userId==null){
+            throw new CustomException(404,"Agent not found.");
+        }
+        Integer countAgentMember=agentMembersDirectRepo.countAgent(userId);
+        if(countAgentMember==null){
+            throw new CustomException(404,"No record.");
+        }
+        pagination.setTotalItem(countAgentMember);
+        return agentMembersDirectRepo.findAgentMemberDirect(userId);
     }
 }
 

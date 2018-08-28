@@ -19,10 +19,12 @@ public interface BuildingsRepo {
             @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
             @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
             @Result(property = "countryName",column = "country"),
+            @Result(property = "street",column = "street_number_or_name"),
             @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
             @Result(property = "agent",column = "id",one = @One(select = "findAgentOfBuildings")),
             @Result(property = "totalCost",column = "id",one = @One(select = "findTotalCostOfBuildings")),
-            @Result(property="filePath",column = "id",one = @One(select="findFilePathOfBuildings"))
+            @Result(property="filePath",column = "id",one = @One(select="findFilePathOfBuildings")),
+            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince"))
     })
     List<Buildings> findBuildings(Pagination pagination);
     @Select("SELECT users.username,users.image,users.id,users.uuid " +
@@ -58,6 +60,12 @@ public interface BuildingsRepo {
             "WHERE id=#{commune_code}")
     String getCommune();
 
-    @Select("select count(id) from building")
+    @Select("SELECT count(id) " +
+            "FROM building")
     int countBuildingsRecord();
+
+    @Select("SELECT latin_name " +
+            "FROM address " +
+            "WHERE id=#{city_or_province}")
+    String getCityOrProvince();
 }
