@@ -100,12 +100,12 @@ public class Buildings {
         this.street = street;
     }
 
-    public String getCityOrProvice() {
+    public String getCityOrProvince() {
         return cityOrProvince;
     }
 
-    public void setCityOrProvice(String cityOrProvice) {
-        this.cityOrProvince = cityOrProvice;
+    public void setCityOrProvince(String cityOrProvince) {
+        this.cityOrProvince = cityOrProvince;
     }
 
     public double getTotalCost() {
