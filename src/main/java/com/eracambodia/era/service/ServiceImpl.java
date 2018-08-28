@@ -60,11 +60,15 @@ public class ServiceImpl implements Service {
 
     @Override
     public String checkLogin(Login login) {
+        String checkEmail=loginRepo.checkEmail(login.getEmail());
+        if(checkEmail==null){
+            throw new CustomException(404,"You need to register first.");
+        }
         String password = loginRepo.checkLogin(login);
         if (password == null) {
-            throw new CustomException(401, "email or password not available.");
+            throw new CustomException(401, "email need to approve from admin.");
         } else if (!BCrypt.checkpw(login.getPassword(), password)) {
-            throw new CustomException(401, "email or password not correct.");
+            throw new CustomException(404, "email or password not correct.");
         }
         return password;
     }

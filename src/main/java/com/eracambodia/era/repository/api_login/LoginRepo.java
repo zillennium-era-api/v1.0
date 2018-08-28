@@ -27,4 +27,9 @@ public interface LoginRepo {
             "FROM users " +
             "WHERE email=#{email} AND enable=true")
     String checkLogin(Login login);
+
+    @Select("SELECT email " +
+            "FROM users " +
+            "WHERE email=#{email}")
+    String checkEmail(String email);
 }
