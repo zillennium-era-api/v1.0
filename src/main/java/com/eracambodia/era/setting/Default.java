@@ -11,4 +11,7 @@ public class Default {
     public static final String buildingImage=ServletUriComponentsBuilder.fromCurrentContextPath()
             .path("/api/image/building/")
             .toUriString();
+
+    public static final String oneSignalAppID="fa84ca51-c94d-4de7-9104-f90143f2b946";
+    public static final String oneSignalRestAPIKey="OWY1MmUyODQtMjNhNS00ZjFhLWJlNTktODBkNTdkNGQ4ZDgw";
 }

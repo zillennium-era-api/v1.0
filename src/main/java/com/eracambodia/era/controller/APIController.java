@@ -141,7 +141,7 @@ public class APIController {
 
         //provide url for view image
         String downloadUri= ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/api/user/image/")
+                .path("/api/image/user/")
                 .path(fileName)
                 .toUriString();
 
