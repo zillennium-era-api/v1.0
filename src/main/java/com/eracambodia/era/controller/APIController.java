@@ -197,6 +197,31 @@ public class APIController {
                 .body(resource);
     }
 
+    @ApiIgnore
+    @GetMapping("/download/apk/{fileName:.+}")
+    public ResponseEntity downloadApk(@PathVariable String fileName,HttpServletRequest request){
+        Resource resource=fileStorageService.loadFileAsResource(fileName,"apk");
+        if(resource==null){
+            throw new CustomException(404 , "File not found.");
+        }
+        //content type as image for view
+        String contentType = null;
+        try {
+            contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
+        } catch (IOException ex) {
+            System.out.println("Could not determine file type.");
+        }
+        if(contentType == null) {
+            contentType = "application/octet-stream";
+        }
+
+        //return image view on brownser
+        return ResponseEntity.ok()
+                .contentType(MediaType.parseMediaType(contentType))
+                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resource.getFilename() + "\"")
+                .body(resource);
+    }
+
     @PutMapping("/agent/account/password")
     public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal){
         String password=service.getUserPasswordByEmail(principal.getName());

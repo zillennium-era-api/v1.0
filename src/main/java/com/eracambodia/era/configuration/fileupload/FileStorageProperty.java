@@ -6,6 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class FileStorageProperty {
     private String uploadDir;
     private String uploadBuildingDir;
+    private String uploadApk;
 
     public String getUploadBuildingDir() {
         return uploadBuildingDir;
@@ -23,11 +24,20 @@ public class FileStorageProperty {
         this.uploadDir = uploadDir;
     }
 
+    public String getUploadApk() {
+        return uploadApk;
+    }
+
+    public void setUploadApk(String uploadApk) {
+        this.uploadApk = uploadApk;
+    }
+
     @Override
     public String toString() {
         return "FileStorageProperty{" +
                 "uploadDir='" + uploadDir + '\'' +
                 ", uploadBuildingDir='" + uploadBuildingDir + '\'' +
+                ", uploadApk='" + uploadApk + '\'' +
                 '}';
     }
 }

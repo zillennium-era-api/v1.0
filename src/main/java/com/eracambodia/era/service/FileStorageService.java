@@ -24,14 +24,17 @@ import java.util.UUID;
 public class FileStorageService {
     private Path path;
     private Path buildingImagePath;
+    private Path apkPath;
 
     @Autowired
     public FileStorageService(FileStorageProperty fileStorageProperties) {
         this.path = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.buildingImagePath=Paths.get(fileStorageProperties.getUploadBuildingDir()).toAbsolutePath().normalize();
+        this.apkPath=Paths.get(fileStorageProperties.getUploadApk()).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.path);
-            Files.createDirectories((this.buildingImagePath));
+            Files.createDirectories(this.buildingImagePath);
+            Files.createDirectories(this.apkPath);
         } catch (Exception ex) {
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
         }
@@ -69,9 +72,22 @@ public class FileStorageService {
             } catch (MalformedURLException ex) {
                 throw new CustomException(404,"File not found " + fileName+" "+ex);
             }
-        }else {
+        }else if (type=="building"){
             try {
                 Path filePath = this.buildingImagePath.resolve(fileName).normalize();
+
+                Resource resource = new UrlResource(filePath.toUri()) ;
+                if(resource.exists()) {
+                    return resource;
+                } else {
+                    throw new CustomException(404,"file not found.");
+                }
+            } catch (MalformedURLException ex) {
+                throw new CustomException(404,"File not found " + fileName+" "+ex);
+            }
+        }else {
+            try {
+                Path filePath = this.apkPath.resolve(fileName).normalize();
 
                 Resource resource = new UrlResource(filePath.toUri()) ;
                 if(resource.exists()) {

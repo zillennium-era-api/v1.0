@@ -27,7 +27,7 @@ public class EraResourceServer extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/login","/api/register","/api/refresh_token","/api/image/**","/api/search/**","/api/noti/**").permitAll()
+                .antMatchers("/api/login","/api/register","/api/refresh_token","/api/image/**","/api/search/**","/api/noti/**","/api/download/**").permitAll()
                 .antMatchers("/api/**").authenticated();
     }
     @Bean
