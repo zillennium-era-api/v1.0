@@ -7,7 +7,12 @@ import java.util.Date;
 public class TransactionResponse {
     private String buildingName;
     private double totalCost;
-    private String address;
+    private String countryName;
+    private String district;
+    private String commune;
+    private String village;
+    private String street;
+    private String cityOrProvince;
     private Date date;
     private String status;
 
@@ -27,12 +32,52 @@ public class TransactionResponse {
         this.totalCost = totalCost;
     }
 
-    public String getAddress() {
-        return address;
+    public String getCountryName() {
+        return countryName;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCommune() {
+        return commune;
+    }
+
+    public void setCommune(String commune) {
+        this.commune = commune;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCityOrProvince() {
+        return cityOrProvince;
+    }
+
+    public void setCityOrProvince(String cityOrProvince) {
+        this.cityOrProvince = cityOrProvince;
     }
 
     public Date getDate() {
@@ -54,9 +99,14 @@ public class TransactionResponse {
     @Override
     public String toString() {
         return "TransactionResponse{" +
-                ", buildingName='" + buildingName + '\'' +
+                "buildingName='" + buildingName + '\'' +
                 ", totalCost=" + totalCost +
-                ", address='" + address + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", district='" + district + '\'' +
+                ", commune='" + commune + '\'' +
+                ", village='" + village + '\'' +
+                ", street='" + street + '\'' +
+                ", cityOrProvince='" + cityOrProvince + '\'' +
                 ", date=" + date +
                 ", status='" + status + '\'' +
                 '}';

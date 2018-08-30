@@ -22,6 +22,7 @@ public class BuildingUUID {
     private double latitude;
     private double longitude;
     private boolean ifFavorite;
+    private int countFavorite;
     private Agent agent;
     private List<File> files;
     private Feature feature;
@@ -187,6 +188,14 @@ public class BuildingUUID {
         this.ifFavorite = ifFavorite;
     }
 
+    public int getCountFavorite() {
+        return countFavorite;
+    }
+
+    public void setCountFavorite(int countFavorite) {
+        this.countFavorite = countFavorite;
+    }
+
     public List<File> getFiles() {
         return files;
     }
@@ -233,6 +242,7 @@ public class BuildingUUID {
                 ", latitude=" + latitude +
                 ", longitude=" + longitude +
                 ", ifFavorite=" + ifFavorite +
+                ", countFavorite=" + countFavorite +
                 ", agent=" + agent +
                 ", files=" + files +
                 ", feature=" + feature +

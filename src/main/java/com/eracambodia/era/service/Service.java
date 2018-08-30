@@ -28,14 +28,14 @@ public interface Service {
     User findUserByEmailOfLogin(String email);
     String checkLogin(Login login);
 
-    // api/building/uuid
+    // api/building/{uuid}
     BuildingUUID findBuildingByUUID(String uuid,String email);
     void favoriteEnable(BuildingUUID buildingUUID,int userId,int buildingId);
     Integer getIdFromUser(String email);
 
-    // api/building
-    List<Buildings> findBuildings(Pagination pagination);
-    int countBuildingsRecord();
+    // api/building/status/{status}
+    List<Buildings> findBuildings(Pagination pagination,String status);
+    /*int countBuildingsRecord();*/
 
     // api/building/status/update
     Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
@@ -48,7 +48,7 @@ public interface Service {
     List<BuildingHeld> findBuildingHeld(Pagination pagination);
 
     // api/register
-    void register(Register register);
+    void register(Register register,String jwtToken);
 
     // api/user
     com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username);
@@ -64,8 +64,8 @@ public interface Service {
     //api/agent/account/update
     void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email);
 
-    // api/agent/transaction
-    List<TransactionResponse> findAgentsTransaction(String email, Pagination pagination);
+    // api/agent/transaction/status/{status}
+    List<TransactionResponse> findAgentsTransaction(String email,String status, Pagination pagination);
 
     // api/agent/booking
     List<AgentBooking> findAgentsBooking(String email,Pagination pagination);

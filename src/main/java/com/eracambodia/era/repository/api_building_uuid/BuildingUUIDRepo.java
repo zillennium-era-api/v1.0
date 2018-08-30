@@ -4,6 +4,7 @@ import com.eracambodia.era.model.api_building_uuid.response.*;
 import org.apache.ibatis.annotations.*;
 import org.checkerframework.checker.guieffect.qual.SafeEffect;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -29,7 +30,8 @@ public interface BuildingUUIDRepo {
             @Result(property = "agent",column = "id",one = @One(select = "findAgentOfBuildingUUID")),
             @Result(property = "files" ,column = "id",many = @Many(select = "findFilesOfBuildingUUID")),
             @Result(property = "feature",column = "id",many = @Many(select = "findFeatureOfBuildingUUID")),
-            @Result(property = "neighborhood",column = "id",many = @Many(select = "findNeighborhoodOfBuildingUUID"))
+            @Result(property = "neighborhood",column = "id",many = @Many(select = "findNeighborhoodOfBuildingUUID")),
+            @Result(property = "countFavorite",column = "id",one = @One(select="countFavoriteOfBuildingUUID"))
     })
     BuildingUUID findBuildingByUUID(String uuid);
     @Select("SELECT latin_name " +
@@ -100,4 +102,9 @@ public interface BuildingUUIDRepo {
             "FROM address " +
             "WHERE id=#{city_or_province}")
     String getCityOrProvince();
+
+    @Select("SELECT COUNT(id) " +
+            "FROM favorite " +
+            "WHERE owner_id=#{id}")
+    int countFavoriteOfBuildingUUID();
 }

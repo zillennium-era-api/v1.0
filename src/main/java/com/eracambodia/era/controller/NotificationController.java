@@ -2,19 +2,14 @@ package com.eracambodia.era.controller;
 
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Response;
-import com.eracambodia.era.model.api_noti_create_noti.Notification;
+import com.eracambodia.era.model.api_noti_playerid.Notification;
 import com.eracambodia.era.setting.Default;
-import com.fasterxml.jackson.core.*;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.io.OutputStream;
-import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Map;
@@ -23,11 +18,11 @@ import java.util.Scanner;
 @RestController
 @RequestMapping("/api/noti")
 public class NotificationController {
-
-    @PostMapping("/create_noti")
-    public ResponseEntity createNoti(@RequestBody Notification notification){
+    @PostMapping("/playerid")
+    public ResponseEntity allUsers(@RequestBody Notification notification){
         String jsonResponse="";
         int statusCode=0;
+
         try {
             URL url = new URL("https://onesignal.com/api/v1/notifications");
             HttpURLConnection con = (HttpURLConnection)url.openConnection();

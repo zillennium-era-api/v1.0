@@ -15,6 +15,7 @@ public class Buildings {
     private String village;
     private String street;
     private String cityOrProvince;
+    private int countFavorite;
     private double totalCost;
     private String filePath;
     private Agent agent;
@@ -108,6 +109,14 @@ public class Buildings {
         this.cityOrProvince = cityOrProvince;
     }
 
+    public int getCountFavorite() {
+        return countFavorite;
+    }
+
+    public void setCountFavorite(int countFavorite) {
+        this.countFavorite = countFavorite;
+    }
+
     public double getTotalCost() {
         return totalCost;
     }
@@ -147,7 +156,8 @@ public class Buildings {
                 ", commune='" + commune + '\'' +
                 ", village='" + village + '\'' +
                 ", street='" + street + '\'' +
-                ", cityOrProvice='" + cityOrProvince + '\'' +
+                ", cityOrProvince='" + cityOrProvince + '\'' +
+                ", countFavorite=" + countFavorite +
                 ", totalCost=" + totalCost +
                 ", filePath='" + filePath + '\'' +
                 ", agent=" + agent +

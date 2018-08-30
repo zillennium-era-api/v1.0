@@ -38,6 +38,7 @@ import com.eracambodia.era.repository.api_login.LoginRepo;
 import com.eracambodia.era.repository.api_register.RegisterRepo;
 import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
+import com.eracambodia.era.utils.DecodeJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -104,28 +105,36 @@ public class ServiceImpl implements Service {
         return buildingUUIDRepo.getIdFromUser(email);
     }
 
-    // api/building
+    // api/building/status/{status}
     @Autowired
     private BuildingsRepo buildingsRepo;
 
     @Override
-    public List<Buildings> findBuildings(Pagination pagination) {
-        List<Buildings> buildings = buildingsRepo.findBuildings(pagination);
+    public List<Buildings> findBuildings(Pagination pagination,String status) {
+        if(!status.equalsIgnoreCase("all")) {
+            List<Buildings> buildings = buildingsRepo.findBuildings(pagination, status);
+            if (buildings.size() < 1) {
+                throw new CustomException(404, "Page not Found.");
+            }
+            pagination.setTotalItem(buildingsRepo.countBuildingsRecord(status));
+            return buildings;
+        }
+        List<Buildings> buildings = buildingsRepo.findAllBuildings(pagination);
         if (buildings.size() < 1) {
             throw new CustomException(404, "Page not Found.");
         }
-        pagination.setTotalItem(buildingsRepo.countBuildingsRecord());
+        pagination.setTotalItem(buildingsRepo.countAllBuildingsRecord());
         return buildings;
     }
 
-    @Override
+    /*@Override
     public int countBuildingsRecord() {
         int countAllBuildings = buildingsRepo.countBuildingsRecord();
         if (countAllBuildings < 1) {
             throw new CustomException(404, "No record of building ");
         }
         return countAllBuildings;
-    }
+    }*/
 
     // api building/status/update
     @Autowired
@@ -178,7 +187,7 @@ public class ServiceImpl implements Service {
     private RegisterRepo registerRepo;
 
     @Override
-    public void register(Register register) {
+    public void register(Register register,String jwtToken) {
         String message = "";
         RegisterUniqueFields registerUniqueFields = new RegisterUniqueFields();
         if (registerRepo.getIdCard(register.getIdCard()) != null) {
@@ -195,7 +204,11 @@ public class ServiceImpl implements Service {
         }
         if (message.length() > 1)
             throw new CustomException(409, message, registerUniqueFields);
-        registerRepo.register(register);
+
+        String email=DecodeJWT.getEmailFromJwt(jwtToken);
+        Integer userId=registerRepo.getIdByEmail(email);
+
+        registerRepo.register(register,userId);
     }
 
 
@@ -261,16 +274,23 @@ public class ServiceImpl implements Service {
         updateAgentAccountRepo.updateUserInformation(updateAgentAccount, email);
     }
 
-    // api/agent/transaction
+    // api/agent/transaction/status/{status}
     @Autowired
     private AgentTransactionRepo agentTransactionRepo;
 
     @Override
-    public List<TransactionResponse> findAgentsTransaction(String email, Pagination pagination) {
-        List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsTransaction(email, pagination);
+    public List<TransactionResponse> findAgentsTransaction(String email,String status, Pagination pagination) {
+        if(!status.equalsIgnoreCase("all")) {
+            List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsTransaction(email, status, pagination);
+            if (transactionResponses.size() < 1)
+                throw new CustomException(404, "No record");
+            pagination.setTotalItem(agentTransactionRepo.countTransaction(email, status));
+            return transactionResponses;
+        }
+        List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsAllTransaction(email, pagination);
         if (transactionResponses.size() < 1)
             throw new CustomException(404, "No record");
-        pagination.setTotalItem(agentTransactionRepo.countTransaction(email));
+        pagination.setTotalItem(agentTransactionRepo.countAllTransaction(email));
         return transactionResponses;
     }
 

@@ -109,9 +109,10 @@ public class APIController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register,HttpServletRequest request) {
+        String jwtToken=request.getHeader("Authorization");
         register.setPassword(passwordEncoder.encode(register.getPassword()));
-        service.register(register);
+        service.register(register,jwtToken);
         Response response=new Response(201);
         return response.getResponseEntity();
     }
@@ -242,14 +243,13 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-    @GetMapping("/building")
-    public ResponseEntity buildings(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
+    @GetMapping("/building/status/{status}")
+    public ResponseEntity buildings(@PathVariable(value = "status")String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
         Pagination pagination=new Pagination(page,limit);
-        List<Buildings> buildings=service.findBuildings(pagination);
+        List<Buildings> buildings=service.findBuildings(pagination,status);
 
         Response response = new Response(200, buildings,pagination);
         return response.getResponseEntity("data","pagination");
-
     }
 
     @GetMapping("/building/{uuid}")
@@ -267,6 +267,7 @@ public class APIController {
         return response.getResponseEntity();
     }
 
+    @ApiIgnore
     @GetMapping("/building/available")
     public ResponseEntity buildingAvailable(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
         Pagination pagination=new Pagination(page,limit);
@@ -276,6 +277,7 @@ public class APIController {
 
     }
 
+    @ApiIgnore
     @GetMapping("/building/held")
     public ResponseEntity buildingHeld(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
         Pagination pagination=new Pagination(page,limit);
@@ -284,10 +286,10 @@ public class APIController {
 
     }
 
-    @GetMapping("/agent/transaction")
-    public ResponseEntity agentTransaction(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
+    @GetMapping("/agent/transaction/status/{status}")
+    public ResponseEntity agentTransaction(@PathVariable("status")String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
         Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findAgentsTransaction(principal.getName(),pagination),pagination);
+        Response response=new Response(200,service.findAgentsTransaction(principal.getName(),status,pagination),pagination);
         return response.getResponseEntity("data","pagination");
     }
 

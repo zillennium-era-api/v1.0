@@ -12,8 +12,10 @@ import java.util.List;
 public interface BuildingsRepo {
 
     @Select("SELECT * " +
-            "FROM building ORDER BY user_create_date DESC " +
-            "LIMIT #{limit} OFFSET #{offset} ")
+            "FROM building " +
+            "WHERE building.status ILIKE #{status} " +
+            "ORDER BY user_create_date DESC " +
+            "LIMIT #{pagination.limit} OFFSET #{pagination.offset} ")
     @Results({
             @Result(property = "id",column = "id"),
             @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
@@ -24,9 +26,10 @@ public interface BuildingsRepo {
             @Result(property = "agent",column = "id",one = @One(select = "findAgentOfBuildings")),
             @Result(property = "totalCost",column = "id",one = @One(select = "findTotalCostOfBuildings")),
             @Result(property="filePath",column = "id",one = @One(select="findFilePathOfBuildings")),
-            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince"))
+            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince")),
+            @Result(property = "countFavorite",column = "id",one = @One(select = "countFavoriteOfBuilding"))
     })
-    List<Buildings> findBuildings(Pagination pagination);
+    List<Buildings> findBuildings(@Param("pagination")Pagination pagination,@Param("status")String status);
     @Select("SELECT users.username,users.image,users.id,users.uuid " +
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
@@ -61,11 +64,41 @@ public interface BuildingsRepo {
     String getCommune();
 
     @Select("SELECT count(id) " +
-            "FROM building")
-    int countBuildingsRecord();
+            "FROM building " +
+            "WHERE status ILIKE #{status}")
+    int countBuildingsRecord(String status);
+
+    @Select("SELECT count(id) " +
+            "FROM building ")
+    int countAllBuildingsRecord();
 
     @Select("SELECT latin_name " +
             "FROM address " +
             "WHERE id=#{city_or_province}")
     String getCityOrProvince();
+
+    @Select("SELECT COUNT(id) " +
+            "FROM favorite " +
+            "WHERE owner_id=#{id}")
+    int countFavoriteOfBuilding();
+
+    @Select("SELECT * " +
+            "FROM building " +
+            "ORDER BY user_create_date DESC " +
+            "LIMIT #{limit} OFFSET #{offset} ")
+    @Results({
+            @Result(property = "id",column = "id"),
+            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
+            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
+            @Result(property = "countryName",column = "country"),
+            @Result(property = "street",column = "street_number_or_name"),
+            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
+            @Result(property = "agent",column = "id",one = @One(select = "findAgentOfBuildings")),
+            @Result(property = "totalCost",column = "id",one = @One(select = "findTotalCostOfBuildings")),
+            @Result(property = "filePath",column = "id",one = @One(select="findFilePathOfBuildings")),
+            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince")),
+            @Result(property = "countFavorite",column = "id",one = @One(select = "countFavoriteOfBuilding"))
+    })
+    List<Buildings> findAllBuildings(Pagination pagination);
+
 }

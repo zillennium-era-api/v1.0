@@ -1,4 +1,4 @@
-package com.eracambodia.era.model.api_noti_create_noti;
+package com.eracambodia.era.model.api_noti_playerid;
 
 public class Notification {
     private String title;

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RegisterRepo {
-    @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card,uuid) " +
-            "VALUES (#{name},#{email},#{password},#{gender},#{dateOfBirth},#{phone},#{idCard},#{uuid})")
-    void register(Register register);
+    @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card,uuid,parent_id) " +
+            "VALUES (#{register.name},#{register.email},#{register.password},#{register.gender},#{register.dateOfBirth},#{register.phone},#{register.idCard},#{register.uuid},#{parentId})")
+    void register(@Param("register")Register register,@Param("parentId")Integer parentId);
 
 
     @Select("SELECT email " +
@@ -23,4 +23,10 @@ public interface RegisterRepo {
             "FROM users " +
             "WHERE id_card=#{idCard}")
     String getIdCard(String idCard);
+
+    @Select("SELECT id " +
+            "FROM users " +
+            "WHERE email=#{email}")
+    Integer getIdByEmail(String email);
+
 }
