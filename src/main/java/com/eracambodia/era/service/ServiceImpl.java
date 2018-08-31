@@ -35,6 +35,7 @@ import com.eracambodia.era.repository.api_building_held.BuildingHeldRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
 import com.eracambodia.era.repository.api_login.LoginRepo;
+import com.eracambodia.era.repository.api_noti_to_favoritor.NotiToFavoritorRepo;
 import com.eracambodia.era.repository.api_register.RegisterRepo;
 import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
@@ -389,6 +390,18 @@ public class ServiceImpl implements Service {
         }
         pagination.setTotalItem(countAgentMember);
         return agentMembersDirectRepo.findAgentMemberDirect(userId);
+    }
+
+    // api/noti/to_favoritor
+    @Autowired
+    private NotiToFavoritorRepo notiToFavoritorRepo;
+    @Override
+    public List<String> findPlayerId(int userId, int ownerId) {
+        List<String> playerId=notiToFavoritorRepo.findPlayerId(userId,ownerId);
+        if(playerId==null || playerId.size()<1){
+            throw new CustomException(404,"No favoritor.");
+        }
+        return playerId;
     }
 }
 

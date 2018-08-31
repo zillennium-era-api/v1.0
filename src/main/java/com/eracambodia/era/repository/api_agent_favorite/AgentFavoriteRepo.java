@@ -11,9 +11,9 @@ import java.util.List;
 
 @Service
 public interface AgentFavoriteRepo {
-    @Select("SELECT building.id as bid,building.name,users.id as uid,building.uuid,building.status,building.type,building.country,building.street_number_or_name,building.district_code,building.village_code,building.commune_code,building.city_or_province " +
-            "FROM building " +
-            "INNER JOIN favorite ON building.id=favorite.owner_id " +
+    @Select("SELECT building.id as bid,building.name,users.id as uid,building.uuid,building.status,building.type,building.country,building.street_number_or_name,building.district_code,building.village_code,building.commune_code,building.city_or_province,favorite.owner_id as fbid " +
+            "FROM favorite " +
+            "INNER JOIN building ON building.id=favorite.owner_id " +
             "INNER JOIN users ON users.id=favorite.user_id " +
             "WHERE users.email=#{email} " +
             "ORDER BY building.user_create_date DESC LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
@@ -21,7 +21,7 @@ public interface AgentFavoriteRepo {
             @Result(property = "id",column = "bid"),
             @Result(property = "totalCost",column = "bid",one = @One(select="getTotalCost")),
             @Result(property = "filePath",column = "bid",one=@One(select = "getFilePath")),
-            @Result(property = "agent",column = "uid",one=@One(select = "getAgent")),
+            @Result(property = "agent",column = "fbid",one=@One(select = "getAgent")),
             @Result(property = "countryName",column = "country"),
             @Result(property = "street",column = "street_number_or_name"),
             @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
@@ -39,9 +39,11 @@ public interface AgentFavoriteRepo {
             "WHERE owner_id=#{id} AND type='image' " +
             "ORDER BY id DESC LIMIT 1")
     String getFilePath();
-    @Select("SELECT * " +
+    @Select("SELECT users.username,users.image,users.id,users.uuid " +
             "FROM users " +
-            "WHERE id=#{uid}")
+            "INNER JOIN transaction ON transaction.user_id=users.id " +
+            "WHERE transaction.owner_id = #{fbid} " +
+            "ORDER BY transaction.create_date LIMIT 1")
     @Results({
             @Result(property = "name",column = "username"),
             @Result(property = "profilePhoto",column = "image")

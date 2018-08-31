@@ -88,4 +88,7 @@ public interface Service {
 
     // api/agent/member/direct/uuid
     List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination);
+
+    // api/noti/to_favoritor
+    List<String> findPlayerId(int userId,int ownerId);
 }

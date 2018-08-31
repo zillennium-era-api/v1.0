@@ -314,7 +314,7 @@ public class APIController {
         return response.getResponseEntity();
     }
 
-    @DeleteMapping("/agent/favorite/delete")
+    @PostMapping("/agent/favorite/delete")
     public ResponseEntity agentDeleteFavorite(@RequestBody AgentDeleteFavorite agentDeleteFavorite,@ApiIgnore Principal principal){
         service.deleteAgentFavorite(agentDeleteFavorite,principal.getName());
         Response response=new Response(200);
