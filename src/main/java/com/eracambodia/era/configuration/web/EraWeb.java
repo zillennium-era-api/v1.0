@@ -1,6 +1,7 @@
 package com.eracambodia.era.configuration.web;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ContentNegotiationConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -21,5 +22,10 @@ public class EraWeb implements WebMvcConfigurer {
             registry.addResourceHandler("/**").addResourceLocations(
                     RESOURCE_LOCATIONS);
         }
+    }
+
+    @Override
+    public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
+        configurer.favorPathExtension(false);
     }
 }

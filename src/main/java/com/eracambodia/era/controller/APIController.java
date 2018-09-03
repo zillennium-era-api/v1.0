@@ -25,6 +25,7 @@ import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -151,11 +152,13 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-    @GetMapping("/image/user/{fileName:.+}")
-    public ResponseEntity<Resource> viewImage(@PathVariable String fileName,HttpServletRequest request){
+
+
+    @GetMapping(value = "/image/user/{fileName:.+}")
+    public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName,HttpServletRequest request){
         //load image
         Resource resource=fileStorageService.loadFileAsResource(fileName,"user");
-        if(resource==null){
+        if(!resource.exists()){
             throw new CustomException(404 , "File not found.");
         }
         //content type as image for view
@@ -178,7 +181,7 @@ public class APIController {
     @GetMapping("/image/building/{fileName:.+}")
     public ResponseEntity imageBuilding(@PathVariable String fileName,HttpServletRequest request){
         Resource resource=fileStorageService.loadFileAsResource(fileName,"building");
-        if(resource==null){
+        if(!resource.exists()){
             throw new CustomException(404 , "File not found.");
         }
         //content type as image for view
@@ -186,7 +189,8 @@ public class APIController {
         try {
             contentType = request.getServletContext().getMimeType(resource.getFile().getAbsolutePath());
         } catch (IOException ex) {
-            System.out.println("Could not determine file type.");
+            System.out.println("" +
+                    "Could not determine file type.");
         }
         if(contentType == null) {
             contentType = "application/octet-stream";

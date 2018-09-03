@@ -90,5 +90,6 @@ public interface Service {
     List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination);
 
     // api/noti/to_favoritor
-    List<String> findPlayerId(int userId,int ownerId);
+    List<String> findPlayerId(String email,String buildingUUID);
+    String getImage(String email);
 }

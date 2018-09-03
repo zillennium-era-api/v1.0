@@ -16,7 +16,7 @@ public interface AgentFavoriteRepo {
             "INNER JOIN building ON building.id=favorite.owner_id " +
             "INNER JOIN users ON users.id=favorite.user_id " +
             "WHERE users.email=#{email} " +
-            "ORDER BY building.user_create_date DESC LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
+            "ORDER BY favorite.date DESC LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
             @Result(property = "id",column = "bid"),
             @Result(property = "totalCost",column = "bid",one = @One(select="getTotalCost")),

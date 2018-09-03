@@ -209,7 +209,11 @@ public class ServiceImpl implements Service {
         String email=DecodeJWT.getEmailFromJwt(jwtToken);
         Integer userId=registerRepo.getIdByEmail(email);
 
-        registerRepo.register(register,userId);
+        if(registerRepo.register(register,userId)>0) {
+            if (userId != null) {
+                registerRepo.enable(register.getEmail());
+            }
+        }
     }
 
 
@@ -396,12 +400,24 @@ public class ServiceImpl implements Service {
     @Autowired
     private NotiToFavoritorRepo notiToFavoritorRepo;
     @Override
-    public List<String> findPlayerId(int userId, int ownerId) {
+    public List<String> findPlayerId(String email, String buildingUUID) {
+        Integer ownerId=notiToFavoritorRepo.getBuildingID(buildingUUID);
+        if(ownerId==null){
+            throw new CustomException(404,"Building UUID Not Found.");
+        }
+        Integer userId=notiToFavoritorRepo.getIDByEmail(email);
+        if(userId==null){
+            throw new CustomException(404,"Email not found.");
+        }
         List<String> playerId=notiToFavoritorRepo.findPlayerId(userId,ownerId);
         if(playerId==null || playerId.size()<1){
             throw new CustomException(404,"No favoritor.");
         }
         return playerId;
+    }
+    @Override
+    public String getImage(String email) {
+        return notiToFavoritorRepo.getImage(email);
     }
 }
 

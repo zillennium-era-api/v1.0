@@ -63,12 +63,8 @@ public class FileStorageService {
             try {
                 Path filePath = this.path.resolve(fileName).normalize();
 
-                Resource resource = new UrlResource(filePath.toUri()) ;
-                if(resource.exists()) {
-                    return resource;
-                } else {
-                    throw new CustomException(404,"file not found.");
-                }
+                Resource resource = new UrlResource(filePath.toUri());
+                return resource;
             } catch (MalformedURLException ex) {
                 throw new CustomException(404,"File not found " + fileName+" "+ex);
             }
@@ -77,11 +73,8 @@ public class FileStorageService {
                 Path filePath = this.buildingImagePath.resolve(fileName).normalize();
 
                 Resource resource = new UrlResource(filePath.toUri()) ;
-                if(resource.exists()) {
-                    return resource;
-                } else {
-                    throw new CustomException(404,"file not found.");
-                }
+                return resource;
+
             } catch (MalformedURLException ex) {
                 throw new CustomException(404,"File not found " + fileName+" "+ex);
             }
@@ -90,11 +83,8 @@ public class FileStorageService {
                 Path filePath = this.apkPath.resolve(fileName).normalize();
 
                 Resource resource = new UrlResource(filePath.toUri()) ;
-                if(resource.exists()) {
-                    return resource;
-                } else {
-                    throw new CustomException(404,"file not found.");
-                }
+                return resource;
+
             } catch (MalformedURLException ex) {
                 throw new CustomException(404,"File not found " + fileName+" "+ex);
             }

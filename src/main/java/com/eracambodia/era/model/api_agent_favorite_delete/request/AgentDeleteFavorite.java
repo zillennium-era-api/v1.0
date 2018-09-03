@@ -1,6 +1,9 @@
 package com.eracambodia.era.model.api_agent_favorite_delete.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class AgentDeleteFavorite {
+    @JsonIgnore
     private int userId;
     private int ownerId;
     private String tableName;

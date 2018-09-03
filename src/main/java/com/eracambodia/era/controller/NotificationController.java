@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
@@ -25,8 +26,12 @@ public class NotificationController {
     private Service service;
 
     @PostMapping("/playerid")
-    public ResponseEntity allUsers(@RequestBody Notification notification){
-       /* List<String> playerIds=service.findPlayerId(notification.getUserId(),notification.getOwnerId());
+    public ResponseEntity allUsers(@RequestBody Notification notification, Principal principal){
+        List<String> playerIds=service.findPlayerId(principal.getName(),notification.getBuildingUUID());
+        String profilePhoto=service.getImage(principal.getName());
+        if(profilePhoto!=null){
+            profilePhoto=Default.profilePhoto+profilePhoto;
+        }
         String arrayIds="[";
         for(int i=0;i<playerIds.size();i++){
             arrayIds+="\""+playerIds.get(i)+"\"";
@@ -34,7 +39,7 @@ public class NotificationController {
                 arrayIds+=",";
             }
         }
-        arrayIds+="]";*/
+        arrayIds+="]";
         String jsonResponse="";
         int statusCode=0;
 
@@ -48,24 +53,15 @@ public class NotificationController {
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             con.setRequestProperty("Authorization", "Basic "+ Default.oneSignalRestAPIKey);
             con.setRequestMethod("POST");
-
-            /*String strJsonBody = "{"
-                    +   "\"app_id\": \""+Default.oneSignalAppID+"\","
-                    +   "\"include_player_ids\": "+arrayIds+","
-                    +   "\"big_picture\": \""+notification.getImage()+"\","
-                    +   "\"headings\": {\"en\":\""+notification.getTitle()+"\"},"
-                    +   "\"data\": {\"foo\": \"bar\"},"
-                    +   "\"contents\": {\"en\": \""+notification.getContent()+"\"}"
-                    + "}";*/
-
             String strJsonBody = "{"
                     +   "\"app_id\": \""+Default.oneSignalAppID+"\","
-                    +   "\"included_segments\": [\"All\"],"
-                    +   "\"data\": {\"foo\": \"bar\"},"
-                    +   "\"contents\": {\"en\": \"English Message\"}"
+                    +   "\"include_player_ids\": "+arrayIds+","
+                    +   "\"big_picture\": \""+notification.getBigPicture()+"\","
+                    +   "\"headings\": {\"en\":\""+notification.getTitle()+"\"},"
+                    +   "\"data\": {\"buildingUUID\": \""+notification.getBuildingUUID()+"\"},"
+                    +   "\"large_icon\": \""+profilePhoto+"\","
+                    +   "\"contents\": {\"en\": \""+notification.getContent()+"\"}"
                     + "}";
-
-            /*System.out.println("strJsonBody:\n" + strJsonBody);*/
 
             byte[] sendBytes = strJsonBody.getBytes("UTF-8");
             con.setFixedLengthStreamingMode(sendBytes.length);

@@ -1,26 +1,18 @@
 package com.eracambodia.era.model.api_noti_to_favoritor;
 
 public class Notification {
-    private int ownerId;
-    private int userId;
+    private String buildingUUID;
     private String title;
     private String content;
-    private String image;
+    private String profilePhoto;
+    private String bigPicture;
 
-    public int getOwnerId() {
-        return ownerId;
+    public String getBuildingUUID() {
+        return buildingUUID;
     }
 
-    public void setOwnerId(int ownerId) {
-        this.ownerId = ownerId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
+    public void setBuildingUUID(String buildingUUID) {
+        this.buildingUUID = buildingUUID;
     }
 
     public String getTitle() {
@@ -39,22 +31,30 @@ public class Notification {
         this.content = content;
     }
 
-    public String getImage() {
-        return image;
+    public String getProfilePhoto() {
+        return profilePhoto;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
+    public String getBigPicture() {
+        return bigPicture;
+    }
+
+    public void setBigPicture(String bigPicture) {
+        this.bigPicture = bigPicture;
     }
 
     @Override
     public String toString() {
         return "Notification{" +
-                "ownerId=" + ownerId +
-                ", userId=" + userId +
+                "buildingUUID='" + buildingUUID + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", image='" + image + '\'' +
+                ", profilePhoto='" + profilePhoto + '\'' +
+                ", image='" + bigPicture + '\'' +
                 '}';
     }
 }

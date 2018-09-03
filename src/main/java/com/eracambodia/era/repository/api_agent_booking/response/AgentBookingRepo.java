@@ -16,6 +16,7 @@ public interface AgentBookingRepo {
             "INNER JOIN users ON users.id=transaction.user_id " +
             "WHERE building.status = 'BOOKED' AND users.email=#{email} LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
+            @Result(property = "id",column = "id"),
             @Result(property = "totalCost",column = "id",one = @One(select = "getTotalCost")),
             @Result(property = "filePath",column = "id",one = @One(select = "getFilePath"))
     })
