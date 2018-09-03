@@ -106,7 +106,7 @@ public class APIController {
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
         Response response=new Response(200,token);
-        return response.getResponseEntity("refreshTokenResponse");
+        return response.getResponseEntity("data");
     }
 
     @PostMapping("/register")
