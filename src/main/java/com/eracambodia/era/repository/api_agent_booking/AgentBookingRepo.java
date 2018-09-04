@@ -1,4 +1,4 @@
-package com.eracambodia.era.repository.api_agent_booking.response;
+package com.eracambodia.era.repository.api_agent_booking;
 
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;

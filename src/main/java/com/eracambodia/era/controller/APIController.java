@@ -297,6 +297,7 @@ public class APIController {
         return response.getResponseEntity("data","pagination");
     }
 
+    @ApiIgnore
     @GetMapping("/agent/booking")
     public ResponseEntity agentBooking(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
         Pagination pagination=new Pagination(page,limit);
@@ -342,6 +343,13 @@ public class APIController {
     public ResponseEntity agentMemberDirect(@PathVariable("uuid")String uuid,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
         Pagination pagination=new Pagination(page,limit);
         Response response=new Response(200,service.findAgentMemberDirect(uuid,pagination),pagination);
+        return response.getResponseEntity("data","pagination");
+    }
+
+    @GetMapping("/agent/status/{status}")
+    public ResponseEntity agentProcess(@PathVariable String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
+        Pagination pagination=new Pagination(page,limit);
+        Response response=new Response(200,service.findAgentProcess(status,principal.getName(),pagination),pagination);
         return response.getResponseEntity("data","pagination");
     }
 }

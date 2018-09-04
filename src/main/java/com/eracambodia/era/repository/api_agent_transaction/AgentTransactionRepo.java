@@ -17,7 +17,7 @@ public interface AgentTransactionRepo {
             "WHERE users.email=#{email} AND transaction.status ilike #{status}" +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
-            @Result(property = "buildingName",column = "owner_id",one=@One(select = "findBuildingName")),
+            @Result(property = "name",column = "owner_id",one=@One(select = "findBuildingName")),
             @Result(property = "totalCost",column = "owner_id",one=@One(select="findTotalCost")),
             @Result(property = "date",column = "create_date"),
             @Result(property = "countryName",column = "country"),
@@ -73,7 +73,7 @@ public interface AgentTransactionRepo {
             "WHERE users.email=#{email} " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
-            @Result(property = "buildingName",column = "owner_id",one=@One(select = "findBuildingName")),
+            @Result(property = "name",column = "owner_id",one=@One(select = "findBuildingName")),
             @Result(property = "totalCost",column = "owner_id",one=@One(select="findTotalCost")),
             @Result(property = "date",column = "create_date"),
             @Result(property = "countryName",column = "country"),

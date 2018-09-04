@@ -10,6 +10,7 @@ import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
+import com.eracambodia.era.model.api_agent_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -21,13 +22,14 @@ import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
-import com.eracambodia.era.repository.api_agent_booking.response.AgentBookingRepo;
+import com.eracambodia.era.repository.api_agent_booking.AgentBookingRepo;
 import com.eracambodia.era.repository.api_agent_favorite.AgentFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_favorite_add.AgentAddFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_favorite_delete.AgentDeleteFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_member_uuid.AgentMemberUUIDRepo;
 import com.eracambodia.era.repository.api_agent_members_direct_uuid.AgentMembersDirectRepo;
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
+import com.eracambodia.era.repository.api_agent_status_status.AgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_available.BuildingAvailableRepo;
@@ -44,7 +46,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -418,6 +419,28 @@ public class ServiceImpl implements Service {
     @Override
     public String getImage(String email) {
         return notiToFavoritorRepo.getImage(email);
+    }
+
+    // api/agent/status/{status}
+    @Autowired
+    private AgentRepo agentRepo;
+    @Override
+    public List<Agent> findAgentProcess(String status,String email, Pagination pagination) {
+        if(status.equalsIgnoreCase("all")){
+            List<Agent> list=agentRepo.findAgentsAllProcess(email,pagination);
+            if(list.size()<1){
+                throw new CustomException(404,"No record.");
+            }
+            pagination.setTotalItem(agentRepo.countAgentAllProcess(email));
+            return list;
+        }else {
+            List<Agent> list=agentRepo.findAgentsProcess(status,email,pagination);
+            if(list.size()<1){
+                throw new CustomException(404,"No record of "+status);
+            }
+            pagination.setTotalItem(agentRepo.countAgentProcess(email,status));
+            return list;
+        }
     }
 }
 

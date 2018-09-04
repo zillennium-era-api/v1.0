@@ -5,8 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.util.Date;
 
 public class TransactionResponse {
-    private String buildingName;
-    private double totalCost;
+    private String name;
+    private Double totalCost;
     private String countryName;
     private String district;
     private String commune;
@@ -16,19 +16,19 @@ public class TransactionResponse {
     private Date date;
     private String status;
 
-    public String getBuildingName() {
-        return buildingName;
+    public String getName() {
+        return name;
     }
 
-    public void setBuildingName(String buildingName) {
-        this.buildingName = buildingName;
+    public void setName(String buildingName) {
+        this.name = buildingName;
     }
 
-    public double getTotalCost() {
+    public Double getTotalCost() {
         return totalCost;
     }
 
-    public void setTotalCost(double totalCost) {
+    public void setTotalCost(Double totalCost) {
         this.totalCost = totalCost;
     }
 
@@ -99,7 +99,7 @@ public class TransactionResponse {
     @Override
     public String toString() {
         return "TransactionResponse{" +
-                "buildingName='" + buildingName + '\'' +
+                "buildingName='" + name + '\'' +
                 ", totalCost=" + totalCost +
                 ", countryName='" + countryName + '\'' +
                 ", district='" + district + '\'' +

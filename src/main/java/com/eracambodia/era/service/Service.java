@@ -9,6 +9,7 @@ import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
+import com.eracambodia.era.model.api_agent_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -92,4 +93,7 @@ public interface Service {
     // api/noti/to_favoritor
     List<String> findPlayerId(String email,String buildingUUID);
     String getImage(String email);
+
+    // api/agent/status/{status}
+    List<Agent> findAgentProcess(String status,String email,Pagination pagination);
 }
