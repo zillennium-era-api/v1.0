@@ -1,4 +1,4 @@
-package com.eracambodia.era.model.api_agent_status_status.response;
+package com.eracambodia.era.model.api_agent_building_status_status.response;
 
 import com.eracambodia.era.setting.Default;
 

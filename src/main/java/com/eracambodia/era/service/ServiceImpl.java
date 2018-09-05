@@ -10,7 +10,7 @@ import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
-import com.eracambodia.era.model.api_agent_status_status.response.Agent;
+import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -29,7 +29,7 @@ import com.eracambodia.era.repository.api_agent_favorite_delete.AgentDeleteFavor
 import com.eracambodia.era.repository.api_agent_member_uuid.AgentMemberUUIDRepo;
 import com.eracambodia.era.repository.api_agent_members_direct_uuid.AgentMembersDirectRepo;
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
-import com.eracambodia.era.repository.api_agent_status_status.AgentRepo;
+import com.eracambodia.era.repository.api_agent_building_status_status.AgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_available.BuildingAvailableRepo;

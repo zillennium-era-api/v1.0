@@ -1,8 +1,7 @@
-package com.eracambodia.era.repository.api_agent_status_status;
+package com.eracambodia.era.repository.api_agent_building_status_status;
 
 import com.eracambodia.era.model.Pagination;
-import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
-import com.eracambodia.era.model.api_agent_status_status.response.Agent;
+import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 

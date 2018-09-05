@@ -9,7 +9,7 @@ import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
-import com.eracambodia.era.model.api_agent_status_status.response.Agent;
+import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
@@ -18,9 +18,7 @@ import com.eracambodia.era.model.api_building_status_update.request.BuildingStat
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_register.request.Register;
-import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 
-import java.awt.print.Pageable;
 import java.util.List;
 
 public interface Service {
