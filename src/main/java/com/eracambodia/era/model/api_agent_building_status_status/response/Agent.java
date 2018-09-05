@@ -8,6 +8,12 @@ public class Agent {
     private String uuid;
     private String status;
     private String type;
+    private String countryName;
+    private String district;
+    private String commune;
+    private String village;
+    private String street;
+    private String cityOrProvince;
     private double totalCost=0;
     private String filePath;
 
@@ -51,6 +57,54 @@ public class Agent {
         this.type = type;
     }
 
+    public String getCountryName() {
+        return countryName;
+    }
+
+    public void setCountryName(String countryName) {
+        this.countryName = countryName;
+    }
+
+    public String getDistrict() {
+        return district;
+    }
+
+    public void setDistrict(String district) {
+        this.district = district;
+    }
+
+    public String getCommune() {
+        return commune;
+    }
+
+    public void setCommune(String commune) {
+        this.commune = commune;
+    }
+
+    public String getVillage() {
+        return village;
+    }
+
+    public void setVillage(String village) {
+        this.village = village;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public void setStreet(String street) {
+        this.street = street;
+    }
+
+    public String getCityOrProvince() {
+        return cityOrProvince;
+    }
+
+    public void setCityOrProvince(String cityOrProvince) {
+        this.cityOrProvince = cityOrProvince;
+    }
+
     public double getTotalCost() {
         return totalCost;
     }
@@ -71,12 +125,18 @@ public class Agent {
 
     @Override
     public String toString() {
-        return "AgentBooking{" +
+        return "Agent{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", uuid='" + uuid + '\'' +
                 ", status='" + status + '\'' +
                 ", type='" + type + '\'' +
+                ", countryName='" + countryName + '\'' +
+                ", district='" + district + '\'' +
+                ", commune='" + commune + '\'' +
+                ", village='" + village + '\'' +
+                ", street='" + street + '\'' +
+                ", cityOrProvince='" + cityOrProvince + '\'' +
                 ", totalCost=" + totalCost +
                 ", filePath='" + filePath + '\'' +
                 '}';

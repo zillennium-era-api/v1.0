@@ -265,8 +265,8 @@ public class APIController {
     }
 
     @PostMapping("/building/status/update")
-    public ResponseEntity updateBuildingStatus(@RequestBody BuildingStatusUpdate buildingStatusUpdate){
-        service.updateBuildingStatus(buildingStatusUpdate);
+    public ResponseEntity updateBuildingStatus(@RequestBody BuildingStatusUpdate buildingStatusUpdate,@ApiIgnore Principal principal){
+        service.updateBuildingStatus(buildingStatusUpdate,principal.getName());
         Response response=new Response(200);
         return response.getResponseEntity();
     }

@@ -1,10 +1,11 @@
 package com.eracambodia.era.model.api_noti_to_favoritor;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Notification {
     private String buildingUUID;
     private String title;
     private String content;
-    private String profilePhoto;
     private String bigPicture;
 
     public String getBuildingUUID() {
@@ -31,14 +32,6 @@ public class Notification {
         this.content = content;
     }
 
-    public String getProfilePhoto() {
-        return profilePhoto;
-    }
-
-    public void setProfilePhoto(String profilePhoto) {
-        this.profilePhoto = profilePhoto;
-    }
-
     public String getBigPicture() {
         return bigPicture;
     }
@@ -53,7 +46,6 @@ public class Notification {
                 "buildingUUID='" + buildingUUID + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", profilePhoto='" + profilePhoto + '\'' +
                 ", image='" + bigPicture + '\'' +
                 '}';
     }

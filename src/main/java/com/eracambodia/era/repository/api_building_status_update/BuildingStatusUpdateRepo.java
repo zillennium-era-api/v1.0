@@ -19,4 +19,8 @@ public interface BuildingStatusUpdateRepo {
             "WHERE id=#{ownerId} ")
     Integer findBuildingIdByIdOfBuildingStatusUpdate(@Param("ownerId")int ownerId);
 
+    @Select("SELECT id " +
+            "FROM users " +
+            "WHERE email=#{email}")
+    int getUserEmail(String email);
 }

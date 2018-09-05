@@ -10,6 +10,7 @@ import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -26,7 +27,7 @@ public class NotificationController {
     private Service service;
 
     @PostMapping("/playerid")
-    public ResponseEntity allUsers(@RequestBody Notification notification, Principal principal){
+    public ResponseEntity allUsers(@RequestBody Notification notification, @ApiIgnore Principal principal){
         List<String> playerIds=service.findPlayerId(principal.getName(),notification.getBuildingUUID());
         String profilePhoto=service.getImage(principal.getName());
         if(profilePhoto!=null){

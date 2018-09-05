@@ -37,7 +37,7 @@ public interface Service {
     /*int countBuildingsRecord();*/
 
     // api/building/status/update
-    Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
+    Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate,String email);
     Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId);
 
     // api/building/available

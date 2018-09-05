@@ -1,9 +1,13 @@
 package com.eracambodia.era.model.api_building_status_update.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import springfox.documentation.annotations.ApiIgnore;
+
 public class BuildingStatusUpdate {
     private int ownerId;
     private String tableName;
     private String status;
+    @JsonIgnore
     private int userId;
     private double bookingPrice;
 

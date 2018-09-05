@@ -143,10 +143,12 @@ public class ServiceImpl implements Service {
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
 
     @Override
-    public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate) {
+    public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate,String email) {
+        int id=buildingStatusUpdateRepo.getUserEmail(email);
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
+        buildingStatusUpdate.setUserId(id);
         return buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
     }
 
@@ -266,9 +268,6 @@ public class ServiceImpl implements Service {
     @Override
     public void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email) {
         String phone = registerRepo.getPhone(updateAgentAccount.getPhone());
-        if (phone != null) {
-            throw new CustomException(409, "Phose already exist");
-        }
         String password = updateAgentAccountRepo.getUserPassword(email);
         if (password == null) {
             throw new CustomException(404, "Account not found");
@@ -276,6 +275,9 @@ public class ServiceImpl implements Service {
         boolean checkPassword = passwordEncoder.matches(updateAgentAccount.getConfirmPassword(), password);
         if (!checkPassword) {
             throw new CustomException(401, "Your password not match.");
+        }
+        if (phone != null) {
+            throw new CustomException(409, "Phone already exist");
         }
         updateAgentAccountRepo.updateUserInformation(updateAgentAccount, email);
     }
