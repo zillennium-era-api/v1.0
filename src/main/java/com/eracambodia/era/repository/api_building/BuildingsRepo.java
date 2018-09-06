@@ -84,7 +84,7 @@ public interface BuildingsRepo {
 
     @Select("SELECT * " +
             "FROM building " +
-            "ORDER BY building.id " +
+            "ORDER BY building.id DESC " +
             "LIMIT #{limit} OFFSET #{offset} ")
     @Results({
             @Result(property = "id",column = "id"),

@@ -270,7 +270,7 @@ public class ServiceImpl implements Service {
         String password = updateAgentAccountRepo.getUserPassword(email);
         boolean checkPassword = passwordEncoder.matches(updateAgentAccount.getConfirmPassword(), password);
         if (!checkPassword) {
-            throw new CustomException(401, "Your password not match.");
+            throw new CustomException(404, "Password not match.");
         }
         if(updateAgentAccount.getPhone().length()<1){
             updateAgentAccountRepo.updateUsername(updateAgentAccount,email);
