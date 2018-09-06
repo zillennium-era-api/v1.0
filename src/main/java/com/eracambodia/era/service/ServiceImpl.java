@@ -267,19 +267,20 @@ public class ServiceImpl implements Service {
 
     @Override
     public void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email) {
-        String phone = registerRepo.getPhone(updateAgentAccount.getPhone());
         String password = updateAgentAccountRepo.getUserPassword(email);
-        if (password == null) {
-            throw new CustomException(404, "Account not found");
-        }
         boolean checkPassword = passwordEncoder.matches(updateAgentAccount.getConfirmPassword(), password);
         if (!checkPassword) {
             throw new CustomException(401, "Your password not match.");
         }
-        if (phone != null) {
-            throw new CustomException(409, "Phone already exist");
+        if(updateAgentAccount.getPhone().length()<1){
+            updateAgentAccountRepo.updateUsername(updateAgentAccount,email);
+        }else {
+            String phone = registerRepo.getPhone(updateAgentAccount.getPhone());
+            if (phone != null) {
+                throw new CustomException(409, "Phone already exist");
+            }
+            updateAgentAccountRepo.updateUserInformation(updateAgentAccount,email);
         }
-        updateAgentAccountRepo.updateUserInformation(updateAgentAccount, email);
     }
 
     // api/agent/transaction/status/{status}

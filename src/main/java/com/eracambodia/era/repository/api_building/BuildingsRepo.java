@@ -14,7 +14,7 @@ public interface BuildingsRepo {
     @Select("SELECT * " +
             "FROM building " +
             "WHERE building.status ILIKE #{status} " +
-            "ORDER BY user_create_date DESC " +
+            "ORDER BY building.id DESC " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset} ")
     @Results({
             @Result(property = "id",column = "id"),
@@ -84,7 +84,7 @@ public interface BuildingsRepo {
 
     @Select("SELECT * " +
             "FROM building " +
-            "ORDER BY user_create_date DESC " +
+            "ORDER BY building.id " +
             "LIMIT #{limit} OFFSET #{offset} ")
     @Results({
             @Result(property = "id",column = "id"),

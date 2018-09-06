@@ -352,4 +352,9 @@ public class APIController {
         Response response=new Response(200,service.findAgentProcess(status,principal.getName(),pagination),pagination);
         return response.getResponseEntity("data","pagination");
     }
+
+    @GetMapping("/agent/transaction/total_commission")
+    public ResponseEntity agentTotalCommission(@ApiIgnore Principal principal){
+        return null;
+    }
 }

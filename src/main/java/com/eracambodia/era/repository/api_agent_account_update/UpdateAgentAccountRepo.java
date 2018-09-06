@@ -17,4 +17,10 @@ public interface UpdateAgentAccountRepo {
             "FROM users " +
             "WHERE email=#{email}")
     String getUserPassword(String email);
+
+    @Update("UPDATE users " +
+            "SET username=#{updateAgentAccount.name} " +
+            "WHERE email=#{email}")
+    void updateUsername(@Param("updateAgentAccount") UpdateAgentAccount updateAgentAccount,@Param("email") String email);
+
 }
