@@ -61,7 +61,7 @@ public interface SearchRepo {
     @Options(statementType = StatementType.CALLABLE)
     Integer countSearch(String keyword);
 
-    @Select("SELECT table_name " +
+    @Select("SELECT type " +
             "FROM building")
     List<String> projectType();
 }
