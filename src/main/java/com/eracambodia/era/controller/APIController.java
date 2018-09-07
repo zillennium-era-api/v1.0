@@ -331,6 +331,12 @@ public class APIController {
         return response.getResponseEntity("data","pagination");
     }
 
+    @GetMapping("/search/project_type")
+    public ResponseEntity projectType(){
+        Response response=new Response(200,service.projectType());
+        return response.getResponseEntity("data");
+    }
+
     @GetMapping("/agent/transaction/total_commission")
     public ResponseEntity agentTotalCommission(@ApiIgnore Principal principal){
         return null;

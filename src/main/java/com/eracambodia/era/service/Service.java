@@ -68,6 +68,7 @@ public interface Service {
 
     // api/search
     List<Buildings> search(String keyword,Pagination pagination);
+    List<String> projectType();
 
     // api/agent/members/uuid
     List<AgentMember> findAgentMember(String uuid);
@@ -75,7 +76,7 @@ public interface Service {
     // api/agent/member/direct/uuid
     List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination);
 
-    // api/noti/to_favoritor
+    // api/noti/to_favoritor/playerid
     List<String> findPlayerId(String email,String buildingUUID);
     String getImage(String email);
 

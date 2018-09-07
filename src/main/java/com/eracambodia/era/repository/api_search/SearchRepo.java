@@ -60,4 +60,8 @@ public interface SearchRepo {
     @Select(value= "{CALL countsearch(#{keyword})}")
     @Options(statementType = StatementType.CALLABLE)
     Integer countSearch(String keyword);
+
+    @Select("SELECT table_name " +
+            "FROM building")
+    List<String> projectType();
 }

@@ -331,6 +331,15 @@ public class ServiceImpl implements Service {
         return buildings;
     }
 
+    @Override
+    public List<String> projectType() {
+        List<String> type=searchRepo.projectType();
+        if(type==null){
+            throw new CustomException(404,"Project Type No Record.");
+        }
+        return type;
+    }
+
     // api/agent/members/uuid
     @Autowired
     private AgentMemberUUIDRepo agentMemberUUIDRepo;
@@ -363,7 +372,7 @@ public class ServiceImpl implements Service {
         return agentMembersDirectRepo.findAgentMemberDirect(userId);
     }
 
-    // api/noti/to_favoritor
+    // api/noti/to_favoritor/playerid
     @Autowired
     private NotiToFavoritorRepo notiToFavoritorRepo;
     @Override
