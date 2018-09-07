@@ -4,7 +4,6 @@ import com.eracambodia.era.model.api_agent_account_password.request.ChangePasswo
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
-import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_user.response.User;
 import com.eracambodia.era.setting.Default;
@@ -271,24 +270,9 @@ public class APIController {
         return response.getResponseEntity();
     }
 
-    @ApiIgnore
-    @GetMapping("/building/available")
-    public ResponseEntity buildingAvailable(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
-        Pagination pagination=new Pagination(page,limit);
-        List<BuildingAvailable> buildingAvailable=service.findBuildingAvailable(pagination);
-        Response response = new Response(200, buildingAvailable,pagination);
-        return response.getResponseEntity("data","pagination");
 
-    }
 
-    @ApiIgnore
-    @GetMapping("/building/held")
-    public ResponseEntity buildingHeld(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findBuildingHeld(pagination),pagination);
-        return response.getResponseEntity("data","pagination");
 
-    }
 
     @GetMapping("/agent/transaction/status/{status}")
     public ResponseEntity agentTransaction(@PathVariable("status")String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
@@ -297,13 +281,7 @@ public class APIController {
         return response.getResponseEntity("data","pagination");
     }
 
-    @ApiIgnore
-    @GetMapping("/agent/booking")
-    public ResponseEntity agentBooking(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findAgentsBooking(principal.getName(),pagination),pagination);
-        return response.getResponseEntity("data","pagination");
-    }
+
 
     @GetMapping("/agent/favorite")
     public ResponseEntity agentFavorite(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){

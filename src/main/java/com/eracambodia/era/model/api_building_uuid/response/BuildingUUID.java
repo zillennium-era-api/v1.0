@@ -18,7 +18,7 @@ public class BuildingUUID {
     private String streetNameOrNumber;
     private String detail;
     private int numberOfFloor;
-    private String buildingHeight;
+    private double buildingHeight;
     private double latitude;
     private double longitude;
     private boolean ifFavorite;
@@ -148,11 +148,11 @@ public class BuildingUUID {
         this.numberOfFloor = numberOfFloor;
     }
 
-    public String getBuildingHeight() {
+    public double getBuildingHeight() {
         return buildingHeight;
     }
 
-    public void setBuildingHeight(String buildingHeight) {
+    public void setBuildingHeight(double buildingHeight) {
         this.buildingHeight = buildingHeight;
     }
 

@@ -25,11 +25,11 @@ public interface RegisterRepo {
 
     @Select("SELECT id " +
             "FROM users " +
-            "WHERE email=#{email}")
+            "WHERE email=#{email} AND (authority_id=1 OR authority_id=3)")
     Integer getIdByEmail(String email);
 
     @Update("UPDATE users " +
             "SET enable=true " +
-            "WHERE email=#{email}")
+            "WHERE email=#{email} ")
     Integer enable(String email);
 }

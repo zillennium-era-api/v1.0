@@ -4,7 +4,6 @@ import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
-import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
 import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
@@ -13,8 +12,6 @@ import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMem
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
-import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
-import com.eracambodia.era.model.api_building_held.response.BuildingHeld;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
@@ -22,7 +19,6 @@ import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
-import com.eracambodia.era.repository.api_agent_booking.AgentBookingRepo;
 import com.eracambodia.era.repository.api_agent_favorite.AgentFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_favorite_add.AgentAddFavoriteRepo;
 import com.eracambodia.era.repository.api_agent_favorite_delete.AgentDeleteFavoriteRepo;
@@ -32,8 +28,6 @@ import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgen
 import com.eracambodia.era.repository.api_agent_building_status_status.AgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
-import com.eracambodia.era.repository.api_building_available.BuildingAvailableRepo;
-import com.eracambodia.era.repository.api_building_held.BuildingHeldRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
 import com.eracambodia.era.repository.api_login.LoginRepo;
@@ -43,8 +37,10 @@ import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
 import com.eracambodia.era.utils.DecodeJWT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -112,6 +108,7 @@ public class ServiceImpl implements Service {
     private BuildingsRepo buildingsRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<Buildings> findBuildings(Pagination pagination,String status) {
         if(!status.equalsIgnoreCase("all")) {
             List<Buildings> buildings = buildingsRepo.findBuildings(pagination, status);
@@ -129,20 +126,12 @@ public class ServiceImpl implements Service {
         return buildings;
     }
 
-    /*@Override
-    public int countBuildingsRecord() {
-        int countAllBuildings = buildingsRepo.countBuildingsRecord();
-        if (countAllBuildings < 1) {
-            throw new CustomException(404, "No record of building ");
-        }
-        return countAllBuildings;
-    }*/
-
     // api building/status/update
     @Autowired
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate,String email) {
         int id=buildingStatusUpdateRepo.getUserEmail(email);
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
@@ -153,38 +142,12 @@ public class ServiceImpl implements Service {
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId) {
         return buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(ownerId);
     }
 
 
-    // api/building/available
-    @Autowired
-    private BuildingAvailableRepo buildingAvailableRepo;
-
-    @Override
-    public List<BuildingAvailable> findBuildingAvailable(Pagination pagination) {
-        List<BuildingAvailable> buildingAvailables = buildingAvailableRepo.findBuildingAvailable(pagination);
-        if (buildingAvailables.size() < 1) {
-            throw new CustomException(404, "no record");
-        }
-        pagination.setTotalItem(buildingAvailableRepo.countBuildingAvailable());
-        return buildingAvailables;
-    }
-
-    // api/building/held
-    @Autowired
-    private BuildingHeldRepo buildingHeldRepo;
-
-    @Override
-    public List<BuildingHeld> findBuildingHeld(Pagination pagination) {
-        List<BuildingHeld> buildingHelds = buildingHeldRepo.findBuildingHeld(pagination);
-        if (buildingHelds.size() < 1) {
-            throw new CustomException(404, "Not found");
-        }
-        pagination.setTotalItem(buildingHeldRepo.countBuildingHeld());
-        return buildingHelds;
-    }
 
     // api/register
     @Autowired
@@ -225,6 +188,7 @@ public class ServiceImpl implements Service {
     private UserRepo userRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username) {
         com.eracambodia.era.model.api_user.response.User user = userRepo.findUserByUsernameOfUser(username);
         if (user == null) {
@@ -238,11 +202,13 @@ public class ServiceImpl implements Service {
     private UploadProfileAgentRepo uploadProfileAgentRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public String findImageByUsernameOfUploadProfileAgent(String username) {
         return uploadProfileAgentRepo.findImageByUsernameOfUploadProfileAgent(username);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void updateImageProfileOfUploadProfileAgent(String image, String email) {
         uploadProfileAgentRepo.updateImageProfileOfUploadProfileAgent(image, email);
     }
@@ -252,11 +218,13 @@ public class ServiceImpl implements Service {
     private AgentChangePasswordRepo agentChangePasswordRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void updateUserPassword(String password, String email) {
         agentChangePasswordRepo.updateUserPassword(password, email);
     }
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public String getUserPasswordByEmail(String email) {
         return agentChangePasswordRepo.getUserPasswordByEmail(email);
     }
@@ -266,6 +234,7 @@ public class ServiceImpl implements Service {
     private UpdateAgentAccountRepo updateAgentAccountRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email) {
         String password = updateAgentAccountRepo.getUserPassword(email);
         boolean checkPassword = passwordEncoder.matches(updateAgentAccount.getConfirmPassword(), password);
@@ -288,6 +257,7 @@ public class ServiceImpl implements Service {
     private AgentTransactionRepo agentTransactionRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<TransactionResponse> findAgentsTransaction(String email,String status, Pagination pagination) {
         if(!status.equalsIgnoreCase("all")) {
             List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsTransaction(email, status, pagination);
@@ -303,25 +273,14 @@ public class ServiceImpl implements Service {
         return transactionResponses;
     }
 
-    // api/agent/booking
-    @Autowired
-    private AgentBookingRepo agentBookingRepo;
 
-    @Override
-    public List<AgentBooking> findAgentsBooking(String email, Pagination pagination) {
-        List<AgentBooking> agentBookings = agentBookingRepo.findAgentsBooking(email, pagination);
-        if (agentBookings.size() < 1) {
-            throw new CustomException(404, "No record");
-        }
-        pagination.setTotalItem(agentBookingRepo.countAgentBooking());
-        return agentBookings;
-    }
 
     // api/agent/favorite
     @Autowired
     private AgentFavoriteRepo agentFavoriteRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<AgentFavorite> findAgentFavorite(String email, Pagination pagination) {
         List<AgentFavorite> agentFavorites = agentFavoriteRepo.findAgentFavorite(email, pagination);
         if (agentFavorites.size() < 1) {
@@ -336,6 +295,7 @@ public class ServiceImpl implements Service {
     private AgentAddFavoriteRepo agentAddFavoriteRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void addFavorite(AgentAddFavorite agentAddFavorite, String email) {
         agentAddFavorite.setUserId(agentAddFavoriteRepo.getUserIdByEmail(email));
         if(agentAddFavoriteRepo.addFavorite(agentAddFavorite)<1){
@@ -348,6 +308,7 @@ public class ServiceImpl implements Service {
     private AgentDeleteFavoriteRepo agentDeleteFavoriteRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite,String email) {
         int id=agentDeleteFavoriteRepo.findUserByEmail(email);
         agentDeleteFavorite.setUserId(id);
@@ -374,6 +335,7 @@ public class ServiceImpl implements Service {
     @Autowired
     private AgentMemberUUIDRepo agentMemberUUIDRepo;
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<AgentMember> findAgentMember(String uuid) {
         Integer userId=agentMemberUUIDRepo.getIdFromAgent(uuid);
         if(userId==null){
@@ -387,6 +349,7 @@ public class ServiceImpl implements Service {
     private AgentMembersDirectRepo agentMembersDirectRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination) {
         Integer userId=agentMembersDirectRepo.getUserParentId(uuid);
         if(userId==null){
@@ -404,6 +367,7 @@ public class ServiceImpl implements Service {
     @Autowired
     private NotiToFavoritorRepo notiToFavoritorRepo;
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<String> findPlayerId(String email, String buildingUUID) {
         Integer ownerId=notiToFavoritorRepo.getBuildingID(buildingUUID);
         if(ownerId==null){
@@ -420,6 +384,7 @@ public class ServiceImpl implements Service {
         return playerId;
     }
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public String getImage(String email) {
         return notiToFavoritorRepo.getImage(email);
     }
@@ -428,6 +393,7 @@ public class ServiceImpl implements Service {
     @Autowired
     private AgentRepo agentRepo;
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<Agent> findAgentProcess(String status,String email, Pagination pagination) {
         if(status.equalsIgnoreCase("all")){
             List<Agent> list=agentRepo.findAgentsAllProcess(email,pagination);

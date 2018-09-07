@@ -3,7 +3,6 @@ package com.eracambodia.era.service;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
-import com.eracambodia.era.model.api_agent_booking.response.AgentBooking;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
 import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
@@ -12,8 +11,6 @@ import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMem
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
 import com.eracambodia.era.model.api_building.response.Buildings;
-import com.eracambodia.era.model.api_building_available.response.BuildingAvailable;
-import com.eracambodia.era.model.api_building_held.response.BuildingHeld;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
@@ -40,12 +37,6 @@ public interface Service {
     Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate,String email);
     Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId);
 
-    // api/building/available
-    List<BuildingAvailable> findBuildingAvailable(Pagination pagination);
-
-    // api/building/held
-    List<BuildingHeld> findBuildingHeld(Pagination pagination);
-
     // api/register
     void register(Register register,String jwtToken);
 
@@ -65,10 +56,6 @@ public interface Service {
 
     // api/agent/transaction/status/{status}
     List<TransactionResponse> findAgentsTransaction(String email,String status, Pagination pagination);
-
-    // api/agent/booking
-    List<AgentBooking> findAgentsBooking(String email,Pagination pagination);
-
 
     // api/agent/favorite
     List<AgentFavorite> findAgentFavorite(String email,Pagination pagination);
