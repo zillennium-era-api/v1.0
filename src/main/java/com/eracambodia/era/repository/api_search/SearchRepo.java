@@ -12,7 +12,7 @@ import java.util.List;
 
 @Repository
 public interface SearchRepo {
-    @Select(value= "{CALL search(#{keyword},#{limit},#{offset})}")
+    @Select(value= "{CALL search(#{keyword},#{type},#{limit},#{offset})}")
     @Results({
             @Result(property = "id",column = "bid"),
             @Result(property = "name",column = "bname"),
@@ -31,7 +31,7 @@ public interface SearchRepo {
             @Result(property = "filePath",column = "bid",one = @One(select = "getFilePath"))
     })
     @Options(statementType = StatementType.CALLABLE)
-    List<Buildings> search(@Param("keyword") String keyword,@Param("limit")int limit,@Param("offset")int offset);
+    List<Buildings> search(@Param("keyword") String keyword,@Param("type")String type,@Param("limit")int limit,@Param("offset")int offset);
 
     @Select("SELECT paths " +
             "FROM file " +

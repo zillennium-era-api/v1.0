@@ -2,6 +2,7 @@ package com.eracambodia.era.service;
 
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
+import com.eracambodia.era.model.TransactionCal;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
@@ -11,6 +12,8 @@ import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
+import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
+import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
@@ -27,6 +30,7 @@ import com.eracambodia.era.repository.api_agent_members_direct_uuid.AgentMembers
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
 import com.eracambodia.era.repository.api_agent_building_status_status.AgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
+import com.eracambodia.era.repository.api_agent_trasaction_total_commission.AgentCommissionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
@@ -322,8 +326,8 @@ public class ServiceImpl implements Service {
     private SearchRepo searchRepo;
 
     @Override
-    public List<Buildings> search(String keyword,Pagination pagination) {
-        List<Buildings>buildings=searchRepo.search(keyword,pagination.getLimit(),pagination.getOffset());
+    public List<Buildings> search(String keyword,String type,Pagination pagination) {
+        List<Buildings>buildings=searchRepo.search(keyword,type,pagination.getLimit(),pagination.getOffset());
         if(buildings.size()<1){
             throw new CustomException(404,"No record");
         }
@@ -419,6 +423,43 @@ public class ServiceImpl implements Service {
             pagination.setTotalItem(agentRepo.countAgentProcess(email,status));
             return list;
         }
+    }
+    @Autowired
+    private AgentCommissionRepo agentCommissionRepo;
+
+    @Override
+    public AgentCommission commissionCalculator(String email) {
+        AgentCommission agentCommission=agentCommissionRepo.commissionCalculator(email);
+        Double totalPrice=agentCommission.getBuildingCompleted();
+        List<AgentGot> listAgentGot=agentCommissionRepo.getAgentCommissionAmount(email);
+        agentCommission.setAgentGot(agentAmount(listAgentGot,totalPrice));
+        return agentCommission;
+    }
+    private Double agentAmount(List<AgentGot> agentGotList,double totalPrice){
+        double amount=0;
+        double witholding=agentCommissionRepo.getBusinessValue("witholding");
+        double vats=agentCommissionRepo.getBusinessValue("vat");
+        double agentCommission=agentCommissionRepo.getBusinessValue("agent commission");
+        double leaderCommission=agentCommissionRepo.getBusinessValue("leader commission");
+        for(int i=0;i<agentGotList.size();i++){
+            double commission=totalPrice*agentGotList.get(i).getCommission();
+            double netAfterTax=0;
+            if(agentGotList.get(i).isIncludeVat()){
+                netAfterTax=commission/1.1;
+            }else {
+                netAfterTax=commission;
+            }
+            double vat=netAfterTax*vats;
+            double commissionForAgent=netAfterTax*agentCommission;
+            double withHolding=commissionForAgent*witholding;
+            double agentAmount=commissionForAgent-withHolding;
+            double leaderIncome=agentAmount*leaderCommission;
+            double leaderAmount=leaderIncome-(leaderIncome*witholding);
+            double companyIncome=netAfterTax*0.5;
+            double companyAmount=companyIncome-leaderIncome;
+            amount+=agentAmount;
+        }
+        return amount;
     }
 }
 

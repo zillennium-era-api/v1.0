@@ -10,6 +10,8 @@ import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
+import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
+import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
@@ -67,7 +69,7 @@ public interface Service {
     void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite,String email);
 
     // api/search
-    List<Buildings> search(String keyword,Pagination pagination);
+    List<Buildings> search(String keyword,String type,Pagination pagination);
     List<String> projectType();
 
     // api/agent/members/uuid
@@ -82,4 +84,7 @@ public interface Service {
 
     // api/agent/status/{status}
     List<Agent> findAgentProcess(String status,String email,Pagination pagination);
+
+    // api/agent/transaction/total_commission
+    AgentCommission commissionCalculator(String email);
 }

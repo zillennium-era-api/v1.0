@@ -305,9 +305,9 @@ public class APIController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity search(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@RequestParam("keyword")String keyword){
+    public ResponseEntity search(@RequestParam(value = "keyword",required = false)String keyword,@RequestParam(value = "type",required = false)String type,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
         Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.search(keyword,pagination),pagination);
+        Response response=new Response(200,service.search(keyword,type,pagination),pagination);
         return response.getResponseEntity("data","pagination");
     }
 
@@ -339,6 +339,7 @@ public class APIController {
 
     @GetMapping("/agent/transaction/total_commission")
     public ResponseEntity agentTotalCommission(@ApiIgnore Principal principal){
-        return null;
+        Response response=new Response(200,service.commissionCalculator(principal.getName()));
+        return response.getResponseEntity("data");
     }
 }
