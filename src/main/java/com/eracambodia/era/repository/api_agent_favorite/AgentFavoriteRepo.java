@@ -42,7 +42,7 @@ public interface AgentFavoriteRepo {
     @Select("SELECT users.username,users.image,users.id,users.uuid " +
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
-            "WHERE transaction.owner_id = #{fbid} " +
+            "WHERE transaction.owner_id = #{fbid} and transaction.status NOT ILIKE 'available' " +
             "ORDER BY transaction.create_date LIMIT 1")
     @Results({
             @Result(property = "name",column = "username"),
