@@ -1,17 +1,25 @@
 package com.eracambodia.era.model.api_register.request;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.Date;
 import java.util.UUID;
 
 public class Register {
+    @ApiModelProperty(position = 2)
     private String name;
+    @ApiModelProperty(position = 4)
     private String gender;
+    @ApiModelProperty(position = 7)
     private Date dateOfBirth;
+    @ApiModelProperty(position = 3)
     private String phone;
+    @ApiModelProperty(position = 1)
     private String email;
+    @ApiModelProperty(position = 5)
     private String password;
+    @ApiModelProperty(position = 6)
     private String idCard;
     @JsonIgnore
     private String uuid;

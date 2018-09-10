@@ -31,4 +31,5 @@ public interface NotiToFavoritorRepo {
             "FROM users " +
             "WHERE email=#{email}")
     Integer getIDByEmail(String email);
+
 }
