@@ -431,6 +431,7 @@ public class ServiceImpl implements Service {
     private AgentCommissionRepo agentCommissionRepo;
 
     @Override
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public AgentCommission commissionCalculator(String email) {
         AgentCommission agentCommission=agentCommissionRepo.commissionCalculator(email);
         Double totalPrice=agentCommission.getBuildingCompleted();

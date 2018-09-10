@@ -4,6 +4,7 @@ import com.eracambodia.era.setting.Default;
 import org.hibernate.validator.internal.util.CollectionHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import springfox.documentation.builders.*;
 import springfox.documentation.service.*;
 import springfox.documentation.spi.DocumentationType;
@@ -30,8 +31,22 @@ public class EraSwagger {
                 .apis(RequestHandlerSelectors.basePackage("com.eracambodia.era.controller"))
                 .paths(PathSelectors.regex("/api.*"))
                 .build()
+                .apiInfo(swaggerInfo())
                 .securityContexts(Collections.singletonList(securityContext()))
                 .securitySchemes(Arrays.asList(securitySchema()/*, apiKey(), apiCookieKey()*/));
+    }
+
+    private ApiInfo swaggerInfo(){
+        return new ApiInfo(
+                "era-api",
+                "api for era only.Power by zillennium.2018",
+                "Version 1.0",
+                "Zillennium.com",
+                new Contact("Darong Vann","https://www.facebook.com/darongvann44","darongvann@gmail.com"),
+                "license by zillennium",
+                "zillenniuum.com",
+                Collections.emptyList()
+        );
     }
 
    /* @Bean

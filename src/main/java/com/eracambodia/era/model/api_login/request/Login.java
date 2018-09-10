@@ -1,11 +1,10 @@
 package com.eracambodia.era.model.api_login.request;
 
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.NotNull;
 
 public class Login {
-    @Size(max=2,message = "AAAAAAAAAAAAAAAAAAA")
+
     private String email;
     private String password;
 

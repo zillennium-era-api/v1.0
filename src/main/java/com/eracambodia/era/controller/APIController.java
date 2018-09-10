@@ -17,12 +17,14 @@ import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.Service;
 import com.eracambodia.era.validate.ImageValidator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.Api;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
 import org.springframework.core.io.Resource;
 import org.springframework.http.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,7 @@ import java.util.*;
 @ControllerAdvice
 @RestController
 @RequestMapping("/api")
+@Api(description = "this api is use oauth 2 authentication and generate jwt token for era agent")
 public class APIController {
     @Autowired
     private Service service;
@@ -269,10 +272,6 @@ public class APIController {
         Response response=new Response(200);
         return response.getResponseEntity();
     }
-
-
-
-
 
     @GetMapping("/agent/transaction/status/{status}")
     public ResponseEntity agentTransaction(@PathVariable("status")String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
