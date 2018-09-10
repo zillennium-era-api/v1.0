@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_agent_transaction_total_commission.response;
 
+import java.text.DecimalFormat;
+
 public class AgentCommission {
     private Integer count;
     private Double buildingCompleted;
@@ -20,7 +22,9 @@ public class AgentCommission {
     }
 
     public void setBuildingCompleted(Double buildingCompleted) {
-        this.buildingCompleted = buildingCompleted;
+        DecimalFormat df2 = new DecimalFormat(".##");
+        Double amount=Double.parseDouble(df2.format(buildingCompleted));
+        this.buildingCompleted = amount;
     }
 
     public Integer getFromYear() {
@@ -44,7 +48,9 @@ public class AgentCommission {
     }
 
     public void setAgentGot(Double agentGot) {
-        this.agentGot = agentGot;
+        DecimalFormat df2 = new DecimalFormat(".##");
+        Double amount=Double.parseDouble(df2.format(agentGot));
+        this.agentGot = amount;
     }
 
     @Override
