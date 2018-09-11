@@ -35,6 +35,7 @@ public interface NotiToFavoritorRepo {
 
     @Select("SELECT user_id " +
             "FROM transaction " +
-            "WHERE owner_id=#{owner_id} AND status NOT ILIKE 'available'")
+            "WHERE owner_id=#{owner_id} AND status NOT ILIKE 'available' " +
+            "ORDER BY id LIMIT 1")
     Integer getUserIdFromTransaction(int ownerId);
 }
