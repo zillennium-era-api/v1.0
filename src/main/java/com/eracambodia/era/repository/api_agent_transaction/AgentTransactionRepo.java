@@ -17,17 +17,18 @@ public interface AgentTransactionRepo {
             "WHERE users.email=#{email} AND transaction.status ilike #{status}" +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
-            @Result(property = "name",column = "owner_id",one=@One(select = "findBuildingName")),
-            @Result(property = "totalCost",column = "owner_id",one=@One(select="findTotalCost")),
-            @Result(property = "date",column = "create_date"),
-            @Result(property = "countryName",column = "country"),
-            @Result(property = "street",column = "street_number_or_name"),
-            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
-            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
-            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
-            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince"))
+            @Result(property = "name", column = "owner_id", one = @One(select = "findBuildingName")),
+            @Result(property = "totalCost", column = "owner_id", one = @One(select = "findTotalCost")),
+            @Result(property = "date", column = "create_date"),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "street", column = "street_number_or_name"),
+            @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
+            @Result(property = "commune", column = "commune_code", one = @One(select = "getCommune")),
+            @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
     })
-    List<TransactionResponse> findAgentsTransaction(@Param("email") String email,@Param("status")String status, @Param("pagination")Pagination pagination);
+    List<TransactionResponse> findAgentsTransaction(@Param("email") String email, @Param("status") String status, @Param("pagination") Pagination pagination);
+
     @Select("SELECT " +
             "name " +
             "FROM building " +
@@ -43,7 +44,7 @@ public interface AgentTransactionRepo {
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
             "WHERE users.email=#{email} AND status ILIKE #{status}")
-    Integer countTransaction(@Param("email")String email,@Param("status")String status);
+    Integer countTransaction(@Param("email") String email, @Param("status") String status);
 
     @Select("SELECT latin_name " +
             "FROM address " +
@@ -73,23 +74,23 @@ public interface AgentTransactionRepo {
             "WHERE users.email=#{email} " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
-            @Result(property = "name",column = "owner_id",one=@One(select = "findBuildingName")),
-            @Result(property = "totalCost",column = "owner_id",one=@One(select="findTotalCost")),
-            @Result(property = "date",column = "create_date"),
-            @Result(property = "countryName",column = "country"),
-            @Result(property = "street",column = "street_number_or_name"),
-            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
-            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
-            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
-            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince"))
+            @Result(property = "name", column = "owner_id", one = @One(select = "findBuildingName")),
+            @Result(property = "totalCost", column = "owner_id", one = @One(select = "findTotalCost")),
+            @Result(property = "date", column = "create_date"),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "street", column = "street_number_or_name"),
+            @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
+            @Result(property = "commune", column = "commune_code", one = @One(select = "getCommune")),
+            @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
     })
-    List<TransactionResponse> findAgentsAllTransaction(@Param("email") String email, @Param("pagination")Pagination pagination);
+    List<TransactionResponse> findAgentsAllTransaction(@Param("email") String email, @Param("pagination") Pagination pagination);
 
     @Select("SELECT COUNT(transaction.id) " +
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
             "WHERE users.email=#{email}")
-    Integer countAllTransaction(@Param("email")String email);
+    Integer countAllTransaction(@Param("email") String email);
 
 
 }

@@ -71,8 +71,8 @@ public class ServiceImpl implements Service {
         if (!BCrypt.checkpw(login.getPassword(), password)) {
             throw new CustomException(404, "email or password not correct.");
         }
-        if(BCrypt.checkpw(login.getPassword(), password)){
-            if(loginRepo.checkEmail(login.getEmail())==null){
+        if (BCrypt.checkpw(login.getPassword(), password)) {
+            if (loginRepo.checkEmail(login.getEmail()) == null) {
                 throw new CustomException(401, "account need to approve from admin.");
             }
         }
@@ -114,8 +114,8 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<Buildings> findBuildings(Pagination pagination,String status) {
-        if(!status.equalsIgnoreCase("all")) {
+    public List<Buildings> findBuildings(Pagination pagination, String status) {
+        if (!status.equalsIgnoreCase("all")) {
             List<Buildings> buildings = buildingsRepo.findBuildings(pagination, status);
             if (buildings.size() < 1) {
                 throw new CustomException(404, "Page not Found.");
@@ -137,8 +137,8 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate,String email) {
-        int id=buildingStatusUpdateRepo.getUserEmail(email);
+    public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email) {
+        int id = buildingStatusUpdateRepo.getUserEmail(email);
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
@@ -153,13 +153,12 @@ public class ServiceImpl implements Service {
     }
 
 
-
     // api/register
     @Autowired
     private RegisterRepo registerRepo;
 
     @Override
-    public void register(Register register,String jwtToken) {
+    public void register(Register register, String jwtToken) {
         String message = "";
         RegisterUniqueFields registerUniqueFields = new RegisterUniqueFields();
         if (registerRepo.getIdCard(register.getIdCard()) != null) {
@@ -177,10 +176,10 @@ public class ServiceImpl implements Service {
         if (message.length() > 1)
             throw new CustomException(409, message, registerUniqueFields);
 
-        String email=DecodeJWT.getEmailFromJwt(jwtToken);
-        Integer userId=registerRepo.getIdByEmail(email);
+        String email = DecodeJWT.getEmailFromJwt(jwtToken);
+        Integer userId = registerRepo.getIdByEmail(email);
 
-        if(registerRepo.register(register,userId)>0) {
+        if (registerRepo.register(register, userId) > 0) {
             if (userId != null) {
                 registerRepo.enable(register.getEmail());
             }
@@ -246,14 +245,14 @@ public class ServiceImpl implements Service {
         if (!checkPassword) {
             throw new CustomException(404, "Password not match.");
         }
-        if(updateAgentAccount.getPhone().length()<1){
-            updateAgentAccountRepo.updateUsername(updateAgentAccount,email);
-        }else {
+        if (updateAgentAccount.getPhone().length() < 1) {
+            updateAgentAccountRepo.updateUsername(updateAgentAccount, email);
+        } else {
             String phone = registerRepo.getPhone(updateAgentAccount.getPhone());
             if (phone != null) {
                 throw new CustomException(409, "Phone already exist");
             }
-            updateAgentAccountRepo.updateUserInformation(updateAgentAccount,email);
+            updateAgentAccountRepo.updateUserInformation(updateAgentAccount, email);
         }
     }
 
@@ -263,8 +262,8 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<TransactionResponse> findAgentsTransaction(String email,String status, Pagination pagination) {
-        if(!status.equalsIgnoreCase("all")) {
+    public List<TransactionResponse> findAgentsTransaction(String email, String status, Pagination pagination) {
+        if (!status.equalsIgnoreCase("all")) {
             List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsTransaction(email, status, pagination);
             if (transactionResponses.size() < 1)
                 throw new CustomException(404, "No record");
@@ -277,7 +276,6 @@ public class ServiceImpl implements Service {
         pagination.setTotalItem(agentTransactionRepo.countAllTransaction(email));
         return transactionResponses;
     }
-
 
 
     // api/agent/favorite
@@ -303,8 +301,8 @@ public class ServiceImpl implements Service {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void addFavorite(AgentAddFavorite agentAddFavorite, String email) {
         agentAddFavorite.setUserId(agentAddFavoriteRepo.getUserIdByEmail(email));
-        if(agentAddFavoriteRepo.addFavorite(agentAddFavorite)<1){
-            throw new CustomException(403,"No record has deleted");
+        if (agentAddFavoriteRepo.addFavorite(agentAddFavorite) < 1) {
+            throw new CustomException(403, "No record has deleted");
         }
     }
 
@@ -314,11 +312,11 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite,String email) {
-        int id=agentDeleteFavoriteRepo.findUserByEmail(email);
+    public void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite, String email) {
+        int id = agentDeleteFavoriteRepo.findUserByEmail(email);
         agentDeleteFavorite.setUserId(id);
-        if(agentDeleteFavoriteRepo.deleteAgentFavorite(agentDeleteFavorite)<1){
-            throw new CustomException(403,"No record have deleted");
+        if (agentDeleteFavoriteRepo.deleteAgentFavorite(agentDeleteFavorite) < 1) {
+            throw new CustomException(403, "No record have deleted");
         }
     }
 
@@ -327,10 +325,10 @@ public class ServiceImpl implements Service {
     private SearchRepo searchRepo;
 
     @Override
-    public List<Buildings> search(String keyword,String type,Pagination pagination) {
-        List<Buildings>buildings=searchRepo.search(keyword,type,pagination.getLimit(),pagination.getOffset());
-        if(buildings.size()<1){
-            throw new CustomException(404,"No record");
+    public List<Buildings> search(String keyword, String type, Pagination pagination) {
+        List<Buildings> buildings = searchRepo.search(keyword, type, pagination.getLimit(), pagination.getOffset());
+        if (buildings.size() < 1) {
+            throw new CustomException(404, "No record");
         }
         pagination.setTotalItem(searchRepo.countSearch(keyword));
         return buildings;
@@ -338,9 +336,9 @@ public class ServiceImpl implements Service {
 
     @Override
     public List<String> projectType() {
-        List<String> type=searchRepo.projectType();
-        if(type==null){
-            throw new CustomException(404,"Project Type No Record.");
+        List<String> type = searchRepo.projectType();
+        if (type == null) {
+            throw new CustomException(404, "Project Type No Record.");
         }
         return type;
     }
@@ -348,12 +346,13 @@ public class ServiceImpl implements Service {
     // api/agent/members/uuid
     @Autowired
     private AgentMemberUUIDRepo agentMemberUUIDRepo;
+
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<AgentMember> findAgentMember(String uuid) {
-        Integer userId=agentMemberUUIDRepo.getIdFromAgent(uuid);
-        if(userId==null){
-            throw new CustomException(404,"Not found.");
+        Integer userId = agentMemberUUIDRepo.getIdFromAgent(uuid);
+        if (userId == null) {
+            throw new CustomException(404, "Not found.");
         }
         return agentMemberUUIDRepo.findAgentMember(userId);
     }
@@ -364,14 +363,14 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination) {
-        Integer userId=agentMembersDirectRepo.getUserParentId(uuid);
-        if(userId==null){
-            throw new CustomException(404,"Agent not found.");
+    public List<AgentMemberDirect> findAgentMemberDirect(String uuid, Pagination pagination) {
+        Integer userId = agentMembersDirectRepo.getUserParentId(uuid);
+        if (userId == null) {
+            throw new CustomException(404, "Agent not found.");
         }
-        Integer countAgentMember=agentMembersDirectRepo.countAgent(userId);
-        if(countAgentMember==null){
-            throw new CustomException(404,"No record.");
+        Integer countAgentMember = agentMembersDirectRepo.countAgent(userId);
+        if (countAgentMember == null) {
+            throw new CustomException(404, "No record.");
         }
         pagination.setTotalItem(countAgentMember);
         return agentMembersDirectRepo.findAgentMemberDirect(userId);
@@ -380,23 +379,28 @@ public class ServiceImpl implements Service {
     // api/noti/to_favoritor/playerid
     @Autowired
     private NotiToFavoritorRepo notiToFavoritorRepo;
+
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<String> findPlayerId(String email, String buildingUUID) {
-        Integer ownerId=notiToFavoritorRepo.getBuildingID(buildingUUID);
-        if(ownerId==null){
-            throw new CustomException(404,"Building UUID Not Found.");
+        Integer ownerId = notiToFavoritorRepo.getBuildingID(buildingUUID);
+        if (ownerId == null) {
+            throw new CustomException(404, "Building UUID Not Found.");
         }
-        Integer userId=notiToFavoritorRepo.getIDByEmail(email);
-        if(userId==null){
-            throw new CustomException(404,"Email not found.");
-        }
-        List<String> playerId=notiToFavoritorRepo.findPlayerId(userId,ownerId);
-        if(playerId==null || playerId.size()<1){
-            throw new CustomException(404,"No favoritor.");
+        /*Integer userId = notiToFavoritorRepo.getIDByEmail(email);
+        if (userId == null) {
+            throw new CustomException(404, "Email not found.");
+        }*/
+        Integer userId=notiToFavoritorRepo.getUserIdFromTransaction(ownerId);
+        if(userId==null)
+            userId=0;
+        List<String> playerId = notiToFavoritorRepo.findPlayerId(userId, ownerId);
+        if (playerId == null || playerId.size() < 1) {
+            throw new CustomException(404, "No favoritor.");
         }
         return playerId;
     }
+
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public String getImage(String email) {
@@ -406,22 +410,23 @@ public class ServiceImpl implements Service {
     // api/agent/status/{status}
     @Autowired
     private AgentRepo agentRepo;
+
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<Agent> findAgentProcess(String status,String email, Pagination pagination) {
-        if(status.equalsIgnoreCase("all")){
-            List<Agent> list=agentRepo.findAgentsAllProcess(email,pagination);
-            if(list.size()<1){
-                throw new CustomException(404,"No record.");
+    public List<Agent> findAgentProcess(String status, String email, Pagination pagination) {
+        if (status.equalsIgnoreCase("all")) {
+            List<Agent> list = agentRepo.findAgentsAllProcess(email, pagination);
+            if (list.size() < 1) {
+                throw new CustomException(404, "No record.");
             }
             pagination.setTotalItem(agentRepo.countAgentAllProcess(email));
             return list;
-        }else {
-            List<Agent> list=agentRepo.findAgentsProcess(status,email,pagination);
-            if(list.size()<1){
-                throw new CustomException(404,"No record of "+status);
+        } else {
+            List<Agent> list = agentRepo.findAgentsProcess(status, email, pagination);
+            if (list.size() < 1) {
+                throw new CustomException(404, "No record of " + status);
             }
-            pagination.setTotalItem(agentRepo.countAgentProcess(email,status));
+            pagination.setTotalItem(agentRepo.countAgentProcess(email, status));
             return list;
         }
     }
@@ -433,35 +438,36 @@ public class ServiceImpl implements Service {
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public AgentCommission commissionCalculator(String email) {
-        AgentCommission agentCommission=agentCommissionRepo.commissionCalculator(email);
-        Double totalPrice=agentCommission.getBuildingCompleted();
-        List<AgentGot> listAgentGot=agentCommissionRepo.getAgentCommissionAmount(email);
-        agentCommission.setAgentGot(agentAmount(listAgentGot,totalPrice));
+        AgentCommission agentCommission = agentCommissionRepo.commissionCalculator(email);
+        Double totalPrice = agentCommission.getBuildingCompleted();
+        List<AgentGot> listAgentGot = agentCommissionRepo.getAgentCommissionAmount(email);
+        agentCommission.setAgentGot(agentAmount(listAgentGot, totalPrice));
         return agentCommission;
     }
-    private Double agentAmount(List<AgentGot> agentGotList,double totalPrice){
-        double amount=0;
-        double witholding=agentCommissionRepo.getBusinessValue("witholding");
-        double vats=agentCommissionRepo.getBusinessValue("vat");
-        double agentCommission=agentCommissionRepo.getBusinessValue("agent commission");
-        double leaderCommission=agentCommissionRepo.getBusinessValue("leader commission");
-        for(int i=0;i<agentGotList.size();i++){
-            double commission=totalPrice*agentGotList.get(i).getCommission();
-            double netAfterTax=0;
-            if(agentGotList.get(i).isIncludeVat()){
-                netAfterTax=commission/1.1;
-            }else {
-                netAfterTax=commission;
+
+    private Double agentAmount(List<AgentGot> agentGotList, double totalPrice) {
+        double amount = 0;
+        double witholding = agentCommissionRepo.getBusinessValue("witholding");
+        double vats = agentCommissionRepo.getBusinessValue("vat");
+        double agentCommission = agentCommissionRepo.getBusinessValue("agent commission");
+        double leaderCommission = agentCommissionRepo.getBusinessValue("leader commission");
+        for (int i = 0; i < agentGotList.size(); i++) {
+            double commission = totalPrice * agentGotList.get(i).getCommission();
+            double netAfterTax = 0;
+            if (agentGotList.get(i).isIncludeVat()) {
+                netAfterTax = commission / 1.1;
+            } else {
+                netAfterTax = commission;
             }
-            double vat=netAfterTax*vats;
-            double commissionForAgent=netAfterTax*agentCommission;
-            double withHolding=commissionForAgent*witholding;
-            double agentAmount=commissionForAgent-withHolding;
-            double leaderIncome=agentAmount*leaderCommission;
-            double leaderAmount=leaderIncome-(leaderIncome*witholding);
-            double companyIncome=netAfterTax*0.5;
-            double companyAmount=companyIncome-leaderIncome;
-            amount+=agentAmount;
+            double vat = netAfterTax * vats;
+            double commissionForAgent = netAfterTax * agentCommission;
+            double withHolding = commissionForAgent * witholding;
+            double agentAmount = commissionForAgent - withHolding;
+            double leaderIncome = agentAmount * leaderCommission;
+            double leaderAmount = leaderIncome - (leaderIncome * witholding);
+            double companyIncome = netAfterTax * 0.5;
+            double companyAmount = companyIncome - leaderIncome;
+            amount += agentAmount;
         }
         return amount;
     }

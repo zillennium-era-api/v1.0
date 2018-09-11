@@ -8,10 +8,11 @@ public class ImageValidator {
     private Matcher matcher;
     private static final String IMAGE_PATTERN = "([^\\s]+(\\.(?i)(jpg|png))$)";
 
-    public ImageValidator(){
+    public ImageValidator() {
         pattern = Pattern.compile(IMAGE_PATTERN);
     }
-    public boolean validate(final String image){
+
+    public boolean validate(final String image) {
         matcher = pattern.matcher(image);
         return matcher.matches();
 

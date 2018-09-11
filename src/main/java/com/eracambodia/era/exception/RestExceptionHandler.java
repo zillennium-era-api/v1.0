@@ -12,13 +12,13 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(CustomException.class)
-    public ResponseEntity registerUnauthorize(CustomException ex){
-        Object object=ex.getRegisterUniqueFields();
-        if(object!=null) {
+    public ResponseEntity registerUnauthorize(CustomException ex) {
+        Object object = ex.getRegisterUniqueFields();
+        if (object != null) {
             Response response = new Response(ex.getStatus(), ex.getRegisterUniqueFields());
             response.setMessage(ex.getMessage());
             return response.getResponseEntity("data");
-        }else {
+        } else {
             Response response = new Response(ex.getStatus());
             response.setMessage(ex.getMessage());
             return response.getResponseEntity();

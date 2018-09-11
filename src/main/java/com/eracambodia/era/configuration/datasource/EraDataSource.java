@@ -10,7 +10,7 @@ import javax.sql.DataSource;
 public class EraDataSource {
 
     @Bean(name = "dataSource")
-    public DataSource dataSource(){
+    public DataSource dataSource() {
         return DataSourceBuilder
                 .create()
                 .url("jdbc:postgresql://ec2-54-221-210-97.compute-1.amazonaws.com:5432/dfotv5hpoiu33h?sslmode=require")

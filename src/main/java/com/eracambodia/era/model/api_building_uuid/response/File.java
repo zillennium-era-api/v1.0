@@ -2,7 +2,7 @@ package com.eracambodia.era.model.api_building_uuid.response;
 
 import com.eracambodia.era.setting.Default;
 
-public class File{
+public class File {
     private int ownerId;
     private String filePath;
     private String type;
@@ -16,9 +16,9 @@ public class File{
     }
 
     public String getFilePath() {
-        if(filePath==null)
-        return filePath;
-        else return Default.buildingImage+filePath;
+        if (filePath == null)
+            return filePath;
+        else return Default.buildingImage + filePath;
     }
 
     public void setFilePath(String filePath) {

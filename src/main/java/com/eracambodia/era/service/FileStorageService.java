@@ -29,8 +29,8 @@ public class FileStorageService {
     @Autowired
     public FileStorageService(FileStorageProperty fileStorageProperties) {
         this.path = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
-        this.buildingImagePath=Paths.get(fileStorageProperties.getUploadBuildingDir()).toAbsolutePath().normalize();
-        this.apkPath=Paths.get(fileStorageProperties.getUploadApk()).toAbsolutePath().normalize();
+        this.buildingImagePath = Paths.get(fileStorageProperties.getUploadBuildingDir()).toAbsolutePath().normalize();
+        this.apkPath = Paths.get(fileStorageProperties.getUploadApk()).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.path);
             Files.createDirectories(this.buildingImagePath);
@@ -41,12 +41,12 @@ public class FileStorageService {
     }
 
     public String storeFile(MultipartFile file) {
-        if(file==null){
-            throw new CustomException(404,"File not found.");
+        if (file == null) {
+            throw new CustomException(404, "File not found.");
         }
-        String fileName = UUID.randomUUID()+StringUtils.cleanPath(file.getOriginalFilename());
+        String fileName = UUID.randomUUID() + StringUtils.cleanPath(file.getOriginalFilename());
         try {
-            if(fileName.contains("..")) {
+            if (fileName.contains("..")) {
                 throw new FileStorageException("Sorry! Filename contains invalid path sequence " + fileName);
             }
             Path targetLocation = this.path.resolve(fileName);
@@ -58,44 +58,44 @@ public class FileStorageService {
         }
     }
 
-    public Resource loadFileAsResource(String fileName,String type) {
-        if(type=="user"){
+    public Resource loadFileAsResource(String fileName, String type) {
+        if (type == "user") {
             try {
                 Path filePath = this.path.resolve(fileName).normalize();
 
                 Resource resource = new UrlResource(filePath.toUri());
                 return resource;
             } catch (MalformedURLException ex) {
-                throw new CustomException(404,"File not found " + fileName+" "+ex);
+                throw new CustomException(404, "File not found " + fileName + " " + ex);
             }
-        }else if (type=="building"){
+        } else if (type == "building") {
             try {
                 Path filePath = this.buildingImagePath.resolve(fileName).normalize();
 
-                Resource resource = new UrlResource(filePath.toUri()) ;
+                Resource resource = new UrlResource(filePath.toUri());
                 return resource;
 
             } catch (MalformedURLException ex) {
-                throw new CustomException(404,"File not found " + fileName+" "+ex);
+                throw new CustomException(404, "File not found " + fileName + " " + ex);
             }
-        }else {
+        } else {
             try {
                 Path filePath = this.apkPath.resolve(fileName).normalize();
 
-                Resource resource = new UrlResource(filePath.toUri()) ;
+                Resource resource = new UrlResource(filePath.toUri());
                 return resource;
 
             } catch (MalformedURLException ex) {
-                throw new CustomException(404,"File not found " + fileName+" "+ex);
+                throw new CustomException(404, "File not found " + fileName + " " + ex);
             }
         }
     }
 
 
-    public boolean deleteFile(String fileName){
+    public boolean deleteFile(String fileName) {
         Path filePath = this.path.resolve(fileName).normalize();
-        File file=new File(filePath.toString());
-        if(file.exists())
+        File file = new File(filePath.toString());
+        if (file.exists())
             return file.delete();
         else
             return false;

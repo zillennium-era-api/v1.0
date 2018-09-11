@@ -20,14 +20,14 @@ public class EraMyBatis {
     private DataSource dataSource;
 
     @Bean
-    public SqlSessionFactoryBean sqlSessionFactoryBean(){
-        SqlSessionFactoryBean sessionFactoryBean=new SqlSessionFactoryBean();
+    public SqlSessionFactoryBean sqlSessionFactoryBean() {
+        SqlSessionFactoryBean sessionFactoryBean = new SqlSessionFactoryBean();
         sessionFactoryBean.setDataSource(dataSource);
         return sessionFactoryBean;
     }
 
     @Bean
-    public DataSourceTransactionManager dataSourceTransactionManager(){
+    public DataSourceTransactionManager dataSourceTransactionManager() {
         return new DataSourceTransactionManager(dataSource);
     }
 

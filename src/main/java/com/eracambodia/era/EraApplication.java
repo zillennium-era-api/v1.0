@@ -9,7 +9,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 @EnableConfigurationProperties({FileStorageProperty.class})
 public class EraApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(EraApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(EraApplication.class, args);
+    }
 }

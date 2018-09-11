@@ -4,6 +4,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+
 @Service
 public interface NotiToFavoritorRepo {
 
@@ -13,9 +14,9 @@ public interface NotiToFavoritorRepo {
             "INNER JOIN favorite ON favorite.user_id=users.id " +
             "WHERE favorite.owner_id=#{ownerId} AND favorite.user_id <> #{userId} " +
             "ORDER BY onesignal.user_id,onesignal.created DESC")
-    @ConstructorArgs(value = { @Arg(column = "player_id", javaType = String.class)})
+    @ConstructorArgs(value = {@Arg(column = "player_id", javaType = String.class)})
     @ResultType(String.class)
-    List<String> findPlayerId(@Param("userId")int userId,@Param("ownerId")int ownerId);
+    List<String> findPlayerId(@Param("userId") int userId, @Param("ownerId") int ownerId);
 
     @Select("SELECT image " +
             "FROM users " +
@@ -32,4 +33,8 @@ public interface NotiToFavoritorRepo {
             "WHERE email=#{email}")
     Integer getIDByEmail(String email);
 
+    @Select("SELECT user_id " +
+            "FROM transaction " +
+            "WHERE owner_id=#{owner_id} AND status NOT ILIKE 'available'")
+    Integer getUserIdFromTransaction(int ownerId);
 }

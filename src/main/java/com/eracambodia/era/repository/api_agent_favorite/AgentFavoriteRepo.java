@@ -18,35 +18,38 @@ public interface AgentFavoriteRepo {
             "WHERE users.email=#{email} " +
             "ORDER BY favorite.date DESC LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
-            @Result(property = "id",column = "bid"),
-            @Result(property = "totalCost",column = "bid",one = @One(select="getTotalCost")),
-            @Result(property = "filePath",column = "bid",one=@One(select = "getFilePath")),
-            @Result(property = "agent",column = "fbid",one=@One(select = "getAgent")),
-            @Result(property = "countryName",column = "country"),
-            @Result(property = "street",column = "street_number_or_name"),
-            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
-            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
-            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
-            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince"))
+            @Result(property = "id", column = "bid"),
+            @Result(property = "totalCost", column = "bid", one = @One(select = "getTotalCost")),
+            @Result(property = "filePath", column = "bid", one = @One(select = "getFilePath")),
+            @Result(property = "agent", column = "fbid", one = @One(select = "getAgent")),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "street", column = "street_number_or_name"),
+            @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
+            @Result(property = "commune", column = "commune_code", one = @One(select = "getCommune")),
+            @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
     })
-    List<AgentFavorite> findAgentFavorite(@Param("email")String email, @Param("pagination") Pagination pagination);
+    List<AgentFavorite> findAgentFavorite(@Param("email") String email, @Param("pagination") Pagination pagination);
+
     @Select("SELECT total_project_cost " +
             "FROM building_basic_information " +
             "WHERE building_id=#{bid}")
     double getTotalCost();
+
     @Select("SELECT paths " +
             "FROM file " +
             "WHERE owner_id=#{id} AND type='image' " +
             "ORDER BY id DESC LIMIT 1")
     String getFilePath();
+
     @Select("SELECT users.username,users.image,users.id,users.uuid " +
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
             "WHERE transaction.owner_id = #{fbid} and transaction.status NOT ILIKE 'available' " +
             "ORDER BY transaction.create_date LIMIT 1")
     @Results({
-            @Result(property = "name",column = "username"),
-            @Result(property = "profilePhoto",column = "image")
+            @Result(property = "name", column = "username"),
+            @Result(property = "profilePhoto", column = "image")
     })
     Agent getAgent();
 

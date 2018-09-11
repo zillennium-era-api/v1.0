@@ -23,7 +23,7 @@ public class AgentCommission {
 
     public void setBuildingCompleted(Double buildingCompleted) {
         DecimalFormat df2 = new DecimalFormat(".##");
-        Double amount=Double.parseDouble(df2.format(buildingCompleted));
+        Double amount = Double.parseDouble(df2.format(buildingCompleted));
         this.buildingCompleted = amount;
     }
 
@@ -49,7 +49,7 @@ public class AgentCommission {
 
     public void setAgentGot(Double agentGot) {
         DecimalFormat df2 = new DecimalFormat(".##");
-        Double amount=Double.parseDouble(df2.format(agentGot));
+        Double amount = Double.parseDouble(df2.format(agentGot));
         this.agentGot = amount;
     }
 

@@ -81,7 +81,7 @@ public class Register {
     }
 
     public String getUuid() {
-        return UUID.randomUUID()+"";
+        return UUID.randomUUID() + "";
     }
 
     public void setUuid(String uuid) {

@@ -10,14 +10,14 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface BuildingStatusUpdateRepo {
 
-    @Select(value= "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
+    @Select(value = "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
     @Options(statementType = StatementType.CALLABLE)
     Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
 
     @Select("SELECT id " +
             "FROM building " +
             "WHERE id=#{ownerId} ")
-    Integer findBuildingIdByIdOfBuildingStatusUpdate(@Param("ownerId")int ownerId);
+    Integer findBuildingIdByIdOfBuildingStatusUpdate(@Param("ownerId") int ownerId);
 
     @Select("SELECT id " +
             "FROM users " +

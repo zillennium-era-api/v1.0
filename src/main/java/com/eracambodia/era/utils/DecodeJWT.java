@@ -9,13 +9,13 @@ import org.springframework.boot.json.JsonParserFactory;
 import java.util.Map;
 
 public class DecodeJWT {
-    public static String getEmailFromJwt(String token){
-        String data=null;
-        if(token==null)
+    public static String getEmailFromJwt(String token) {
+        String data = null;
+        if (token == null)
             return null;
         String[] split_string = token.split("\\.");
-        if(split_string.length<3){
-            throw new CustomException(400,"Wrong Token Format");
+        if (split_string.length < 3) {
+            throw new CustomException(400, "Wrong Token Format");
         }
         //String base64EncodedHeader = split_string[0];
         String base64EncodedBody = split_string[1];
@@ -30,9 +30,9 @@ public class DecodeJWT {
         try {
             JsonParser springParser = JsonParserFactory.getJsonParser();
             Map<String, Object> map = springParser.parseMap(body);
-            data=map.get("user_name").toString();
-        }catch (JsonParseException ex) {
-            throw new CustomException(400,"Token not invalid.");
+            data = map.get("user_name").toString();
+        } catch (JsonParseException ex) {
+            throw new CustomException(400, "Token not invalid.");
         }
         return data;
     }

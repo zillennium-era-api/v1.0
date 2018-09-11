@@ -11,7 +11,7 @@ public interface UpdateAgentAccountRepo {
     @Update("UPDATE users " +
             "SET username=#{updateAgentAccount.name},phonenumber=#{updateAgentAccount.phone} " +
             "WHERE email=#{email}")
-    void updateUserInformation(@Param("updateAgentAccount") UpdateAgentAccount updateAgentAccount,@Param("email") String email);
+    void updateUserInformation(@Param("updateAgentAccount") UpdateAgentAccount updateAgentAccount, @Param("email") String email);
 
     @Select("SELECT password " +
             "FROM users " +
@@ -21,6 +21,6 @@ public interface UpdateAgentAccountRepo {
     @Update("UPDATE users " +
             "SET username=#{updateAgentAccount.name} " +
             "WHERE email=#{email}")
-    void updateUsername(@Param("updateAgentAccount") UpdateAgentAccount updateAgentAccount,@Param("email") String email);
+    void updateUsername(@Param("updateAgentAccount") UpdateAgentAccount updateAgentAccount, @Param("email") String email);
 
 }

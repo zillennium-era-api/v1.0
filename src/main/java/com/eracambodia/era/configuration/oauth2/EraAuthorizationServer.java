@@ -44,8 +44,8 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
     private PasswordEncoder passwordEncoder;
 
     @Bean
-    public JwtAccessTokenConverter accessTokenConverter(){
-        JwtAccessTokenConverter converter=new JwtAccessTokenConverter();
+    public JwtAccessTokenConverter accessTokenConverter() {
+        JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
         converter.setSigningKey("eracambodia");
         return converter;
     }
@@ -56,17 +56,17 @@ public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter
     }
 
     @Bean
-    public TokenStore tokenStore(){
+    public TokenStore tokenStore() {
         return new JwtTokenStore(accessTokenConverter());
     }
 
     @Bean
-    public JdbcClientDetailsService clientDetailsService(){
+    public JdbcClientDetailsService clientDetailsService() {
         return new JdbcClientDetailsService(dataSource);
     }
 
     @Override
-    public void configure(AuthorizationServerSecurityConfigurer oauthServer){
+    public void configure(AuthorizationServerSecurityConfigurer oauthServer) {
         oauthServer.tokenKeyAccess("permitAll()").checkTokenAccess("isAuthenticated()").passwordEncoder(passwordEncoder);
     }
 

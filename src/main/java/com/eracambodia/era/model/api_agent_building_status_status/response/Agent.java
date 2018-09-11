@@ -14,7 +14,7 @@ public class Agent {
     private String village;
     private String street;
     private String cityOrProvince;
-    private double totalCost=0;
+    private double totalCost = 0;
     private String filePath;
 
     public int getId() {
@@ -114,9 +114,9 @@ public class Agent {
     }
 
     public String getFilePath() {
-        if(filePath==null)
+        if (filePath == null)
             return filePath;
-        else return Default.buildingImage+filePath;
+        else return Default.buildingImage + filePath;
     }
 
     public void setFilePath(String filePath) {

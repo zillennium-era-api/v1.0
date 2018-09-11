@@ -15,5 +15,5 @@ public interface UploadProfileAgentRepo {
     @Update("UPDATE users " +
             "SET image=#{image} " +
             "WHERE email=#{email}")
-    void updateImageProfileOfUploadProfileAgent(@Param("image") String image    , @Param("email") String email);
+    void updateImageProfileOfUploadProfileAgent(@Param("image") String image, @Param("email") String email);
 }

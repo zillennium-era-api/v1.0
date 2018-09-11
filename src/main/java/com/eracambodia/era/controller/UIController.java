@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class UIController {
     @GetMapping("/")
-    public String starter(){
+    public String starter() {
         return "redirect:/index";
     }
 }

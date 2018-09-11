@@ -20,26 +20,29 @@ public class EraResourceServer extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(ResourceServerSecurityConfigurer resources) {
         resources.resourceId("resources_id")
-        .accessDeniedHandler(accessDeniedHandler())
+                .accessDeniedHandler(accessDeniedHandler())
                 .authenticationEntryPoint(authenticationEntryPoint());
     }
 
     @Override
     public void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/api/login","/api/register","/api/refresh_token","/api/image/**","/api/search/**","/api/download/**").permitAll()
+                .antMatchers("/api/login", "/api/register", "/api/refresh_token", "/api/image/**", "/api/search/**", "/api/download/**").permitAll()
                 .antMatchers("/api/**").authenticated();
     }
+
     @Bean
     public WebResponseExceptionTranslator<?> exceptionTranslator() {
         return new CustomWebResponseExceptionTranslator();
     }
+
     @Bean
     public AccessDeniedHandler accessDeniedHandler() {
         final OAuth2AccessDeniedHandler handler = new OAuth2AccessDeniedHandler();
         handler.setExceptionTranslator(exceptionTranslator());
         return handler;
     }
+
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
         final OAuth2AuthenticationEntryPoint entryPoint = new OAuth2AuthenticationEntryPoint();

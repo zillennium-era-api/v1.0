@@ -20,9 +20,9 @@ public interface AgentMembersDirectRepo {
             "FROM users " +
             "WHERE parent_id=#{parentId}")
     @Results({
-            @Result(property = "name",column = "username"),
-            @Result(property = "phone",column = "phonenumber"),
-            @Result(property = "parent",column = "parent_id",one = @One(select = "getParent"))
+            @Result(property = "name", column = "username"),
+            @Result(property = "phone", column = "phonenumber"),
+            @Result(property = "parent", column = "parent_id", one = @One(select = "getParent"))
     })
     List<AgentMemberDirect> findAgentMemberDirect(int parentId);
 

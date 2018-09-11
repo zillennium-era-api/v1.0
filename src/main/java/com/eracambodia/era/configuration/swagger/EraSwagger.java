@@ -36,13 +36,13 @@ public class EraSwagger {
                 .securitySchemes(Arrays.asList(securitySchema()/*, apiKey(), apiCookieKey()*/));
     }
 
-    private ApiInfo swaggerInfo(){
+    private ApiInfo swaggerInfo() {
         return new ApiInfo(
                 "era-api",
                 "api for era only.Power by zillennium.2018",
                 "Version 1.0",
                 "Zillennium.com",
-                new Contact("Darong Vann","https://www.facebook.com/darongvann44","darongvann@gmail.com"),
+                new Contact("Darong Vann", "https://www.facebook.com/darongvann44", "darongvann@gmail.com"),
                 "license by zillennium",
                 "zillenniuum.com",
                 Collections.emptyList()

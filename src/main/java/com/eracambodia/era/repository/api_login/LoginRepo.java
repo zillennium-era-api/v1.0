@@ -13,10 +13,11 @@ public interface LoginRepo {
             "FROM users " +
             "WHERE email=#{email} AND enable=true")
     @Results({
-            @Result(property = "id",column = "id"),
-            @Result(property = "authority",column = "authority_id",many = @Many(select="findAuthorityByIdOfLogin"))
+            @Result(property = "id", column = "id"),
+            @Result(property = "authority", column = "authority_id", many = @Many(select = "findAuthorityByIdOfLogin"))
     })
     User findUserByEmailOfLogin(String email);
+
     @Select("SELECT * " +
             "FROM authority " +
             "WHERE id=#{authority_id}")

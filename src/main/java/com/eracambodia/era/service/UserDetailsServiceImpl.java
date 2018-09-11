@@ -12,17 +12,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service(value = "userDetailsService")
-public class UserDetailsServiceImpl implements UserDetailsService{
+public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private com.eracambodia.era.service.Service service;
+
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User userAccount=service.findUserByEmailOfLogin(email);
-        List<GrantedAuthorityImpl> authorities=new ArrayList<>();
+        User userAccount = service.findUserByEmailOfLogin(email);
+        List<GrantedAuthorityImpl> authorities = new ArrayList<>();
         authorities.add(userAccount.getAuthority());
-        org.springframework.security.core.userdetails.User userAuth=
+        org.springframework.security.core.userdetails.User userAuth =
                 new org.springframework.security.core.userdetails.User(userAccount.getEmail(),
-                        userAccount.getPassword(),authorities);
+                        userAccount.getPassword(), authorities);
         return userAuth;
     }
 }

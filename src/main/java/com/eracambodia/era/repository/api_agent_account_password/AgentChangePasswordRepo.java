@@ -10,7 +10,7 @@ public interface AgentChangePasswordRepo {
     @Update("UPDATE users " +
             "SET password=#{password} " +
             "WHERE email=#{email}")
-    void updateUserPassword(@Param("password")String password,@Param("email")String email);
+    void updateUserPassword(@Param("password") String password, @Param("email") String email);
 
     @Select("SELECT password " +
             "FROM users " +

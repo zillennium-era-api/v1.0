@@ -78,11 +78,11 @@ public class APIController {
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
         Response response = new Response<Map>(200, token);
-        return  response.getResponseEntity("data");
+        return response.getResponseEntity("data");
     }
 
     @PostMapping("/refresh_token")
-    public ResponseEntity refreshToken(@RequestBody RefreshToken refreshToken){
+    public ResponseEntity refreshToken(@RequestBody RefreshToken refreshToken) {
 
         String clientCredential = "client:123";
         String basicAuth = new String(Base64.encodeBase64(clientCredential.getBytes()));
@@ -92,59 +92,59 @@ public class APIController {
         HttpEntity<String> request = new HttpEntity<>(headers);
 
         String grant_type = "refresh_token";
-        String client_id="client";
-        String refresh_token=refreshToken.getRefreshToken();
+        String client_id = "client";
+        String refresh_token = refreshToken.getRefreshToken();
 
         String refresh_token_url = Default.oauthTokenUrl + "?grant_type=" + grant_type + "&client_id=" + client_id + "&refresh_token=" + refresh_token;
         RestTemplate restTemplate = new RestTemplate();
-        ResponseEntity<String> responseEntity=null;
+        ResponseEntity<String> responseEntity = null;
         try {
             responseEntity = restTemplate.exchange(refresh_token_url, HttpMethod.POST, request, String.class);
-        }catch (HttpClientErrorException ex) {
-            Response response=new Response(401);
+        } catch (HttpClientErrorException ex) {
+            Response response = new Response(401);
             response.setMessage("access token not correct.");
             return response.getResponseEntity();
         }
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
-        Response response=new Response(200,token);
+        Response response = new Response(200, token);
         return response.getResponseEntity("data");
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register,HttpServletRequest request) {
-        String jwtToken=request.getHeader("Authorization");
+    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register, HttpServletRequest request) {
+        String jwtToken = request.getHeader("Authorization");
         register.setPassword(passwordEncoder.encode(register.getPassword()));
-        service.register(register,jwtToken);
-        Response response=new Response(201);
+        service.register(register, jwtToken);
+        Response response = new Response(201);
         return response.getResponseEntity();
     }
 
     @GetMapping("/user")
-    public ResponseEntity viewUserInformation(@ApiIgnore Principal principal){
-        User user=service.findUserByUsernameOfUser(principal.getName());
-        Response response=new Response(200,user);
+    public ResponseEntity viewUserInformation(@ApiIgnore Principal principal) {
+        User user = service.findUserByUsernameOfUser(principal.getName());
+        Response response = new Response(200, user);
         return response.getResponseEntity("data");
     }
 
     @PostMapping("/agent/profile/upload")
-    public ResponseEntity uploadProfileImage(@RequestParam("file")MultipartFile file,@ApiIgnore Principal principal) {
-        ImageValidator imageValidator=new ImageValidator();
-        boolean checkImageExtenstion=imageValidator.validate(file.getOriginalFilename());
-        if(!checkImageExtenstion){
-            throw new CustomException(401,"File type invalid");
+    public ResponseEntity uploadProfileImage(@RequestParam("file") MultipartFile file, @ApiIgnore Principal principal) {
+        ImageValidator imageValidator = new ImageValidator();
+        boolean checkImageExtenstion = imageValidator.validate(file.getOriginalFilename());
+        if (!checkImageExtenstion) {
+            throw new CustomException(401, "File type invalid");
         }
         //remove old image file
-        String imagePath=service.findImageByUsernameOfUploadProfileAgent(principal.getName());
-        if(imagePath!=null){
+        String imagePath = service.findImageByUsernameOfUploadProfileAgent(principal.getName());
+        if (imagePath != null) {
             fileStorageService.deleteFile(imagePath);
         }
 
         //store image in directory uploads
-        String fileName=fileStorageService.storeFile(file);
+        String fileName = fileStorageService.storeFile(file);
 
         //provide url for view image
-        String downloadUri= ServletUriComponentsBuilder.fromCurrentContextPath()
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .path("/api/image/user/")
                 .path(fileName)
                 .toUriString();
@@ -155,13 +155,12 @@ public class APIController {
     }
 
 
-
     @GetMapping(value = "/image/user/{fileName:.+}")
-    public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName,HttpServletRequest request){
+    public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) {
         //load image
-        Resource resource=fileStorageService.loadFileAsResource(fileName,"user");
-        if(!resource.exists()){
-            throw new CustomException(404 , "File not found.");
+        Resource resource = fileStorageService.loadFileAsResource(fileName, "user");
+        if (!resource.exists()) {
+            throw new CustomException(404, "File not found.");
         }
         //content type as image for view
         String contentType = null;
@@ -170,7 +169,7 @@ public class APIController {
         } catch (IOException ex) {
             System.out.println("Could not determine file type.");
         }
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
@@ -181,10 +180,10 @@ public class APIController {
     }
 
     @GetMapping("/image/building/{fileName:.+}")
-    public ResponseEntity imageBuilding(@PathVariable String fileName,HttpServletRequest request){
-        Resource resource=fileStorageService.loadFileAsResource(fileName,"building");
-        if(!resource.exists()){
-            throw new CustomException(404 , "File not found.");
+    public ResponseEntity imageBuilding(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = fileStorageService.loadFileAsResource(fileName, "building");
+        if (!resource.exists()) {
+            throw new CustomException(404, "File not found.");
         }
         //content type as image for view
         String contentType = null;
@@ -194,7 +193,7 @@ public class APIController {
             System.out.println("" +
                     "Could not determine file type.");
         }
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
@@ -206,10 +205,10 @@ public class APIController {
 
     @ApiIgnore
     @GetMapping("/download/apk/{fileName:.+}")
-    public ResponseEntity downloadApk(@PathVariable String fileName,HttpServletRequest request){
-        Resource resource=fileStorageService.loadFileAsResource(fileName,"apk");
-        if(resource==null){
-            throw new CustomException(404 , "File not found.");
+    public ResponseEntity downloadApk(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = fileStorageService.loadFileAsResource(fileName, "apk");
+        if (resource == null) {
+            throw new CustomException(404, "File not found.");
         }
         //content type as image for view
         String contentType = null;
@@ -218,7 +217,7 @@ public class APIController {
         } catch (IOException ex) {
             System.out.println("Could not determine file type.");
         }
-        if(contentType == null) {
+        if (contentType == null) {
             contentType = "application/octet-stream";
         }
 
@@ -230,115 +229,114 @@ public class APIController {
     }
 
     @PutMapping("/agent/account/password")
-    public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal){
-        String password=service.getUserPasswordByEmail(principal.getName());
-        if(!passwordEncoder.matches(changePassword.getOldPassword(),password)){
-            throw new CustomException(401,"password not match.");
+    public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal) {
+        String password = service.getUserPasswordByEmail(principal.getName());
+        if (!passwordEncoder.matches(changePassword.getOldPassword(), password)) {
+            throw new CustomException(401, "password not match.");
         }
-        String resetPassword=passwordEncoder.encode(changePassword.getNewPassword());
-        service.updateUserPassword(resetPassword,principal.getName());
+        String resetPassword = passwordEncoder.encode(changePassword.getNewPassword());
+        service.updateUserPassword(resetPassword, principal.getName());
 
-        Response response=new Response(200);
+        Response response = new Response(200);
         return response.getResponseEntity();
     }
 
     @PutMapping("/agent/account/update")
-    public ResponseEntity updateAccountInformation(@RequestBody UpdateAgentAccount updateAgentAccount, @ApiIgnore Principal principal){
-        service.updateUserInformation(updateAgentAccount,principal.getName());
-        Response response = new Response(201,service.findUserByUsernameOfUser(principal.getName()));
+    public ResponseEntity updateAccountInformation(@RequestBody UpdateAgentAccount updateAgentAccount, @ApiIgnore Principal principal) {
+        service.updateUserInformation(updateAgentAccount, principal.getName());
+        Response response = new Response(201, service.findUserByUsernameOfUser(principal.getName()));
         return response.getResponseEntity("data");
     }
 
     @GetMapping("/building/status/{status}")
-    public ResponseEntity buildings(@PathVariable(value = "status")String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
-        Pagination pagination=new Pagination(page,limit);
-        List<Buildings> buildings=service.findBuildings(pagination,status);
+    public ResponseEntity buildings(@PathVariable(value = "status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        Pagination pagination = new Pagination(page, limit);
+        List<Buildings> buildings = service.findBuildings(pagination, status);
 
-        Response response = new Response(200, buildings,pagination);
-        return response.getResponseEntity("data","pagination");
+        Response response = new Response(200, buildings, pagination);
+        return response.getResponseEntity("data", "pagination");
     }
 
     @GetMapping("/building/{uuid}")
-    public ResponseEntity buildingDetail(@PathVariable("uuid")String uuid,@ApiIgnore Principal principal){
-        BuildingUUID buildingUUID=service.findBuildingByUUID(uuid,principal.getName());
+    public ResponseEntity buildingDetail(@PathVariable("uuid") String uuid, @ApiIgnore Principal principal) {
+        BuildingUUID buildingUUID = service.findBuildingByUUID(uuid, principal.getName());
 
         Response response = new Response(200, buildingUUID);
         return response.getResponseEntity("data");
     }
 
     @PostMapping("/building/status/update")
-    public ResponseEntity updateBuildingStatus(@RequestBody BuildingStatusUpdate buildingStatusUpdate,@ApiIgnore Principal principal){
-        service.updateBuildingStatus(buildingStatusUpdate,principal.getName());
-        Response response=new Response(200);
+    public ResponseEntity updateBuildingStatus(@RequestBody BuildingStatusUpdate buildingStatusUpdate, @ApiIgnore Principal principal) {
+        service.updateBuildingStatus(buildingStatusUpdate, principal.getName());
+        Response response = new Response(200);
         return response.getResponseEntity();
     }
 
     @GetMapping("/agent/transaction/status/{status}")
-    public ResponseEntity agentTransaction(@PathVariable("status")String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findAgentsTransaction(principal.getName(),status,pagination),pagination);
-        return response.getResponseEntity("data","pagination");
+    public ResponseEntity agentTransaction(@PathVariable("status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit, @ApiIgnore Principal principal) {
+        Pagination pagination = new Pagination(page, limit);
+        Response response = new Response(200, service.findAgentsTransaction(principal.getName(), status, pagination), pagination);
+        return response.getResponseEntity("data", "pagination");
     }
-
 
 
     @GetMapping("/agent/favorite")
-    public ResponseEntity agentFavorite(@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findAgentFavorite(principal.getName(),pagination),pagination);
-        return response.getResponseEntity("data","pagination");
+    public ResponseEntity agentFavorite(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit, @ApiIgnore Principal principal) {
+        Pagination pagination = new Pagination(page, limit);
+        Response response = new Response(200, service.findAgentFavorite(principal.getName(), pagination), pagination);
+        return response.getResponseEntity("data", "pagination");
     }
 
     @PostMapping("/agent/favorite/add")
-    public ResponseEntity agentAddFovorite(@RequestBody AgentAddFavorite agentAddFavorite, @ApiIgnore Principal principal){
-        service.addFavorite(agentAddFavorite,principal.getName());
-        Response response=new Response(201);
+    public ResponseEntity agentAddFovorite(@RequestBody AgentAddFavorite agentAddFavorite, @ApiIgnore Principal principal) {
+        service.addFavorite(agentAddFavorite, principal.getName());
+        Response response = new Response(201);
         return response.getResponseEntity();
     }
 
     @PostMapping("/agent/favorite/delete")
-    public ResponseEntity agentDeleteFavorite(@RequestBody AgentDeleteFavorite agentDeleteFavorite,@ApiIgnore Principal principal){
-        service.deleteAgentFavorite(agentDeleteFavorite,principal.getName());
-        Response response=new Response(200);
+    public ResponseEntity agentDeleteFavorite(@RequestBody AgentDeleteFavorite agentDeleteFavorite, @ApiIgnore Principal principal) {
+        service.deleteAgentFavorite(agentDeleteFavorite, principal.getName());
+        Response response = new Response(200);
         return response.getResponseEntity();
     }
 
     @GetMapping("/search")
-    public ResponseEntity search(@RequestParam(value = "keyword",required = false)String keyword,@RequestParam(value = "type",required = false)String type,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.search(keyword,type,pagination),pagination);
-        return response.getResponseEntity("data","pagination");
+    public ResponseEntity search(@RequestParam(value = "keyword", required = false) String keyword, @RequestParam(value = "type", required = false) String type, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        Pagination pagination = new Pagination(page, limit);
+        Response response = new Response(200, service.search(keyword, type, pagination), pagination);
+        return response.getResponseEntity("data", "pagination");
     }
 
     @GetMapping("/agent/members/{uuid}")
-    public ResponseEntity agentMembers(@PathVariable("uuid")String uuid){
-        Response response=new Response(200,service.findAgentMember(uuid));
+    public ResponseEntity agentMembers(@PathVariable("uuid") String uuid) {
+        Response response = new Response(200, service.findAgentMember(uuid));
         return response.getResponseEntity("data");
     }
 
     @GetMapping("/agent/members/direct/{uuid}")
-    public ResponseEntity agentMemberDirect(@PathVariable("uuid")String uuid,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findAgentMemberDirect(uuid,pagination),pagination);
-        return response.getResponseEntity("data","pagination");
+    public ResponseEntity agentMemberDirect(@PathVariable("uuid") String uuid, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
+        Pagination pagination = new Pagination(page, limit);
+        Response response = new Response(200, service.findAgentMemberDirect(uuid, pagination), pagination);
+        return response.getResponseEntity("data", "pagination");
     }
 
     @GetMapping("/agent/building/status/{status}")
-    public ResponseEntity agentProcess(@PathVariable String status,@RequestParam(value = "page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10")int limit,@ApiIgnore Principal principal){
-        Pagination pagination=new Pagination(page,limit);
-        Response response=new Response(200,service.findAgentProcess(status,principal.getName(),pagination),pagination);
-        return response.getResponseEntity("data","pagination");
+    public ResponseEntity agentProcess(@PathVariable String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit, @ApiIgnore Principal principal) {
+        Pagination pagination = new Pagination(page, limit);
+        Response response = new Response(200, service.findAgentProcess(status, principal.getName(), pagination), pagination);
+        return response.getResponseEntity("data", "pagination");
     }
 
     @GetMapping("/search/project_type")
-    public ResponseEntity projectType(){
-        Response response=new Response(200,service.projectType());
+    public ResponseEntity projectType() {
+        Response response = new Response(200, service.projectType());
         return response.getResponseEntity("data");
     }
 
     @GetMapping("/agent/transaction/total_commission")
-    public ResponseEntity agentTotalCommission(@ApiIgnore Principal principal){
-        Response response=new Response(200,service.commissionCalculator(principal.getName()));
+    public ResponseEntity agentTotalCommission(@ApiIgnore Principal principal) {
+        Response response = new Response(200, service.commissionCalculator(principal.getName()));
         return response.getResponseEntity("data");
     }
 }

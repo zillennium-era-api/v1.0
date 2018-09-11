@@ -24,66 +24,74 @@ public interface Service {
 
     // api/login
     User findUserByEmailOfLogin(String email);
+
     String checkLogin(Login login);
 
     // api/building/{uuid}
-    BuildingUUID findBuildingByUUID(String uuid,String email);
-    void favoriteEnable(BuildingUUID buildingUUID,int userId,int buildingId);
+    BuildingUUID findBuildingByUUID(String uuid, String email);
+
+    void favoriteEnable(BuildingUUID buildingUUID, int userId, int buildingId);
+
     Integer getIdFromUser(String email);
 
     // api/building/status/{status}
-    List<Buildings> findBuildings(Pagination pagination,String status);
+    List<Buildings> findBuildings(Pagination pagination, String status);
     /*int countBuildingsRecord();*/
 
     // api/building/status/update
-    Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate,String email);
+    Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email);
+
     Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId);
 
     // api/register
-    void register(Register register,String jwtToken);
+    void register(Register register, String jwtToken);
 
     // api/user
     com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username);
 
     // api/agent/profile/upload
     String findImageByUsernameOfUploadProfileAgent(String email);
-    void updateImageProfileOfUploadProfileAgent(String image,String email);
+
+    void updateImageProfileOfUploadProfileAgent(String image, String email);
 
     // api/agent/account/password
-    void updateUserPassword(String password,String email);
+    void updateUserPassword(String password, String email);
+
     String getUserPasswordByEmail(String email);
 
     //api/agent/account/update
     void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email);
 
     // api/agent/transaction/status/{status}
-    List<TransactionResponse> findAgentsTransaction(String email,String status, Pagination pagination);
+    List<TransactionResponse> findAgentsTransaction(String email, String status, Pagination pagination);
 
     // api/agent/favorite
-    List<AgentFavorite> findAgentFavorite(String email,Pagination pagination);
+    List<AgentFavorite> findAgentFavorite(String email, Pagination pagination);
 
     // api/agent/favorite/add
-    void addFavorite(AgentAddFavorite agentAddFavorite,String email);
+    void addFavorite(AgentAddFavorite agentAddFavorite, String email);
 
     // api/agent/favorite/delete
-    void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite,String email);
+    void deleteAgentFavorite(AgentDeleteFavorite agentDeleteFavorite, String email);
 
     // api/search
-    List<Buildings> search(String keyword,String type,Pagination pagination);
+    List<Buildings> search(String keyword, String type, Pagination pagination);
+
     List<String> projectType();
 
     // api/agent/members/uuid
     List<AgentMember> findAgentMember(String uuid);
 
     // api/agent/member/direct/uuid
-    List<AgentMemberDirect> findAgentMemberDirect(String uuid,Pagination pagination);
+    List<AgentMemberDirect> findAgentMemberDirect(String uuid, Pagination pagination);
 
     // api/noti/to_favoritor/playerid
-    List<String> findPlayerId(String email,String buildingUUID);
+    List<String> findPlayerId(String email, String buildingUUID);
+
     String getImage(String email);
 
     // api/agent/status/{status}
-    List<Agent> findAgentProcess(String status,String email,Pagination pagination);
+    List<Agent> findAgentProcess(String status, String email, Pagination pagination);
 
     // api/agent/transaction/total_commission
     AgentCommission commissionCalculator(String email);

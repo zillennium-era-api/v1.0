@@ -10,21 +10,21 @@ import java.util.List;
 
 @Repository
 public interface AgentCommissionRepo {
-    @Select(value= "{CALL transaction_calculator(#{email})}")
+    @Select(value = "{CALL transaction_calculator(#{email})}")
     @Results({
-            @Result(property = "buildingCompleted",column = "total_price"),
-            @Result(property = "fromYear",column = "from_year"),
-            @Result(property = "toYear",column = "to_year")
+            @Result(property = "buildingCompleted", column = "total_price"),
+            @Result(property = "fromYear", column = "from_year"),
+            @Result(property = "toYear", column = "to_year")
     })
     @Options(statementType = StatementType.CALLABLE)
     AgentCommission commissionCalculator(String email);
 
-    @Select(value= "{CALL agent_got(#{email})}")
+    @Select(value = "{CALL agent_got(#{email})}")
     @Results({
-            @Result(property = "buildingId",column = "building_id"),
-            @Result(property = "isIncludeVat",column = "is_include_vat"),
-            @Result(property = "projectPrice",column = "project_price"),
-            @Result(property = "commission",column = "building_id",one = @One(select = "getCommission"))
+            @Result(property = "buildingId", column = "building_id"),
+            @Result(property = "isIncludeVat", column = "is_include_vat"),
+            @Result(property = "projectPrice", column = "project_price"),
+            @Result(property = "commission", column = "building_id", one = @One(select = "getCommission"))
     })
     @Options(statementType = StatementType.CALLABLE)
     List<AgentGot> getAgentCommissionAmount(String email);

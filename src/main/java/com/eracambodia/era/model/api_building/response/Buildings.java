@@ -126,9 +126,9 @@ public class Buildings {
     }
 
     public String getFilePath() {
-        if(filePath==null)
+        if (filePath == null)
             return filePath;
-        else return Default.buildingImage+filePath;
+        else return Default.buildingImage + filePath;
     }
 
     public void setFilePath(String filePath) {

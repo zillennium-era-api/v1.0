@@ -9,15 +9,15 @@ import java.util.List;
 
 @Repository
 public interface AgentMemberUUIDRepo {
-    @Select(value= "{CALL agent_member(#{userId})}")
+    @Select(value = "{CALL agent_member(#{userId})}")
     @Results({
-            @Result(property = "uuid",column = "user_uuid"),
-            @Result(property = "name",column = "user_name"),
-            @Result(property = "phone",column = "user_phone"),
-            @Result(property = "email",column = "user_email"),
-            @Result(property = "level",column = "user_level"),
-            @Result(property = "memberCount",column = "user_id",one = @One(select = "countMember")),
-            @Result(property = "parent",column = "user_parent_id",one=@One(select = "getParent"))
+            @Result(property = "uuid", column = "user_uuid"),
+            @Result(property = "name", column = "user_name"),
+            @Result(property = "phone", column = "user_phone"),
+            @Result(property = "email", column = "user_email"),
+            @Result(property = "level", column = "user_level"),
+            @Result(property = "memberCount", column = "user_id", one = @One(select = "countMember")),
+            @Result(property = "parent", column = "user_parent_id", one = @One(select = "getParent"))
     })
     @Options(statementType = StatementType.CALLABLE)
     List<AgentMember> findAgentMember(int userId);

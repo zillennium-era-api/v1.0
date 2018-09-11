@@ -8,16 +8,18 @@ import org.springframework.stereotype.Repository;
 public interface RegisterRepo {
     @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card,uuid,parent_id) " +
             "VALUES (#{register.name},#{register.email},#{register.password},#{register.gender},#{register.dateOfBirth},#{register.phone},#{register.idCard},#{register.uuid},#{parentId})")
-    Integer register(@Param("register")Register register,@Param("parentId")Integer parentId);
+    Integer register(@Param("register") Register register, @Param("parentId") Integer parentId);
 
     @Select("SELECT email " +
             "FROM users " +
             "WHERE email=#{email}")
     String getEmail(String email);
+
     @Select("SELECT phonenumber " +
             "FROM users " +
             "WHERE phonenumber = #{phone}")
     String getPhone(String phone);
+
     @Select("SELECT id_card " +
             "FROM users " +
             "WHERE id_card=#{idCard}")

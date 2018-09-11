@@ -15,41 +15,46 @@ public interface BuildingUUIDRepo {
             "FROM building " +
             "WHERE uuid=#{uuid}")
     @Results({
-            @Result(property = "id",column = "id"),
-            @Result(property = "countryCode",column = "country_code",one = @One(select = "getCountry")),
-            @Result(property = "countryName",column = "country"),
-            @Result(property = "cityOrProvince",column = "city_or_province",one = @One(select = "getCityOrProvince")),
-            @Result(property = "village",column = "village_code",one = @One(select = "getVillage")),
-            @Result(property = "commune",column = "commune_code",one = @One(select = "getCommune")),
-            @Result(property = "district",column = "district_code",one = @One(select = "getDestrict")),
-            @Result(property = "streetNameOrNumber",column = "street_number_or_name"),
-            @Result(property = "numberOfFloor",column = "number_of_floor"),
-            @Result(property = "countryName",column = "country"),
-            @Result(property = "buildingHeight",column = "building_height"),
-            @Result(property = "totalCost",column = "id",one = @One(select = "findTotalCostOfBuildingUUID")),
-            @Result(property = "agent",column = "id",one = @One(select = "findAgentOfBuildingUUID")),
-            @Result(property = "files" ,column = "id",many = @Many(select = "findFilesOfBuildingUUID")),
-            @Result(property = "feature",column = "id",many = @Many(select = "findFeatureOfBuildingUUID")),
-            @Result(property = "neighborhood",column = "id",many = @Many(select = "findNeighborhoodOfBuildingUUID")),
-            @Result(property = "countFavorite",column = "id",one = @One(select="countFavoriteOfBuildingUUID"))
+            @Result(property = "id", column = "id"),
+            @Result(property = "countryCode", column = "country_code", one = @One(select = "getCountry")),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
+            @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
+            @Result(property = "commune", column = "commune_code", one = @One(select = "getCommune")),
+            @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
+            @Result(property = "streetNameOrNumber", column = "street_number_or_name"),
+            @Result(property = "numberOfFloor", column = "number_of_floor"),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "buildingHeight", column = "building_height"),
+            @Result(property = "totalCost", column = "id", one = @One(select = "findTotalCostOfBuildingUUID")),
+            @Result(property = "agent", column = "id", one = @One(select = "findAgentOfBuildingUUID")),
+            @Result(property = "files", column = "id", many = @Many(select = "findFilesOfBuildingUUID")),
+            @Result(property = "feature", column = "id", many = @Many(select = "findFeatureOfBuildingUUID")),
+            @Result(property = "neighborhood", column = "id", many = @Many(select = "findNeighborhoodOfBuildingUUID")),
+            @Result(property = "countFavorite", column = "id", one = @One(select = "countFavoriteOfBuildingUUID"))
     })
     BuildingUUID findBuildingByUUID(String uuid);
+
     @Select("SELECT latin_name " +
             "FROM address " +
             "WHERE id=#{district_code}")
     String getDestrict();
+
     @Select("SELECT latin_name " +
             "FROM address " +
             "WHERE id=#{country_code}")
     String getCountry();
+
     @Select("SELECT latin_name " +
             "FROM address " +
             "WHERE id=#{village_code}")
     String getVillage();
+
     @Select("SELECT latin_name " +
             "FROM address " +
             "WHERE id=#{commune_code}")
     String getCommune();
+
     @Select("SELECT users.username,users.image,users.id,users.uuid " +
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
@@ -57,33 +62,37 @@ public interface BuildingUUIDRepo {
             "WHERE transaction.owner_id=#{id} AND transaction.table_name = 'Building' AND transaction.status=building.status AND building.status NOT ILIKE 'available' " +
             "ORDER BY transaction.create_date LIMIT 1")
     @Results({
-            @Result(property = "name",column = "username"),
-            @Result(property = "profilePhoto",column = "image")
+            @Result(property = "name", column = "username"),
+            @Result(property = "profilePhoto", column = "image")
     })
     Agent findAgentOfBuildingUUID();
+
     @Select("SELECT total_project_cost " +
             "FROM building_basic_information " +
             "WHERE building_id=#{id} ")
     Double findTotalCostOfBuildingUUID();
+
     @Select("SELECT owner_id ,paths,type " +
             "FROM file " +
             "WHERE owner_id=#{id} AND type='image'")
     @Results({
-            @Result(property = "filePath" ,column = "paths"),
-            @Result(property = "ownerId" ,column = "owner_id")
+            @Result(property = "filePath", column = "paths"),
+            @Result(property = "ownerId", column = "owner_id")
     })
     List<File> findFilesOfBuildingUUID();
+
     @Select("SELECT * FROM feature WHERE building_id=#{id}")
     @Results({
-            @Result(property = "ownerId" ,column = "building_id"),
-            @Result(property = "amenities",column = "amenity"),
-            @Result(property = "includeService",column = "include_service"),
-            @Result(property = "excludeService",column = "exclude_service")
+            @Result(property = "ownerId", column = "building_id"),
+            @Result(property = "amenities", column = "amenity"),
+            @Result(property = "includeService", column = "include_service"),
+            @Result(property = "excludeService", column = "exclude_service")
     })
     Feature findFeatureOfBuildingUUID();
+
     @Select("SELECT * FROM neighborhood WHERE owner_id=#{id}")
     @Results({
-            @Result(property = "ownerId",column = "owner_id")
+            @Result(property = "ownerId", column = "owner_id")
     })
     List<Neighborhood> findNeighborhoodOfBuildingUUID();
 
@@ -91,7 +100,7 @@ public interface BuildingUUIDRepo {
             "FROM favorite " +
             "INNER JOIN users ON favorite.user_id=#{userId} " +
             "INNER JOIN building ON favorite.owner_id = #{buildingId}")
-    Integer favoriteEnable(@Param("userId")int userId,@Param("buildingId")int buildingId);
+    Integer favoriteEnable(@Param("userId") int userId, @Param("buildingId") int buildingId);
 
     @Select("SELECT id " +
             "FROM users " +

@@ -1,6 +1,6 @@
 package com.eracambodia.era.model.api_building_uuid.response;
 
-public class Feature{
+public class Feature {
     private int ownerId;
     private String facilities;
     private String amenities;

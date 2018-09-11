@@ -115,9 +115,9 @@ public class AgentFavorite {
     }
 
     public String getFilePath() {
-        if(filePath==null)
-        return filePath;
-        else return Default.buildingImage+filePath;
+        if (filePath == null)
+            return filePath;
+        else return Default.buildingImage + filePath;
     }
 
     public void setFilePath(String filePath) {

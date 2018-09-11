@@ -6,17 +6,18 @@ public class Pagination {
     private int offset;
     private int totalPage;
     private int totalItem;
-    public Pagination(int page,int limit){
+
+    public Pagination(int page, int limit) {
         setPage(page);
         setLimit(limit);
-        setOffset(page*limit-limit);
-    }
-    public Pagination(){
-        page=1;
-        limit=10;
-        offset=0;
+        setOffset(page * limit - limit);
     }
 
+    public Pagination() {
+        page = 1;
+        limit = 10;
+        offset = 0;
+    }
 
 
     public int getPage() {
@@ -57,7 +58,7 @@ public class Pagination {
     }
 
     public void setTotalItem(int totalItem) {
-        setTotalPage((int)Math.ceil((double)totalItem/limit));
+        setTotalPage((int) Math.ceil((double) totalItem / limit));
         this.totalItem = totalItem;
     }
 

@@ -33,8 +33,8 @@ public class Agent {
     }
 
     public String getProfilePhoto() {
-        if(profilePhoto!=null)
-            return Default.profilePhoto+profilePhoto;
+        if (profilePhoto != null)
+            return Default.profilePhoto + profilePhoto;
         else return profilePhoto;
     }
 

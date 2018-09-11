@@ -27,41 +27,41 @@ public class NotificationController {
     private Service service;
 
     @PostMapping("/playerid")
-    public ResponseEntity allUsers(@RequestBody Notification notification, @ApiIgnore Principal principal){
-        List<String> playerIds=service.findPlayerId(principal.getName(),notification.getBuildingUUID());
-        String profilePhoto=service.getImage(principal.getName());
-        if(profilePhoto!=null){
-            profilePhoto=Default.profilePhoto+profilePhoto;
+    public ResponseEntity allUsers(@RequestBody Notification notification, @ApiIgnore Principal principal) {
+        List<String> playerIds = service.findPlayerId(principal.getName(), notification.getBuildingUUID());
+        String profilePhoto = service.getImage(principal.getName());
+        if (profilePhoto != null) {
+            profilePhoto = Default.profilePhoto + profilePhoto;
         }
-        String arrayIds="[";
-        for(int i=0;i<playerIds.size();i++){
-            arrayIds+="\""+playerIds.get(i)+"\"";
-            if(i+1<playerIds.size()){
-                arrayIds+=",";
+        String arrayIds = "[";
+        for (int i = 0; i < playerIds.size(); i++) {
+            arrayIds += "\"" + playerIds.get(i) + "\"";
+            if (i + 1 < playerIds.size()) {
+                arrayIds += ",";
             }
         }
-        arrayIds+="]";
-        String jsonResponse="";
-        int statusCode=0;
+        arrayIds += "]";
+        String jsonResponse = "";
+        int statusCode = 0;
 
         try {
             URL url = new URL("https://onesignal.com/api/v1/notifications");
-            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setUseCaches(false);
             con.setDoOutput(true);
             con.setDoInput(true);
 
             con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("Authorization", "Basic "+ Default.oneSignalRestAPIKey);
+            con.setRequestProperty("Authorization", "Basic " + Default.oneSignalRestAPIKey);
             con.setRequestMethod("POST");
             String strJsonBody = "{"
-                    +   "\"app_id\": \""+Default.oneSignalAppID+"\","
-                    +   "\"include_player_ids\": "+arrayIds+","
-                    +   "\"big_picture\": \""+notification.getBigPicture()+"\","
-                    +   "\"headings\": {\"en\":\""+notification.getTitle()+"\"},"
-                    +   "\"data\": {\"buildingUUID\": \""+notification.getBuildingUUID()+"\"},"
-                    +   "\"large_icon\": \""+profilePhoto+"\","
-                    +   "\"contents\": {\"en\": \""+notification.getContent()+"\"}"
+                    + "\"app_id\": \"" + Default.oneSignalAppID + "\","
+                    + "\"include_player_ids\": " + arrayIds + ","
+                    + "\"big_picture\": \"" + notification.getBigPicture() + "\","
+                    + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
+                    + "\"data\": {\"buildingUUID\": \"" + notification.getBuildingUUID() + "\"},"
+                    + "\"large_icon\": \"" + profilePhoto + "\","
+                    + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                     + "}";
 
             byte[] sendBytes = strJsonBody.getBytes("UTF-8");
@@ -71,28 +71,27 @@ public class NotificationController {
             outputStream.write(sendBytes);
 
             int httpResponse = con.getResponseCode();
-            statusCode=httpResponse;
+            statusCode = httpResponse;
             /*System.out.println("httpResponse: " + httpResponse);*/
 
-            if (  httpResponse >= HttpURLConnection.HTTP_OK
+            if (httpResponse >= HttpURLConnection.HTTP_OK
                     && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
                 Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
                 jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                 scanner.close();
-            }
-            else {
+            } else {
                 Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
                 jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                 scanner.close();
             }
             /*System.out.println("jsonResponse:\n" + jsonResponse);*/
 
-        } catch(Throwable t) {
-            throw new CustomException(500,"Ot Deng Error Ey Te.");
+        } catch (Throwable t) {
+            throw new CustomException(500, "Ot Deng Error Ey Te.");
         }
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> json = springParser.parseMap(jsonResponse);
-        Response response=new Response(statusCode,json);
+        Response response = new Response(statusCode, json);
         return response.getResponseEntity("data");
     }
 }
