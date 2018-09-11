@@ -18,6 +18,7 @@ import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
+import com.eracambodia.era.model.api_noti_to_favoritor.Transaction;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
@@ -387,14 +388,15 @@ public class ServiceImpl implements Service {
         if (ownerId == null) {
             throw new CustomException(404, "Building UUID Not Found.");
         }
-        /*Integer userId = notiToFavoritorRepo.getIDByEmail(email);
-        if (userId == null) {
-            throw new CustomException(404, "Email not found.");
-        }*/
-        Integer userId=notiToFavoritorRepo.getUserIdFromTransaction(ownerId);
-        if(userId==null)
-            userId=0;
-        List<String> playerId = notiToFavoritorRepo.findPlayerId(userId, ownerId);
+        Transaction transaction=notiToFavoritorRepo.getUserIdFromTransaction(100);
+        if(transaction.getUserId()==null) {
+            transaction.setUserId(0);
+        }else {
+            if(transaction.getStatus().equalsIgnoreCase("available")) {
+                transaction.setUserId(0);
+            }
+        }
+        List<String> playerId = notiToFavoritorRepo.findPlayerId(transaction.getUserId(), ownerId);
         if (playerId == null || playerId.size() < 1) {
             throw new CustomException(404, "No favoritor.");
         }

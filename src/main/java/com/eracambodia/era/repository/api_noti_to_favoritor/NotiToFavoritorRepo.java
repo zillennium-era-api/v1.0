@@ -1,5 +1,6 @@
 package com.eracambodia.era.repository.api_noti_to_favoritor;
 
+import com.eracambodia.era.model.api_noti_to_favoritor.Transaction;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
@@ -28,14 +29,13 @@ public interface NotiToFavoritorRepo {
             "WHERE uuid=#{uuid}")
     Integer getBuildingID(String uuid);
 
-    @Select("SELECT id " +
-            "FROM users " +
-            "WHERE email=#{email}")
-    Integer getIDByEmail(String email);
-
-    @Select("SELECT user_id " +
+    @Select("SELECT user_id,status " +
             "FROM transaction " +
-            "WHERE owner_id=#{owner_id} AND status NOT ILIKE 'available' " +
-            "ORDER BY id LIMIT 1")
-    Integer getUserIdFromTransaction(int ownerId);
+            "WHERE owner_id=#{owner_id} " +
+            "ORDER BY id DESC LIMIT 1")
+    @Results({
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "status",column = "status")
+    })
+    Transaction getUserIdFromTransaction(int ownerId);
 }
