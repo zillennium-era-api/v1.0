@@ -15,7 +15,7 @@ public interface AgentTransactionRepo {
             "INNER JOIN users on users.id=transaction.user_id " +
             "INNER JOIN building on building.id=transaction.owner_id " +
             "WHERE users.email=#{email} AND transaction.status ilike #{status} " +
-            "ORDERY BY transaction.id " +
+            "ORDERY BY transaction.id DESC " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
             @Result(property = "name", column = "owner_id", one = @One(select = "findBuildingName")),
@@ -73,7 +73,7 @@ public interface AgentTransactionRepo {
             "INNER JOIN users on users.id=transaction.user_id " +
             "INNER JOIN building on building.id=transaction.owner_id " +
             "WHERE users.email=#{email} " +
-            "ORDER BY transaction.id" +
+            "ORDER BY transaction.id DESC " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
             @Result(property = "name", column = "owner_id", one = @One(select = "findBuildingName")),
