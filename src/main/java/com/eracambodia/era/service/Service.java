@@ -44,7 +44,7 @@ public interface Service {
     Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId);
 
     // api/register
-    void register(Register register, String jwtToken);
+    void register(Register register, String jwtToken,String playerId);
 
     // api/user
     com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username);

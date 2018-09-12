@@ -38,4 +38,6 @@ public interface NotiToFavoritorRepo {
             @Result(property = "status",column = "status")
     })
     Transaction getUserIdFromTransaction(int ownerId);
+
+
 }

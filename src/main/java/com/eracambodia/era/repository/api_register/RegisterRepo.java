@@ -34,4 +34,8 @@ public interface RegisterRepo {
             "SET enable=true " +
             "WHERE email=#{email} ")
     Integer enable(String email);
+
+    @Insert("INSERT INTO onesignal(user_id,player_id) " +
+            "VALUES (#{userId},#{playerId})" )
+    int savePlayerId(@Param("userId")int userId,@Param("playerId")String playerId);
 }

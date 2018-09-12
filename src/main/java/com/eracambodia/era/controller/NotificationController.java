@@ -56,7 +56,7 @@ public class NotificationController {
             con.setRequestMethod("POST");
             String strJsonBody = "{"
                     + "\"app_id\": \"" + Default.oneSignalAppID + "\","
-                    + "\"include_player_ids\": " + arrayIds + ","
+                    + "\"include_player_ids\" : " + arrayIds + ","
                     + "\"big_picture\": \"" + notification.getBigPicture() + "\","
                     + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
                     + "\"data\": {\"type\": \"buildingDetail\"}, \"key\": \""+notification.getBuildingUUID()+"\" "
@@ -93,5 +93,10 @@ public class NotificationController {
         Map<String, Object> json = springParser.parseMap(jsonResponse);
         Response response = new Response(statusCode, json);
         return response.getResponseEntity("data");
+    }
+
+    @GetMapping("/save/playerId")
+    public ResponseEntity savePlayerId(@RequestParam String playerId){
+        return null;
     }
 }

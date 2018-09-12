@@ -159,7 +159,7 @@ public class ServiceImpl implements Service {
     private RegisterRepo registerRepo;
 
     @Override
-    public void register(Register register, String jwtToken) {
+    public void register(Register register, String jwtToken,String playerId) {
         String message = "";
         RegisterUniqueFields registerUniqueFields = new RegisterUniqueFields();
         if (registerRepo.getIdCard(register.getIdCard()) != null) {
@@ -184,9 +184,12 @@ public class ServiceImpl implements Service {
             if (userId != null) {
                 registerRepo.enable(register.getEmail());
             }
+            if(playerId!=null) {
+                Integer uid = registerRepo.getIdByEmail(register.getEmail());
+                registerRepo.savePlayerId(uid, playerId);
+            }
         }
     }
-
 
     // api/user
     @Autowired
