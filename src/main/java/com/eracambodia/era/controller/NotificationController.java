@@ -21,12 +21,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 @RestController
-@RequestMapping("/api/noti/to_favoritor")
+@RequestMapping("/api/noti")
 public class NotificationController {
     @Autowired
     private Service service;
 
-    @PostMapping("/playerid")
+    @PostMapping("/favorite")
     public ResponseEntity allUsers(@RequestBody Notification notification, @ApiIgnore Principal principal) {
         List<String> playerIds = service.findPlayerId(principal.getName(), notification.getBuildingUUID());
         String profilePhoto = service.getImage(principal.getName());
@@ -59,7 +59,7 @@ public class NotificationController {
                     + "\"include_player_ids\": " + arrayIds + ","
                     + "\"big_picture\": \"" + notification.getBigPicture() + "\","
                     + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
-                    + "\"data\": {\"buildingUUID\": \"" + notification.getBuildingUUID() + "\"},"
+                    + "\"data\": {\"type\": \"buildingDetail\"}, \"key\": \""+notification.getBuildingUUID()+"\" "
                     + "\"large_icon\": \"" + profilePhoto + "\","
                     + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                     + "}";
