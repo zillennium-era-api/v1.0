@@ -1,7 +1,7 @@
-package com.eracambodia.era.repository.api_agent_transaction;
+package com.eracambodia.era.repository.api_agent_transaction_useruuid_status;
 
 import com.eracambodia.era.model.Pagination;
-import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
+import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +14,7 @@ public interface AgentTransactionRepo {
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
             "INNER JOIN building on building.id=transaction.owner_id " +
-            "WHERE users.email=#{email} AND transaction.status ilike #{status} " +
+            "WHERE users.uuid=#{userUUID} AND transaction.status ilike #{status} " +
             "ORDER BY transaction.id DESC " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
@@ -28,7 +28,7 @@ public interface AgentTransactionRepo {
             @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
             @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
     })
-    List<TransactionResponse> findAgentsTransaction(@Param("email") String email, @Param("status") String status, @Param("pagination") Pagination pagination);
+    List<TransactionResponse> findAgentsTransaction(@Param("userUUID") String userUUID, @Param("status") String status, @Param("pagination") Pagination pagination);
 
     @Select("SELECT " +
             "name " +
@@ -44,8 +44,8 @@ public interface AgentTransactionRepo {
     @Select("SELECT COUNT(transaction.id) " +
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
-            "WHERE users.email=#{email} AND status ILIKE #{status}")
-    Integer countTransaction(@Param("email") String email, @Param("status") String status);
+            "WHERE users.userUUID=#{userUUID} AND status ILIKE #{status}")
+    Integer countTransaction(@Param("userUUID") String userUUID, @Param("status") String status);
 
     @Select("SELECT latin_name " +
             "FROM address " +
@@ -72,7 +72,7 @@ public interface AgentTransactionRepo {
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
             "INNER JOIN building on building.id=transaction.owner_id " +
-            "WHERE users.email=#{email} " +
+            "WHERE users.uuid=#{userUUID} " +
             "ORDER BY transaction.id DESC " +
             "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
     @Results({
@@ -86,13 +86,13 @@ public interface AgentTransactionRepo {
             @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
             @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
     })
-    List<TransactionResponse> findAgentsAllTransaction(@Param("email") String email, @Param("pagination") Pagination pagination);
+    List<TransactionResponse> findAgentsAllTransaction(@Param("userUUID") String userUUID, @Param("pagination") Pagination pagination);
 
     @Select("SELECT COUNT(transaction.id) " +
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
-            "WHERE users.email=#{email}")
-    Integer countAllTransaction(@Param("email") String email);
+            "WHERE users.uuid=#{userUUID}")
+    Integer countAllTransaction(@Param("userUUID") String userUUID);
 
 
 }

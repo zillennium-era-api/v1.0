@@ -9,9 +9,8 @@ import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFa
 import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
-import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
+import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
-import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
 import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
@@ -25,7 +24,7 @@ public interface Service {
     // api/login
     User findUserByEmailOfLogin(String email);
 
-    String checkLogin(Login login);
+    String checkLogin(Login login,String playerId);
 
     // api/building/{uuid}
     BuildingUUID findBuildingByUUID(String uuid, String email);
@@ -36,7 +35,6 @@ public interface Service {
 
     // api/building/status/{status}
     List<Buildings> findBuildings(Pagination pagination, String status);
-    /*int countBuildingsRecord();*/
 
     // api/building/status/update
     Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email);
@@ -62,8 +60,8 @@ public interface Service {
     //api/agent/account/update
     void updateUserInformation(UpdateAgentAccount updateAgentAccount, String email);
 
-    // api/agent/transaction/status/{status}
-    List<TransactionResponse> findAgentsTransaction(String email, String status, Pagination pagination);
+    // api/agent/transaction/{useruuid}/{status}
+    List<TransactionResponse> findAgentsTransaction(String userUUID, String status, Pagination pagination);
 
     // api/agent/favorite
     List<AgentFavorite> findAgentFavorite(String email, Pagination pagination);
@@ -85,7 +83,7 @@ public interface Service {
     // api/agent/member/direct/uuid
     List<AgentMemberDirect> findAgentMemberDirect(String uuid, Pagination pagination);
 
-    // api/noti/to_favoritor/playerid
+    // api/noti/favorite
     List<String> findPlayerId(String email, String buildingUUID);
 
     String getImage(String email);

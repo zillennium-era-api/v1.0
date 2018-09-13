@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Repository
 public interface LoginRepo {
     @Select("SELECT * " +
@@ -33,4 +35,13 @@ public interface LoginRepo {
             "FROM users " +
             "WHERE email=#{email} and enable=true")
     Integer checkEmail(String email);
+
+    @Insert("INSERT INTO onesignal(user_id,player_id) " +
+            "VALUES (#{userId},#{playerId}) ")
+    int savePlayerId(@Param("userId")int userId,@Param("playerId")String playerId);
+
+    @Select("SELECT player_id " +
+            "FROM onesignal " +
+            "WHERE user_id=#{userId}")
+    List<String> getPlayerId(int userId);
 }

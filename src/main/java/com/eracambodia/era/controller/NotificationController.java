@@ -59,7 +59,7 @@ public class NotificationController {
                     + "\"include_player_ids\" : " + arrayIds + ","
                     + "\"big_picture\": \"" + notification.getBigPicture() + "\","
                     + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
-                    + "\"data\": {\"type\": \"buildingDetail\"}, \"key\": \""+notification.getBuildingUUID()+"\" "
+                    + "\"data\": {\"type\": \"buildingDetail\", \"key\": \""+notification.getBuildingUUID()+"\" }, "
                     + "\"large_icon\": \"" + profilePhoto + "\","
                     + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                     + "}";
@@ -93,10 +93,5 @@ public class NotificationController {
         Map<String, Object> json = springParser.parseMap(jsonResponse);
         Response response = new Response(statusCode, json);
         return response.getResponseEntity("data");
-    }
-
-    @GetMapping("/save/playerId")
-    public ResponseEntity savePlayerId(@RequestParam String playerId){
-        return null;
     }
 }

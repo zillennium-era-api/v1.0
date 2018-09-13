@@ -1,6 +1,4 @@
-package com.eracambodia.era.model.api_agent_transaction.response;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.eracambodia.era.model.api_agent_transaction_useruuid_status.response;
 
 import java.util.Date;
 

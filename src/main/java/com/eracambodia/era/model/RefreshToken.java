@@ -1,20 +1,20 @@
 package com.eracambodia.era.model;
 
 public class RefreshToken {
-    private String refreshToken;
+    private String refresh_token;
 
-    public String getRefreshToken() {
-        return refreshToken;
+    public String getRefresh_token() {
+        return refresh_token;
     }
 
-    public void setRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
+    public void setRefresh_token(String refresh_token) {
+        this.refresh_token = refresh_token;
     }
 
     @Override
     public String toString() {
         return "RefreshToken{" +
-                "refreshToken='" + refreshToken + '\'' +
+                "refresh_token='" + refresh_token + '\'' +
                 '}';
     }
 }

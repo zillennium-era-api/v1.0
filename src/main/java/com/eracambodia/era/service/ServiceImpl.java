@@ -2,7 +2,6 @@ package com.eracambodia.era.service;
 
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
-import com.eracambodia.era.model.TransactionCal;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
@@ -11,7 +10,7 @@ import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFa
 import com.eracambodia.era.model.api_agent_member_uuid.response.AgentMember;
 import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMemberDirect;
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
-import com.eracambodia.era.model.api_agent_transaction.response.TransactionResponse;
+import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
 import com.eracambodia.era.model.api_building.response.Buildings;
@@ -30,7 +29,7 @@ import com.eracambodia.era.repository.api_agent_member_uuid.AgentMemberUUIDRepo;
 import com.eracambodia.era.repository.api_agent_members_direct_uuid.AgentMembersDirectRepo;
 import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgentRepo;
 import com.eracambodia.era.repository.api_agent_building_status_status.AgentRepo;
-import com.eracambodia.era.repository.api_agent_transaction.AgentTransactionRepo;
+import com.eracambodia.era.repository.api_agent_transaction_useruuid_status.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_agent_trasaction_total_commission.AgentCommissionRepo;
 import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
@@ -45,9 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DecimalFormat;
 import java.util.List;
 
 @org.springframework.stereotype.Service
@@ -64,7 +61,7 @@ public class ServiceImpl implements Service {
     }
 
     @Override
-    public String checkLogin(Login login) {
+    public String checkLogin(Login login,String playerId) {
         String password = loginRepo.checkLogin(login);
         if (password == null) {
             throw new CustomException(404, "Email Not Found.");
@@ -73,8 +70,15 @@ public class ServiceImpl implements Service {
             throw new CustomException(404, "email or password not correct.");
         }
         if (BCrypt.checkpw(login.getPassword(), password)) {
-            if (loginRepo.checkEmail(login.getEmail()) == null) {
+            Integer userId=loginRepo.checkEmail(login.getEmail());
+            if (userId == null) {
                 throw new CustomException(401, "account need to approve from admin.");
+            }
+            List<String> pid=loginRepo.getPlayerId(userId);
+            for(int i=0;i<pid.size();i++){
+                if(playerId.equals(playerId)){
+                    loginRepo.savePlayerId(userId,playerId);
+                }
             }
         }
         return password;
@@ -260,24 +264,24 @@ public class ServiceImpl implements Service {
         }
     }
 
-    // api/agent/transaction/status/{status}
+    // api/agent/transaction/{useruuid}/{status}
     @Autowired
     private AgentTransactionRepo agentTransactionRepo;
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<TransactionResponse> findAgentsTransaction(String email, String status, Pagination pagination) {
+    public List<TransactionResponse> findAgentsTransaction(String userUUID, String status, Pagination pagination) {
         if (!status.equalsIgnoreCase("all")) {
-            List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsTransaction(email, status, pagination);
+            List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsTransaction(userUUID, status, pagination);
             if (transactionResponses.size() < 1)
                 throw new CustomException(404, "No record");
-            pagination.setTotalItem(agentTransactionRepo.countTransaction(email, status));
+            pagination.setTotalItem(agentTransactionRepo.countTransaction(userUUID, status));
             return transactionResponses;
         }
-        List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsAllTransaction(email, pagination);
+        List<TransactionResponse> transactionResponses = agentTransactionRepo.findAgentsAllTransaction(userUUID, pagination);
         if (transactionResponses.size() < 1)
             throw new CustomException(404, "No record");
-        pagination.setTotalItem(agentTransactionRepo.countAllTransaction(email));
+        pagination.setTotalItem(agentTransactionRepo.countAllTransaction(userUUID));
         return transactionResponses;
     }
 

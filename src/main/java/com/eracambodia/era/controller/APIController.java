@@ -56,8 +56,8 @@ public class APIController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody Login login) {
-        service.checkLogin(login);
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
+        service.checkLogin(login,playerId);
 
         String clientCredential = "client:123";
         String basicAuth = new String(Base64.encodeBase64(clientCredential.getBytes()));
@@ -93,7 +93,7 @@ public class APIController {
 
         String grant_type = "refresh_token";
         String client_id = "client";
-        String refresh_token = refreshToken.getRefreshToken();
+        String refresh_token = refreshToken.getRefresh_token();
 
         String refresh_token_url = Default.oauthTokenUrl + "?grant_type=" + grant_type + "&client_id=" + client_id + "&refresh_token=" + refresh_token;
         RestTemplate restTemplate = new RestTemplate();
@@ -272,13 +272,12 @@ public class APIController {
         return response.getResponseEntity();
     }
 
-    @GetMapping("/agent/transaction/status/{status}")
-    public ResponseEntity agentTransaction(@PathVariable("status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit, @ApiIgnore Principal principal) {
+    @GetMapping("/agent/transaction/{userUUID}/{status}")
+    public ResponseEntity agentTransaction(@PathVariable("userUUID")String userUUID,@PathVariable("status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
         Pagination pagination = new Pagination(page, limit);
-        Response response = new Response(200, service.findAgentsTransaction(principal.getName(), status, pagination), pagination);
+        Response response = new Response(200, service.findAgentsTransaction(userUUID, status, pagination), pagination);
         return response.getResponseEntity("data", "pagination");
     }
-
 
     @GetMapping("/agent/favorite")
     public ResponseEntity agentFavorite(@RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit, @ApiIgnore Principal principal) {
