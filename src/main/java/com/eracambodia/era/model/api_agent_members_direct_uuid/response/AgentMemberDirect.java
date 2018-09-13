@@ -1,11 +1,14 @@
 package com.eracambodia.era.model.api_agent_members_direct_uuid.response;
 
+import com.eracambodia.era.setting.Default;
+
 public class AgentMemberDirect {
     private String uuid;
     private String name;
     private String phone;
     private String email;
     private String parent;
+    private String image;
 
     public String getUuid() {
         return uuid;
@@ -47,6 +50,16 @@ public class AgentMemberDirect {
         this.parent = parent;
     }
 
+    public String getImage() {
+        if(image!=null)
+            return Default.profilePhoto+image;
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     @Override
     public String toString() {
         return "AgentMemberDirect{" +
@@ -55,6 +68,7 @@ public class AgentMemberDirect {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", parent='" + parent + '\'' +
+                ", image='" + image + '\'' +
                 '}';
     }
 }

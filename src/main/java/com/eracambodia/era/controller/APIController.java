@@ -314,10 +314,10 @@ public class APIController {
     }
 
     @GetMapping("/agent/members/direct/{uuid}")
-    public ResponseEntity agentMemberDirect(@PathVariable("uuid") String uuid, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
-        Pagination pagination = new Pagination(page, limit);
-        Response response = new Response(200, service.findAgentMemberDirect(uuid, pagination), pagination);
-        return response.getResponseEntity("data", "pagination");
+    public ResponseEntity agentMemberDirect(@PathVariable("uuid") String uuid/*, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit*/) {
+        //Pagination pagination = new Pagination(page, limit);
+        Response response = new Response(200, service.findAgentMemberDirect(uuid, /*pagination*/null), /*pagination*/null);
+        return response.getResponseEntity("data"/*, "pagination"*/);
     }
 
     @GetMapping("/agent/building/status/{status}")

@@ -378,11 +378,11 @@ public class ServiceImpl implements Service {
         if (userId == null) {
             throw new CustomException(404, "Agent not found.");
         }
-        Integer countAgentMember = agentMembersDirectRepo.countAgent(userId);
+        /*Integer countAgentMember = agentMembersDirectRepo.countAgent(userId);
         if (countAgentMember == null) {
             throw new CustomException(404, "No record.");
         }
-        pagination.setTotalItem(countAgentMember);
+        pagination.setTotalItem(countAgentMember);*/
         return agentMembersDirectRepo.findAgentMemberDirect(userId);
     }
 

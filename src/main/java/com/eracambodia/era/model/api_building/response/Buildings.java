@@ -3,6 +3,9 @@ package com.eracambodia.era.model.api_building.response;
 import com.eracambodia.era.model.api_building.response.Agent;
 import com.eracambodia.era.setting.Default;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class Buildings {
     private int id;
     private String name;
@@ -122,7 +125,8 @@ public class Buildings {
     }
 
     public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        this.totalCost = Double.parseDouble(formatter.format(totalCost));
     }
 
     public String getFilePath() {

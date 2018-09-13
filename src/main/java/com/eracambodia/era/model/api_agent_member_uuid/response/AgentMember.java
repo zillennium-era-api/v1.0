@@ -1,11 +1,14 @@
 package com.eracambodia.era.model.api_agent_member_uuid.response;
 
+import com.eracambodia.era.setting.Default;
+
 public class AgentMember {
     private String uuid;
     private String name;
     private String phone;
     private String email;
     private String parent;
+    private String image;
     private int level;
     private int memberCount;
 
@@ -49,6 +52,16 @@ public class AgentMember {
         this.parent = parent;
     }
 
+    public String getImage() {
+        if(image!=null)
+            return Default.profilePhoto+image;
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public int getLevel() {
         return level;
     }
@@ -65,4 +78,17 @@ public class AgentMember {
         this.memberCount = memberCount;
     }
 
+    @Override
+    public String toString() {
+        return "AgentMember{" +
+                "uuid='" + uuid + '\'' +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", parent='" + parent + '\'' +
+                ", image='" + image + '\'' +
+                ", level=" + level +
+                ", memberCount=" + memberCount +
+                '}';
+    }
 }

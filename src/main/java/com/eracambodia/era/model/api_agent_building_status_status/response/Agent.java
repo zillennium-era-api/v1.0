@@ -2,6 +2,9 @@ package com.eracambodia.era.model.api_agent_building_status_status.response;
 
 import com.eracambodia.era.setting.Default;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+
 public class Agent {
     private int id;
     private String name;
@@ -110,7 +113,8 @@ public class Agent {
     }
 
     public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        this.totalCost = Double.parseDouble(formatter.format(totalCost));
     }
 
     public String getFilePath() {

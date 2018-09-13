@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_agent_transaction_useruuid_status.response;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.Date;
 
 public class TransactionResponse {
@@ -27,7 +29,8 @@ public class TransactionResponse {
     }
 
     public void setTotalCost(Double totalCost) {
-        this.totalCost = totalCost;
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        this.totalCost = Double.parseDouble(formatter.format(totalCost));
     }
 
     public String getCountryName() {

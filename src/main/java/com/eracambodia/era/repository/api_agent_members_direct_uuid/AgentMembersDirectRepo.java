@@ -16,7 +16,7 @@ public interface AgentMembersDirectRepo {
             "WHERE uuid=#{uuid}")
     Integer getUserParentId(String uuid);
 
-    @Select("SELECT uuid,username,phonenumber,email,parent_id " +
+    @Select("SELECT uuid,username,phonenumber,email,parent_id,image " +
             "FROM users " +
             "WHERE parent_id=#{parentId}")
     @Results({

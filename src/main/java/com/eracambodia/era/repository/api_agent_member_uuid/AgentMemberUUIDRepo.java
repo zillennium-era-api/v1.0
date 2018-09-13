@@ -16,6 +16,7 @@ public interface AgentMemberUUIDRepo {
             @Result(property = "phone", column = "user_phone"),
             @Result(property = "email", column = "user_email"),
             @Result(property = "level", column = "user_level"),
+            @Result(property = "image",column = "user_image"),
             @Result(property = "memberCount", column = "user_id", one = @One(select = "countMember")),
             @Result(property = "parent", column = "user_parent_id", one = @One(select = "getParent"))
     })

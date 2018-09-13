@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_building_uuid.response;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.List;
 
 public class BuildingUUID {
@@ -73,7 +75,8 @@ public class BuildingUUID {
     }
 
     public void setTotalCost(double totalCost) {
-        this.totalCost = totalCost;
+        NumberFormat formatter = new DecimalFormat("#0.00");
+        this.totalCost = Double.parseDouble(formatter.format(totalCost));
     }
 
     public String getCountryCode() {
