@@ -316,7 +316,7 @@ public class APIController {
     @GetMapping("/agent/members/direct/{uuid}")
     public ResponseEntity agentMemberDirect(@PathVariable("uuid") String uuid/*, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit*/) {
         //Pagination pagination = new Pagination(page, limit);
-        Response response = new Response(200, service.findAgentMemberDirect(uuid, /*pagination*/null), /*pagination*/null);
+        Response response = new Response(200, service.findAgentMemberDirect(uuid, /*pagination*/null)/*, pagination*/);
         return response.getResponseEntity("data"/*, "pagination"*/);
     }
 
