@@ -5,8 +5,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class UIController {
-    @GetMapping("/")
+    @GetMapping({"/","/index"})
     public String starter() {
-        return "redirect:/index";
+        return "index";
+    }
+    @GetMapping("/doc")
+    public String swagger(){
+        return "redirect:/swagger-ui.html";
     }
 }
