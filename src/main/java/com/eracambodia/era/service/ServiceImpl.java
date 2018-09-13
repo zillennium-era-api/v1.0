@@ -74,10 +74,12 @@ public class ServiceImpl implements Service {
             if (userId == null) {
                 throw new CustomException(401, "account need to approve from admin.");
             }
-            List<String> pid=loginRepo.getPlayerId(userId);
-            for(int i=0;i<pid.size();i++){
-                if(playerId.equals(playerId)){
-                    loginRepo.savePlayerId(userId,playerId);
+            if(playerId!=null) {
+                List<String> pid = loginRepo.getPlayerId(userId);
+                for (int i = 0; i < pid.size(); i++) {
+                    if (playerId.equals(playerId)) {
+                        loginRepo.savePlayerId(userId, playerId);
+                    }
                 }
             }
         }
