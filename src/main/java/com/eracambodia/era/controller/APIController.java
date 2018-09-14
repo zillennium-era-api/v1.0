@@ -54,8 +54,7 @@ public class APIController {
 
     @Autowired
     private FileStorageService fileStorageService;
-
-    @CrossOrigin(origins = "http://localhost:3000")
+    
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
         service.checkLogin(login,playerId);
@@ -156,7 +155,6 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "/image/user/{fileName:.+}")
     public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) {
         //load image
