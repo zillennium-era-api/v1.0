@@ -54,7 +54,7 @@ public class APIController {
 
     @Autowired
     private FileStorageService fileStorageService;
-    
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
         service.checkLogin(login,playerId);
@@ -120,7 +120,6 @@ public class APIController {
         return response.getResponseEntity();
     }
 
-    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("/user")
     public ResponseEntity viewUserInformation(@ApiIgnore Principal principal) {
         User user = service.findUserByUsernameOfUser(principal.getName());
