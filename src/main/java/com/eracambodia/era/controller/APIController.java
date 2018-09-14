@@ -156,7 +156,7 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping(value = "/image/user/{fileName:.+}")
     public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) {
         //load image
