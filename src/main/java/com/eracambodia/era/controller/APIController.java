@@ -334,9 +334,9 @@ public class APIController {
         return response.getResponseEntity("data");
     }
 
-    @GetMapping("/agent/transaction/total_commission")
-    public ResponseEntity agentTotalCommission(@ApiIgnore Principal principal) {
-        Response response = new Response(200, service.commissionCalculator(principal.getName()));
+    @GetMapping("/agent/transaction/total_commission/{uuid}")
+    public ResponseEntity agentTotalCommission(@PathVariable("uuid")String uuid) {
+        Response response = new Response(200, service.commissionCalculator(uuid));
         return response.getResponseEntity("data");
     }
 }

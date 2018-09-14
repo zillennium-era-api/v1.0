@@ -448,10 +448,10 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public AgentCommission commissionCalculator(String email) {
-        AgentCommission agentCommission = agentCommissionRepo.commissionCalculator(email);
+    public AgentCommission commissionCalculator(String uuid) {
+        AgentCommission agentCommission = agentCommissionRepo.commissionCalculator(uuid);
         Double totalPrice = agentCommission.getBuildingCompleted();
-        List<AgentGot> listAgentGot = agentCommissionRepo.getAgentCommissionAmount(email);
+        List<AgentGot> listAgentGot = agentCommissionRepo.getAgentCommissionAmount(uuid);
         agentCommission.setAgentGot(agentAmount(listAgentGot, totalPrice));
         return agentCommission;
     }

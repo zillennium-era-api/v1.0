@@ -92,5 +92,5 @@ public interface Service {
     List<Agent> findAgentProcess(String status, String email, Pagination pagination);
 
     // api/agent/transaction/total_commission
-    AgentCommission commissionCalculator(String email);
+    AgentCommission commissionCalculator(String uuid);
 }

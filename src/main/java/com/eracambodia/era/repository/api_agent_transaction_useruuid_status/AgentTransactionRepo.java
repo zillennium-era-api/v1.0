@@ -44,7 +44,7 @@ public interface AgentTransactionRepo {
     @Select("SELECT COUNT(transaction.id) " +
             "FROM transaction " +
             "INNER JOIN users on users.id=transaction.user_id " +
-            "WHERE users.userUUID=#{userUUID} AND status ILIKE #{status}")
+            "WHERE users.uuid=#{userUUID} AND status ILIKE #{status}")
     Integer countTransaction(@Param("userUUID") String userUUID, @Param("status") String status);
 
     @Select("SELECT latin_name " +

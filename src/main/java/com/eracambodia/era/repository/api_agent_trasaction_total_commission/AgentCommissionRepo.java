@@ -10,16 +10,16 @@ import java.util.List;
 
 @Repository
 public interface AgentCommissionRepo {
-    @Select(value = "{CALL transaction_calculator(#{email})}")
+    @Select(value = "{CALL transaction_calculator(#{uuid})}")
     @Results({
             @Result(property = "buildingCompleted", column = "total_price"),
             @Result(property = "fromYear", column = "from_year"),
             @Result(property = "toYear", column = "to_year")
     })
     @Options(statementType = StatementType.CALLABLE)
-    AgentCommission commissionCalculator(String email);
+    AgentCommission commissionCalculator(String uuid);
 
-    @Select(value = "{CALL agent_got(#{email})}")
+    @Select(value = "{CALL agent_got(#{uuid})}")
     @Results({
             @Result(property = "buildingId", column = "building_id"),
             @Result(property = "isIncludeVat", column = "is_include_vat"),
@@ -27,7 +27,7 @@ public interface AgentCommissionRepo {
             @Result(property = "commission", column = "building_id", one = @One(select = "getCommission"))
     })
     @Options(statementType = StatementType.CALLABLE)
-    List<AgentGot> getAgentCommissionAmount(String email);
+    List<AgentGot> getAgentCommissionAmount(String uuid);
 
     @Select("SELECT value " +
             "FROM value_reference " +
