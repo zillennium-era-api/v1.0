@@ -18,7 +18,7 @@ public interface AgentMembersDirectRepo {
 
     @Select("SELECT uuid,username,phonenumber,email,parent_id,image " +
             "FROM users " +
-            "WHERE parent_id=#{parentId}")
+            "WHERE parent_id=#{parentId} AND authority_id=3")
     @Results({
             @Result(property = "name", column = "username"),
             @Result(property = "phone", column = "phonenumber"),
@@ -28,11 +28,11 @@ public interface AgentMembersDirectRepo {
 
     @Select("SELECT username " +
             "FROM users " +
-            "WHERE parent_id=#{parent_id} LIMIT 1")
+            "WHERE id=#{parent_id}")
     String getParent();
 
     @Select("SELECT COUNT(id) " +
             "FROM users " +
-            "WHERE parent_id=#{parentId}")
+            "WHERE parent_id=#{parentId} AND authority_id=3")
     Integer countAgent(int parentId);
 }
