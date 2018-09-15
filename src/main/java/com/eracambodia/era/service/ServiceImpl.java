@@ -397,7 +397,7 @@ public class ServiceImpl implements Service {
         if (ownerId == null) {
             throw new CustomException(404, "Building UUID Not Found.");
         }
-        Transaction transaction=notiToFavoritorRepo.getUserIdFromTransaction(100);
+        Transaction transaction=notiToFavoritorRepo.getUserIdFromTransaction(ownerId);
         if(transaction.getUserId()==null) {
             transaction.setUserId(0);
         }else {
