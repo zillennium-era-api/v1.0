@@ -432,7 +432,8 @@ public class ServiceImpl implements Service {
         }
         List<String> playerId = notiToFavoritorRepo.findPlayerId(transaction.getUserId(), ownerId);
         if (playerId == null || playerId.size() < 1) {
-            throw new CustomException(404, "No favoritor.");
+            /*throw new CustomException(404, "No favoritor.");*/
+            playerId=null;
         }
         return playerId;
     }
@@ -451,18 +452,20 @@ public class ServiceImpl implements Service {
         }else {
             profilePhoto="https://eraapi.herokuapp.com/api/image/user/1.jpg";
         }
-        String arrayIds = "[";
-        for (int i = 0; i < playerIds.size(); i++) {
-            arrayIds += "\"" + playerIds.get(i) + "\"";
-            if (i + 1 < playerIds.size()) {
-                arrayIds += ",";
+        String arrayIds = "";
+        if(playerIds!=null) {
+            arrayIds = "[";
+            for (int i = 0; i < playerIds.size(); i++) {
+                arrayIds += "\"" + playerIds.get(i) + "\"";
+                if (i + 1 < playerIds.size()) {
+                    arrayIds += ",";
+                }
             }
+            arrayIds += "]";
         }
-        arrayIds += "]";
         String jsonResponse = "";
         int statusCode = 0;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        System.out.print(profilePhoto);
         try {
             URL url = new URL("https://onesignal.com/api/v1/notifications");
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -482,7 +485,6 @@ public class ServiceImpl implements Service {
                     + "\"large_icon\": \"" + profilePhoto + "\","
                     + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                     + "}";
-            System.out.println(strJsonBody);
             byte[] sendBytes = strJsonBody.getBytes("UTF-8");
             con.setFixedLengthStreamingMode(sendBytes.length);
 
@@ -491,7 +493,6 @@ public class ServiceImpl implements Service {
 
             int httpResponse = con.getResponseCode();
             statusCode = httpResponse;
-            /*System.out.println("httpResponse: " + httpResponse);*/
 
             if (httpResponse >= HttpURLConnection.HTTP_OK
                     && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
@@ -503,10 +504,9 @@ public class ServiceImpl implements Service {
                 jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                 scanner.close();
             }
-            //System.out.println("jsonResponse:\n" + jsonResponse);
 
         } catch (Throwable t) {
-            throw new CustomException(500, "Ot Deng Error Ey Te.");
+            throw new CustomException(statusCode, jsonResponse.toString());
         }
         /*JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> json = springParser.parseMap(jsonResponse);
