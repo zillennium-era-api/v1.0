@@ -447,7 +447,7 @@ public class ServiceImpl implements Service {
         if (profilePhoto != null) {
             profilePhoto = Default.profilePhoto + profilePhoto;
         }else {
-            profilePhoto=Default.profilePhoto+"/era.jpg";
+            profilePhoto=Default.profilePhoto+"era.jpg";
         }
         String arrayIds = "";
         if(playerIds!=null) {
