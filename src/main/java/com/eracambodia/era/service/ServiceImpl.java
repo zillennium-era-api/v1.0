@@ -184,7 +184,6 @@ public class ServiceImpl implements Service {
         return buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(ownerId);
     }
 
-
     // api/register
     @Autowired
     private RegisterRepo registerRepo;
@@ -323,6 +322,11 @@ public class ServiceImpl implements Service {
         List<AgentFavorite> agentFavorites = agentFavoriteRepo.findAgentFavorite(email, pagination);
         if (agentFavorites.size() < 1) {
             throw new CustomException(404, "No record.");
+        }
+        for(int i=0;i<agentFavorites.size();i++){
+            if(agentFavorites.get(i).getStatus().equalsIgnoreCase("available")){
+                agentFavorites.get(i).setAgent(null);
+            }
         }
         pagination.setTotalItem(agentFavoriteRepo.countAgentFavorite(email));
         return agentFavorites;
