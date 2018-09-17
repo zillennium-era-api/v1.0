@@ -170,11 +170,9 @@ public class ServiceImpl implements Service {
         }
         buildingStatusUpdate.setUserId(id);
         Object result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
-        if(result!=null){
-            Notification notification=new Notification();
-            notification.setBuildingID(buildingStatusUpdate.getOwnerId());
-            this.pushFavorite(notification,buildingStatusUpdate.getStatus(),email);
-        }
+        Notification notification=new Notification();
+        notification.setBuildingID(buildingStatusUpdate.getOwnerId());
+        this.pushFavorite(notification,buildingStatusUpdate.getStatus(),email);
         return result;
     }
 
@@ -432,7 +430,6 @@ public class ServiceImpl implements Service {
         }
         List<String> playerId = notiToFavoritorRepo.findPlayerId(transaction.getUserId(), ownerId);
         if (playerId == null || playerId.size() < 1) {
-            /*throw new CustomException(404, "No favoritor.");*/
             playerId=null;
         }
         return playerId;
@@ -450,7 +447,7 @@ public class ServiceImpl implements Service {
         if (profilePhoto != null) {
             profilePhoto = Default.profilePhoto + profilePhoto;
         }else {
-            profilePhoto="https://eraapi.herokuapp.com/api/image/user/1.jpg";
+            profilePhoto=Default.profilePhoto+"/era.jpg";
         }
         String arrayIds = "";
         if(playerIds!=null) {
@@ -508,10 +505,6 @@ public class ServiceImpl implements Service {
         } catch (Throwable t) {
             throw new CustomException(statusCode, jsonResponse.toString());
         }
-        /*JsonParser springParser = JsonParserFactory.getJsonParser();
-        Map<String, Object> json = springParser.parseMap(jsonResponse);
-        Response response = new Response(statusCode, json);
-        return response.getResponseEntity("data");*/
     }
 
     // api/agent/status/{status}
