@@ -1,19 +1,17 @@
-package com.eracambodia.era.model.api_noti_to_favoritor;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+package com.eracambodia.era.model.api_noti_favoritor;
 
 public class Notification {
-    private String buildingUUID;
+    private int buildingID;
     private String title;
     private String content;
     private String bigPicture;
 
-    public String getBuildingUUID() {
-        return buildingUUID;
+    public int getBuildingID() {
+        return buildingID;
     }
 
-    public void setBuildingUUID(String buildingUUID) {
-        this.buildingUUID = buildingUUID;
+    public void setBuildingID(int buildingID) {
+        this.buildingID = buildingID;
     }
 
     public String getTitle() {
@@ -43,7 +41,7 @@ public class Notification {
     @Override
     public String toString() {
         return "Notification{" +
-                "buildingUUID='" + buildingUUID + '\'' +
+                "buildingUUID='" + buildingID + '\'' +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", image='" + bigPicture + '\'' +

@@ -1,4 +1,4 @@
-package com.eracambodia.era.model.api_noti_to_favoritor;
+package com.eracambodia.era.model.api_noti_favoritor;
 
 public class Transaction {
     private Integer userId;

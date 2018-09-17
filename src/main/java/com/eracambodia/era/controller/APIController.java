@@ -112,7 +112,7 @@ public class APIController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register,@RequestParam("playerId")String playerId ,HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register,@RequestParam(value = "playerId",required = false)String playerId ,HttpServletRequest request) {
         String jwtToken = request.getHeader("Authorization");
         register.setPassword(passwordEncoder.encode(register.getPassword()));
         service.register(register, jwtToken,playerId);

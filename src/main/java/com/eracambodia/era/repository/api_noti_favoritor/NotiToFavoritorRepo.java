@@ -1,12 +1,13 @@
-package com.eracambodia.era.repository.api_noti_to_favoritor;
+package com.eracambodia.era.repository.api_noti_favoritor;
 
-import com.eracambodia.era.model.api_noti_to_favoritor.Transaction;
+import com.eracambodia.era.model.api_noti_favoritor.Transaction;
 import org.apache.ibatis.annotations.*;
+import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
+@Repository
 public interface NotiToFavoritorRepo {
 
     @Select("SELECT DISTINCT ON (onesignal.user_id)onesignal.user_id, onesignal.player_id " +
@@ -39,5 +40,11 @@ public interface NotiToFavoritorRepo {
     })
     Transaction getUserIdFromTransaction(int ownerId);
 
-
+    @Select("SELECT name " +
+            "FROM building where id=#{ownerId}")
+    String buildingName(int ownerId);
+    @Select("SELECT username " +
+            "FROM users " +
+            "WHERE email=#{email}")
+    String agentName(String email);
 }

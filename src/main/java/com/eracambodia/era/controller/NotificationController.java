@@ -2,7 +2,7 @@ package com.eracambodia.era.controller;
 
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Response;
-import com.eracambodia.era.model.api_noti_to_favoritor.Notification;
+import com.eracambodia.era.model.api_noti_favoritor.Notification;
 import com.eracambodia.era.service.Service;
 import com.eracambodia.era.setting.Default;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-@RestController
-@RequestMapping("/api/noti")
+/*@RestController
+@RequestMapping("/api/noti")*/
 public class NotificationController {
-    @Autowired
+    /*@Autowired
     private Service service;
 
     @PostMapping("/favorite")
     public ResponseEntity allUsers(@RequestBody Notification notification, @ApiIgnore Principal principal) {
-        List<String> playerIds = service.findPlayerId(principal.getName(), notification.getBuildingUUID());
+        List<String> playerIds = service.findPlayerId(principal.getName(), notification.getBuildingID());
         String profilePhoto = service.getImage(principal.getName());
         if (profilePhoto != null) {
             profilePhoto = Default.profilePhoto + profilePhoto;
@@ -59,7 +59,7 @@ public class NotificationController {
                     + "\"include_player_ids\" : " + arrayIds + ","
                     + "\"big_picture\": \"" + notification.getBigPicture() + "\","
                     + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
-                    + "\"data\": {\"type\": \"buildingDetail\", \"key\": \""+notification.getBuildingUUID()+"\" }, "
+                    + "\"data\": {\"type\": \"buildingDetail\", \"key\": \""+notification.getBuildingID()+"\" }, "
                     + "\"large_icon\": \"" + profilePhoto + "\","
                     + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                     + "}";
@@ -72,7 +72,7 @@ public class NotificationController {
 
             int httpResponse = con.getResponseCode();
             statusCode = httpResponse;
-            /*System.out.println("httpResponse: " + httpResponse);*/
+            *//*System.out.println("httpResponse: " + httpResponse);*//*
 
             if (httpResponse >= HttpURLConnection.HTTP_OK
                     && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
@@ -84,7 +84,7 @@ public class NotificationController {
                 jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                 scanner.close();
             }
-            /*System.out.println("jsonResponse:\n" + jsonResponse);*/
+            *//*System.out.println("jsonResponse:\n" + jsonResponse);*//*
 
         } catch (Throwable t) {
             throw new CustomException(500, "Ot Deng Error Ey Te.");
@@ -93,5 +93,5 @@ public class NotificationController {
         Map<String, Object> json = springParser.parseMap(jsonResponse);
         Response response = new Response(statusCode, json);
         return response.getResponseEntity("data");
-    }
+    }*/
 }

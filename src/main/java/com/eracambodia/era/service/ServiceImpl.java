@@ -2,6 +2,7 @@ package com.eracambodia.era.service;
 
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
+import com.eracambodia.era.model.Response;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
@@ -17,7 +18,8 @@ import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
-import com.eracambodia.era.model.api_noti_to_favoritor.Transaction;
+import com.eracambodia.era.model.api_noti_favoritor.Notification;
+import com.eracambodia.era.model.api_noti_favoritor.Transaction;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
@@ -35,17 +37,34 @@ import com.eracambodia.era.repository.api_building.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
 import com.eracambodia.era.repository.api_login.LoginRepo;
-import com.eracambodia.era.repository.api_noti_to_favoritor.NotiToFavoritorRepo;
+import com.eracambodia.era.repository.api_noti_favoritor.NotiToFavoritorRepo;
 import com.eracambodia.era.repository.api_register.RegisterRepo;
 import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
+import com.eracambodia.era.setting.Default;
 import com.eracambodia.era.utils.DecodeJWT;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.json.JsonParser;
+import org.springframework.boot.json.JsonParserFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.RequestBody;
+import springfox.documentation.annotations.ApiIgnore;
 
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.security.Principal;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Scanner;
 
 @org.springframework.stereotype.Service
 public class ServiceImpl implements Service {
@@ -150,7 +169,13 @@ public class ServiceImpl implements Service {
             throw new CustomException(404, "Building not found");
         }
         buildingStatusUpdate.setUserId(id);
-        return buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
+        Object result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
+        if(result!=null){
+            Notification notification=new Notification();
+            notification.setBuildingID(buildingStatusUpdate.getOwnerId());
+            this.pushFavorite(notification,buildingStatusUpdate.getStatus(),email);
+        }
+        return result;
     }
 
     @Override
@@ -386,17 +411,13 @@ public class ServiceImpl implements Service {
         return agentMembersDirectRepo.findAgentMemberDirect(userId);
     }
 
-    // api/noti/to_favoritor/playerid
+    // api/noti/favorite
     @Autowired
     private NotiToFavoritorRepo notiToFavoritorRepo;
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<String> findPlayerId(String email, String buildingUUID) {
-        Integer ownerId = notiToFavoritorRepo.getBuildingID(buildingUUID);
-        if (ownerId == null) {
-            throw new CustomException(404, "Building UUID Not Found.");
-        }
+    public List<String> findPlayerId(String email,int ownerId) {
         Transaction transaction=notiToFavoritorRepo.getUserIdFromTransaction(ownerId);
         if(transaction.getUserId()==null) {
             transaction.setUserId(0);
@@ -412,10 +433,81 @@ public class ServiceImpl implements Service {
         return playerId;
     }
 
-    @Override
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public String getImage(String email) {
-        return notiToFavoritorRepo.getImage(email);
+    private void pushFavorite(Notification notification,String status, String email) {
+        List<String> playerIds = this.findPlayerId(email, notification.getBuildingID());
+        String buildingName=notiToFavoritorRepo.buildingName(notification.getBuildingID());
+        String agentName=notiToFavoritorRepo.agentName(email);
+        String title="Status Changed";
+        String content=agentName+" change "+buildingName+" status to "+status+".";
+        notification.setTitle(title);
+        notification.setContent(content);
+        String profilePhoto = notiToFavoritorRepo.getImage(email);
+        if (profilePhoto != null) {
+            profilePhoto = Default.profilePhoto + profilePhoto;
+        }else {
+            profilePhoto="https://eraapi.herokuapp.com/api/image/user/1.jpg";
+        }
+        String arrayIds = "[";
+        for (int i = 0; i < playerIds.size(); i++) {
+            arrayIds += "\"" + playerIds.get(i) + "\"";
+            if (i + 1 < playerIds.size()) {
+                arrayIds += ",";
+            }
+        }
+        arrayIds += "]";
+        String jsonResponse = "";
+        int statusCode = 0;
+        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+        System.out.print(profilePhoto);
+        try {
+            URL url = new URL("https://onesignal.com/api/v1/notifications");
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setUseCaches(false);
+            con.setDoOutput(true);
+            con.setDoInput(true);
+
+            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+            con.setRequestProperty("Authorization", "Basic " + Default.oneSignalRestAPIKey);
+            con.setRequestMethod("POST");
+            String strJsonBody = "{"
+                    + "\"app_id\": \"" + Default.oneSignalAppID + "\","
+                    + "\"include_player_ids\" : " + arrayIds + ","
+                    + "\"big_picture\": \"" + notification.getBigPicture() + "\","
+                    + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
+                    + "\"data\": {\"type\": \"buildingDetail\", \"key\": \""+notification.getBuildingID()+"\", \"key\": \""+timestamp.getTime()+"\" }, "
+                    + "\"large_icon\": \"" + profilePhoto + "\","
+                    + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
+                    + "}";
+            System.out.println(strJsonBody);
+            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+            con.setFixedLengthStreamingMode(sendBytes.length);
+
+            OutputStream outputStream = con.getOutputStream();
+            outputStream.write(sendBytes);
+
+            int httpResponse = con.getResponseCode();
+            statusCode = httpResponse;
+            /*System.out.println("httpResponse: " + httpResponse);*/
+
+            if (httpResponse >= HttpURLConnection.HTTP_OK
+                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            } else {
+                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                scanner.close();
+            }
+            //System.out.println("jsonResponse:\n" + jsonResponse);
+
+        } catch (Throwable t) {
+            throw new CustomException(500, "Ot Deng Error Ey Te.");
+        }
+        /*JsonParser springParser = JsonParserFactory.getJsonParser();
+        Map<String, Object> json = springParser.parseMap(jsonResponse);
+        Response response = new Response(statusCode, json);
+        return response.getResponseEntity("data");*/
     }
 
     // api/agent/status/{status}
@@ -482,5 +574,7 @@ public class ServiceImpl implements Service {
         }
         return amount;
     }
+
+
 }
 

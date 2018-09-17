@@ -84,9 +84,7 @@ public interface Service {
     List<AgentMemberDirect> findAgentMemberDirect(String uuid, Pagination pagination);
 
     // api/noti/favorite
-    List<String> findPlayerId(String email, String buildingUUID);
-
-    String getImage(String email);
+    List<String> findPlayerId(String email, int ownerId);
 
     // api/agent/status/{status}
     List<Agent> findAgentProcess(String status, String email, Pagination pagination);
