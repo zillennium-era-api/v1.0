@@ -501,7 +501,7 @@ public class ServiceImpl implements Service {
                 jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                 scanner.close();
             }
-
+            throw new CustomException(200,jsonResponse.toString());
         } catch (Throwable t) {
             throw new CustomException(statusCode, jsonResponse.toString());
         }
