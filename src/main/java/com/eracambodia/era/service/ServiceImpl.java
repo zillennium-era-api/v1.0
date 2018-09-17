@@ -96,7 +96,7 @@ public class ServiceImpl implements Service {
             if(playerId!=null) {
                 List<String> pid = loginRepo.getPlayerId(userId);
                 for (int i = 0; i < pid.size(); i++) {
-                    if (playerId.equals(playerId)) {
+                    if (!playerId.equalsIgnoreCase(playerId)) {
                         loginRepo.savePlayerId(userId, playerId);
                     }
                 }

@@ -28,7 +28,7 @@ public interface LoginRepo {
 
     @Select("SELECT password " +
             "FROM users " +
-            "WHERE email=#{email}")
+            "WHERE email=#{email }")
     String checkLogin(Login login);
 
     @Select("SELECT id " +
