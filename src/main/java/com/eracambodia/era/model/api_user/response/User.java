@@ -14,8 +14,6 @@ public class User {
     private String idCard;
     private String profilePhoto;
     private boolean enable;
-    private Date created;
-    private Date updated;
 
     public int getId() {
         return id;
@@ -91,21 +89,6 @@ public class User {
         this.enable = enable;
     }
 
-    public Date getCreated() {
-        return created;
-    }
-
-    public void setCreated(Date created) {
-        this.created = created;
-    }
-
-    public Date getUpdated() {
-        return updated;
-    }
-
-    public void setUpdated(Date updated) {
-        this.updated = updated;
-    }
 
     @Override
     public String toString() {
@@ -118,8 +101,6 @@ public class User {
                 ", phone='" + phone + '\'' +
                 ", profilePhoto='" + profilePhoto + '\'' +
                 ", enable=" + enable +
-                ", created=" + created +
-                ", updated=" + updated +
                 '}';
     }
 }

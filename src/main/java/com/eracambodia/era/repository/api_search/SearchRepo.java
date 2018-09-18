@@ -1,12 +1,9 @@
 package com.eracambodia.era.repository.api_search;
 
-import com.eracambodia.era.model.api_building.response.Agent;
-import com.eracambodia.era.model.api_building.response.Buildings;
+import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
-import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 

@@ -11,11 +11,10 @@ import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMem
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
-import com.eracambodia.era.model.api_building.response.Buildings;
+import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
-import com.eracambodia.era.model.api_noti_favoritor.Transaction;
 import com.eracambodia.era.model.api_register.request.Register;
 
 import java.util.List;

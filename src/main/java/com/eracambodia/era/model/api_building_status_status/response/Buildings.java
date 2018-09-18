@@ -1,6 +1,5 @@
-package com.eracambodia.era.model.api_building.response;
+package com.eracambodia.era.model.api_building_status_status.response;
 
-import com.eracambodia.era.model.api_building.response.Agent;
 import com.eracambodia.era.setting.Default;
 
 import java.text.DecimalFormat;

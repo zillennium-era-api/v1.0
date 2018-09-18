@@ -2,12 +2,13 @@ package com.eracambodia.era.repository.api_register;
 
 import com.eracambodia.era.model.api_register.request.Register;
 import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RegisterRepo {
-    @Insert("INSERT INTO users(username,email,password,gender,dob,phonenumber,id_card,uuid,parent_id) " +
-            "VALUES (#{register.name},#{register.email},#{register.password},#{register.gender},#{register.dateOfBirth},#{register.phone},#{register.idCard},#{register.uuid},#{parentId})")
+    @Select(value = "{CALL register(#{register.name},#{register.email},#{register.password},#{register.gender},#{register.dateOfBirth},#{register.phone},#{register.idCard},#{register.uuid},#{parentId})}")
+    @Options(statementType = StatementType.CALLABLE)
     Integer register(@Param("register") Register register, @Param("parentId") Integer parentId);
 
     @Select("SELECT email " +

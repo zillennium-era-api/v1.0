@@ -2,7 +2,6 @@ package com.eracambodia.era.service;
 
 import com.eracambodia.era.exception.CustomException;
 import com.eracambodia.era.model.Pagination;
-import com.eracambodia.era.model.Response;
 import com.eracambodia.era.model.User;
 import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAccount;
 import com.eracambodia.era.model.api_agent_favorite.response.AgentFavorite;
@@ -14,12 +13,11 @@ import com.eracambodia.era.model.api_agent_building_status_status.response.Agent
 import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
-import com.eracambodia.era.model.api_building.response.Buildings;
+import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_noti_favoritor.Notification;
-import com.eracambodia.era.model.api_noti_favoritor.Transaction;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
@@ -33,7 +31,7 @@ import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgen
 import com.eracambodia.era.repository.api_agent_building_status_status.AgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction_useruuid_status.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_agent_trasaction_total_commission.AgentCommissionRepo;
-import com.eracambodia.era.repository.api_building.BuildingsRepo;
+import com.eracambodia.era.repository.api_building_status_status.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
 import com.eracambodia.era.repository.api_login.LoginRepo;
@@ -44,26 +42,15 @@ import com.eracambodia.era.repository.api_user.UserRepo;
 import com.eracambodia.era.setting.Default;
 import com.eracambodia.era.utils.DecodeJWT;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.json.JsonParser;
-import org.springframework.boot.json.JsonParserFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.web.bind.annotation.RequestBody;
-import springfox.documentation.annotations.ApiIgnore;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.security.Principal;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Scanner;
 
 @org.springframework.stereotype.Service
@@ -204,17 +191,18 @@ public class ServiceImpl implements Service {
         }
         if (message.length() > 1)
             throw new CustomException(409, message, registerUniqueFields);
-
-        String email = DecodeJWT.getEmailFromJwt(jwtToken);
-        Integer userId = registerRepo.getIdByEmail(email);
-
-        if (registerRepo.register(register, userId) > 0) {
-            if (userId != null) {
-                registerRepo.enable(register.getEmail());
-            }
+        if(jwtToken!=null){
+            String email = DecodeJWT.getEmailFromJwt(jwtToken);
+            Integer userId = registerRepo.getIdByEmail(email);
+            Integer registerId=registerRepo.register(register,userId);
+            registerRepo.enable(register.getEmail());
             if(playerId!=null) {
-                Integer uid = registerRepo.getIdByEmail(register.getEmail());
-                registerRepo.savePlayerId(uid, playerId);
+                registerRepo.savePlayerId(registerId, playerId);
+            }
+        }else {
+            Integer registerId=registerRepo.register(register,null);
+            if(playerId!=null){
+                registerRepo.savePlayerId(registerId,playerId);
             }
         }
     }
