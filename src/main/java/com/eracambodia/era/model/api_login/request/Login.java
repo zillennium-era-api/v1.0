@@ -1,14 +1,11 @@
 package com.eracambodia.era.model.api_login.request;
 
+import org.hibernate.validator.constraints.NotBlank;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 public class Login {
-
-    @NotBlank
     private String email;
     private String password;
 

@@ -15,6 +15,7 @@ import com.eracambodia.era.model.api_building.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
+import com.eracambodia.era.model.api_noti_favoritor.Transaction;
 import com.eracambodia.era.model.api_register.request.Register;
 
 import java.util.List;
@@ -84,7 +85,7 @@ public interface Service {
     List<AgentMemberDirect> findAgentMemberDirect(String uuid, Pagination pagination);
 
     // api/noti/favorite
-    List<String> findPlayerId(String email, int ownerId);
+    List<String> findPlayerId(String email, int ownerId, Integer agentId);
 
     // api/agent/status/{status}
     List<Agent> findAgentProcess(String status, String email, Pagination pagination);

@@ -23,4 +23,9 @@ public interface BuildingStatusUpdateRepo {
             "FROM users " +
             "WHERE email=#{email}")
     int getUserEmail(String email);
+
+    @Select("SELECT id " +
+            "FROM transaction " +
+            "WHERE owner_id=#{buildingId} ")
+    Integer changeStatusAuthority();
 }

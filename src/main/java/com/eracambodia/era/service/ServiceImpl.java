@@ -172,7 +172,7 @@ public class ServiceImpl implements Service {
         Object result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
-        this.pushFavorite(notification,buildingStatusUpdate.getStatus(),email);
+        this.pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
         return result;
     }
 
@@ -405,11 +405,6 @@ public class ServiceImpl implements Service {
         if (userId == null) {
             throw new CustomException(404, "Agent not found.");
         }
-        /*Integer countAgentMember = agentMembersDirectRepo.countAgent(userId);
-        if (countAgentMember == null) {
-            throw new CustomException(404, "No record.");
-        }
-        pagination.setTotalItem(countAgentMember);*/
         return agentMembersDirectRepo.findAgentMemberDirect(userId);
     }
 
@@ -419,28 +414,20 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public List<String> findPlayerId(String email,int ownerId) {
-        Transaction transaction=notiToFavoritorRepo.getUserIdFromTransaction(ownerId);
-        if(transaction.getUserId()==null) {
-            transaction.setUserId(0);
-        }else {
-            if(transaction.getStatus().equalsIgnoreCase("available")) {
-                transaction.setUserId(0);
-            }
-        }
-        List<String> playerId = notiToFavoritorRepo.findPlayerId(transaction.getUserId(), ownerId);
+    public List<String> findPlayerId(String email,int ownerId,Integer agentId) {
+        List<String> playerId = notiToFavoritorRepo.findPlayerId(agentId, ownerId);
         if (playerId == null || playerId.size() < 1) {
             playerId=null;
         }
         return playerId;
     }
 
-    private void pushFavorite(Notification notification,String status, String email) {
-        List<String> playerIds = this.findPlayerId(email, notification.getBuildingID());
+    private void pushFavorite(Notification notification,String status, String email,Integer agentId) {
+        List<String> playerIds = this.findPlayerId(email, notification.getBuildingID(),agentId);
         String buildingName=notiToFavoritorRepo.buildingName(notification.getBuildingID());
         String agentName=notiToFavoritorRepo.agentName(email);
         String title="Status Changed";
-        String content=agentName+" change "+buildingName+" status to "+status+".";
+        String content=agentName+" change "+buildingName+"'s status to "+status+".";
         notification.setTitle(title);
         notification.setContent(content);
         String profilePhoto = notiToFavoritorRepo.getImage(email);
