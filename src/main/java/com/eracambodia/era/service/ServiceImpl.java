@@ -172,7 +172,7 @@ public class ServiceImpl implements Service {
         Object result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
-        this.pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
+        pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
         return result;
     }
 
