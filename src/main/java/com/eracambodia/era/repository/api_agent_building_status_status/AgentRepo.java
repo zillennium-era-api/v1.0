@@ -9,13 +9,13 @@ import java.util.List;
 
 @Repository
 public interface AgentRepo {
-    @Select("SELECT DISTINCT ON(building.id) building.id as bid,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
+    @Select("SELECT * FROM (SELECT DISTINCT ON(building.id) building.id as bid,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
             "FROM building " +
             "INNER JOIN transaction ON building.id=transaction.owner_id " +
             "INNER JOIN users on users.id=transaction.user_id " +
-            "WHERE users.email=#{email} AND building.status ILIKE #{status} " +
-            "ORDER BY building.id,transaction.create_date DESC " +
-            "LIMIT #{pagination.limit} OFFSET #{pagination.offset}")
+            "WHERE users.email=#{email} " +
+            "ORDER BY building.id,transaction.id DESC " +
+            "LIMIT #{pagination.limit} OFFSET #{pagination.offset})building WHERE status ilike #{status}")
     @Results({
             @Result(property = "id", column = "bid"),
             @Result(property = "totalCost", column = "bid", one = @One(select = "getTotalCost")),
@@ -40,12 +40,14 @@ public interface AgentRepo {
             "ORDER BY id DESC LIMIT 1")
     String getFilePath();
 
-    @Select("SELECT COUNT(*) FROM (SELECT DISTINCT ON(building.id) building.id " +
+    @Select("SELECT count(bid) FROM (SELECT DISTINCT ON(building.id) building.id as bid,building.status " +
             "FROM building " +
             "INNER JOIN transaction ON building.id=transaction.owner_id " +
             "INNER JOIN users on users.id=transaction.user_id " +
-            "WHERE users.email=#{email} AND building.status ILIKE #{status}" +
-            "ORDER BY building.id) as tb")
+            "WHERE users.email=#{email} " +
+            "ORDER BY building.id,transaction.id DESC) " +
+            "building WHERE status ilike #{status}")
+
     Integer countAgentProcess(@Param("email") String email, @Param("status") String status);
 
     @Select("SELECT DISTINCT ON(building.id) building.id as bid,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
