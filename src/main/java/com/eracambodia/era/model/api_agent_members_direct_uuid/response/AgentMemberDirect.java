@@ -8,7 +8,7 @@ public class AgentMemberDirect {
     private String phone;
     private String email;
     private String parent;
-    private String image;
+    private String profilePhoto;
 
     public String getUuid() {
         return uuid;
@@ -50,14 +50,14 @@ public class AgentMemberDirect {
         this.parent = parent;
     }
 
-    public String getImage() {
-        if(image!=null)
-            return Default.profilePhoto+image;
-        return image;
+    public String getProfilePhoto() {
+        if(profilePhoto!=null)
+            return Default.profilePhoto+profilePhoto;
+        return profilePhoto;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProfilePhoto(String image) {
+        this.profilePhoto = image;
     }
 
     @Override
@@ -68,7 +68,7 @@ public class AgentMemberDirect {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", parent='" + parent + '\'' +
-                ", image='" + image + '\'' +
+                ", image='" + profilePhoto + '\'' +
                 '}';
     }
 }

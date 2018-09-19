@@ -20,6 +20,7 @@ public interface AgentMembersDirectRepo {
             "FROM users " +
             "WHERE parent_id=#{parentId} AND authority_id=3")
     @Results({
+            @Result(property = "profilePhoto",column = "image"),
             @Result(property = "name", column = "username"),
             @Result(property = "phone", column = "phonenumber"),
             @Result(property = "parent", column = "parent_id", one = @One(select = "getParent"))

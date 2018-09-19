@@ -8,7 +8,7 @@ public class AgentMember {
     private String phone;
     private String email;
     private String parent;
-    private String image;
+    private String profilePhoto;
     private int level;
     private int memberCount;
 
@@ -52,14 +52,14 @@ public class AgentMember {
         this.parent = parent;
     }
 
-    public String getImage() {
-        if(image!=null)
-            return Default.profilePhoto+image;
-        return image;
+    public String getProfilePhoto() {
+        if(profilePhoto!=null)
+            return Default.profilePhoto+profilePhoto;
+        return profilePhoto;
     }
 
-    public void setImage(String image) {
-        this.image = image;
+    public void setProfilePhoto(String profilePhoto ) {
+        this.profilePhoto = profilePhoto;
     }
 
     public int getLevel() {
@@ -86,7 +86,7 @@ public class AgentMember {
                 ", phone='" + phone + '\'' +
                 ", email='" + email + '\'' +
                 ", parent='" + parent + '\'' +
-                ", image='" + image + '\'' +
+                ", image='" + profilePhoto + '\'' +
                 ", level=" + level +
                 ", memberCount=" + memberCount +
                 '}';
