@@ -412,21 +412,20 @@ public class ServiceImpl implements Service {
 
     private void pushFavorite(Notification notification,String status, String email,Integer agentId) {
         List<String> playerIds = this.findPlayerId(email, notification.getBuildingID(),agentId);
-        String buildingName=notiToFavoritorRepo.buildingName(notification.getBuildingID());
-        String agentName=notiToFavoritorRepo.agentName(email);
-        String title="Status Changed";
-        String content=agentName+" change "+buildingName+"'s status to "+status+".";
-        notification.setTitle(title);
-        notification.setContent(content);
-        String profilePhoto = notiToFavoritorRepo.getImage(email);
-        if (profilePhoto != null) {
-            profilePhoto = Default.profilePhoto + profilePhoto;
-        }else {
-            profilePhoto=Default.profilePhoto+"era.jpg";
-        }
-        String arrayIds = "";
         if(playerIds!=null) {
-            arrayIds = "[";
+            String buildingName = notiToFavoritorRepo.buildingName(notification.getBuildingID());
+            String agentName = notiToFavoritorRepo.agentName(email);
+            String title = "Status Changed";
+            String content = agentName + " change " + buildingName + "'s status to " + status + ".";
+            notification.setTitle(title);
+            notification.setContent(content);
+            String profilePhoto = notiToFavoritorRepo.getImage(email);
+            if (profilePhoto != null) {
+                profilePhoto = Default.profilePhoto + profilePhoto;
+            } else {
+                profilePhoto = Default.profilePhoto + "era.jpg";
+            }
+            String arrayIds = "[";
             for (int i = 0; i < playerIds.size(); i++) {
                 arrayIds += "\"" + playerIds.get(i) + "\"";
                 if (i + 1 < playerIds.size()) {
@@ -434,52 +433,52 @@ public class ServiceImpl implements Service {
                 }
             }
             arrayIds += "]";
-        }
-        System.out.print(arrayIds+"AAAA");
-        String jsonResponse = "";
-        int statusCode = 0;
-        Timestamp timestamp = new Timestamp(System.currentTimeMillis());
-        try {
-            URL url = new URL("https://onesignal.com/api/v1/notifications");
-            HttpURLConnection con = (HttpURLConnection) url.openConnection();
-            con.setUseCaches(false);
-            con.setDoOutput(true);
-            con.setDoInput(true);
 
-            con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            con.setRequestProperty("Authorization", "Basic " + Default.oneSignalRestAPIKey);
-            con.setRequestMethod("POST");
-            String strJsonBody = "{"
-                    + "\"app_id\": \"" + Default.oneSignalAppID + "\","
-                    + "\"include_player_ids\" : " + arrayIds + ","
-                    + "\"big_picture\": \"" + notification.getBigPicture() + "\","
-                    + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
-                    + "\"data\": {\"type\": \"buildingDetail\", \"key\": \""+notification.getBuildingID()+"\", \"key\": \""+timestamp.getTime()+"\" }, "
-                    + "\"large_icon\": \"" + profilePhoto + "\","
-                    + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
-                    + "}";
-            byte[] sendBytes = strJsonBody.getBytes("UTF-8");
-            con.setFixedLengthStreamingMode(sendBytes.length);
+            String jsonResponse = "";
+            int statusCode = 0;
+            Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+            try {
+                URL url = new URL("https://onesignal.com/api/v1/notifications");
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setUseCaches(false);
+                con.setDoOutput(true);
+                con.setDoInput(true);
 
-            OutputStream outputStream = con.getOutputStream();
-            outputStream.write(sendBytes);
+                con.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                con.setRequestProperty("Authorization", "Basic " + Default.oneSignalRestAPIKey);
+                con.setRequestMethod("POST");
+                String strJsonBody = "{"
+                        + "\"app_id\": \"" + Default.oneSignalAppID + "\","
+                        + "\"include_player_ids\" : " + arrayIds + ","
+                        + "\"big_picture\": \"" + notification.getBigPicture() + "\","
+                        + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
+                        + "\"data\": {\"type\": \"buildingDetail\", \"key\": \"" + notification.getBuildingID() + "\", \"key\": \"" + timestamp.getTime() + "\" }, "
+                        + "\"large_icon\": \"" + profilePhoto + "\","
+                        + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
+                        + "}";
+                byte[] sendBytes = strJsonBody.getBytes("UTF-8");
+                con.setFixedLengthStreamingMode(sendBytes.length);
 
-            int httpResponse = con.getResponseCode();
-            statusCode = httpResponse;
+                OutputStream outputStream = con.getOutputStream();
+                outputStream.write(sendBytes);
 
-            if (httpResponse >= HttpURLConnection.HTTP_OK
-                    && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
-                Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
-                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
-                scanner.close();
-            } else {
-                Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
-                jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
-                scanner.close();
+                int httpResponse = con.getResponseCode();
+                statusCode = httpResponse;
+
+                if (httpResponse >= HttpURLConnection.HTTP_OK
+                        && httpResponse < HttpURLConnection.HTTP_BAD_REQUEST) {
+                    Scanner scanner = new Scanner(con.getInputStream(), "UTF-8");
+                    jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                    scanner.close();
+                } else {
+                    Scanner scanner = new Scanner(con.getErrorStream(), "UTF-8");
+                    jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
+                    scanner.close();
+                }
+                throw new CustomException(200, jsonResponse.toString());
+            } catch (Throwable t) {
+                throw new CustomException(statusCode, jsonResponse.toString());
             }
-            throw new CustomException(200,jsonResponse.toString());
-        } catch (Throwable t) {
-            throw new CustomException(statusCode, jsonResponse.toString());
         }
     }
 
