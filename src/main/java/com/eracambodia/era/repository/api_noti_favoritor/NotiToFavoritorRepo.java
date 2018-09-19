@@ -10,16 +10,6 @@ import java.util.List;
 @Repository
 public interface NotiToFavoritorRepo {
 
-   /* @Select("SELECT DISTINCT ON (onesignal.user_id)onesignal.user_id, onesignal.player_id " +
-            "FROM onesignal " +
-            "INNER JOIN users ON onesignal.user_id=users.id " +
-            "INNER JOIN favorite ON favorite.user_id=users.id " +
-            "WHERE favorite.owner_id=#{ownerId} AND favorite.user_id <> #{userId} " +
-            "ORDER BY onesignal.user_id,onesignal.created DESC")
-    @ConstructorArgs(value = {@Arg(column = "player_id", javaType = String.class)})
-    @ResultType(String.class)
-    List<String> findPlayerId(@Param("userId") int userId, @Param("ownerId") int ownerId);*/
-
     @Select("SELECT player_id " +
             "FROM onesignal " +
             "INNER JOIN favorite ON onesignal.user_id=favorite.user_id " +
