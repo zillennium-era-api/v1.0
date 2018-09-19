@@ -435,6 +435,7 @@ public class ServiceImpl implements Service {
             }
             arrayIds += "]";
         }
+        System.out.print(arrayIds+"AAAA");
         String jsonResponse = "";
         int statusCode = 0;
         Timestamp timestamp = new Timestamp(System.currentTimeMillis());
