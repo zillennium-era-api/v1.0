@@ -81,8 +81,8 @@ public class TransactionResponse {
         this.cityOrProvince = cityOrProvince;
     }
 
-    public Date getDate() {
-        return date;
+    public Long getDate() {
+        return date.getTime();
     }
 
     public void setDate(Date date) {
