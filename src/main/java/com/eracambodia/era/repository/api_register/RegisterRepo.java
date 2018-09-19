@@ -32,7 +32,7 @@ public interface RegisterRepo {
     Integer getIdByEmail(String email);
 
     @Update("UPDATE users " +
-            "SET enable=true " +
+            "SET enable=true,authority_id=3 " +
             "WHERE email=#{email} ")
     Integer enable(String email);
 

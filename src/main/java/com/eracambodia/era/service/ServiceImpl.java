@@ -417,6 +417,7 @@ public class ServiceImpl implements Service {
     private void pushFavorite(Notification notification,String status, String email,Integer agentId) {
         List<String> playerIds = this.findPlayerId(email, notification.getBuildingID(),agentId);
         if(playerIds!=null) {
+            String buildingUUID=notiToFavoritorRepo.getBuildingUUID(notification.getBuildingID());
             String buildingName = notiToFavoritorRepo.buildingName(notification.getBuildingID());
             String agentName = notiToFavoritorRepo.agentName(email);
             String title = "Status Changed";
@@ -456,7 +457,7 @@ public class ServiceImpl implements Service {
                         + "\"include_player_ids\" : " + arrayIds + ","
                         + "\"big_picture\": \"" + notification.getBigPicture() + "\","
                         + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
-                        + "\"data\": {\"type\": \"buildingDetail\", \"key\": \"" + notification.getBuildingID() + "\", \"key\": \"" + timestamp.getTime() + "\" }, "
+                        + "\"data\": {\"type\": \"buildingDetail\", \"key\": \"" + buildingUUID + "\", \"date\": \"" + timestamp.getTime() + "\" }, "
                         + "\"large_icon\": \"" + profilePhoto + "\","
                         + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                         + "}";

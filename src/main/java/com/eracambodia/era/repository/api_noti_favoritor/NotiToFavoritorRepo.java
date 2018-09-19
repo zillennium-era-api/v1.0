@@ -44,4 +44,9 @@ public interface NotiToFavoritorRepo {
             "FROM users " +
             "WHERE email=#{email}")
     String agentName(String email);
+
+    @Select("SELECT uuid " +
+            "FROM building " +
+            "WHERE id=#{id}")
+    String getBuildingUUID(Integer id);
 }
