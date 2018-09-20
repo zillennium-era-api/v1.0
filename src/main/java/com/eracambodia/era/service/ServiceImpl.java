@@ -15,11 +15,13 @@ import com.eracambodia.era.model.api_agent_transaction_total_commission.response
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
 import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
+import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_noti_favoritor.Notification;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
+import com.eracambodia.era.module.BuildingStatusModule;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
 import com.eracambodia.era.repository.api_agent_favorite.AgentFavoriteRepo;
@@ -151,6 +153,8 @@ public class ServiceImpl implements Service {
     // api building/status/update
     @Autowired
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
+    @Autowired
+    private BuildingStatusModule buildingStatusModule;
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
@@ -163,6 +167,8 @@ public class ServiceImpl implements Service {
         Object result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
+        BuildingUpdate buildingUpdate=buildingStatusUpdateRepo.getBuildingUpdate(buildingStatusUpdate.getOwnerId());
+        buildingStatusModule.broadcastEvent("update",buildingUpdate);
         pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
         return result;
     }
