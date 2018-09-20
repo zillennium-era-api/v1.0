@@ -153,8 +153,8 @@ public class ServiceImpl implements Service {
     // api building/status/update
     @Autowired
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
-    @Autowired
-    private BuildingStatusModule buildingStatusModule;
+    /*@Autowired
+    private BuildingStatusModule buildingStatusModule;*/
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
@@ -168,7 +168,7 @@ public class ServiceImpl implements Service {
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
         BuildingUpdate buildingUpdate=buildingStatusUpdateRepo.getBuildingUpdate(buildingStatusUpdate.getOwnerId());
-        buildingStatusModule.broadcastEvent("update",buildingUpdate);
+       /* buildingStatusModule.broadcastEvent("update",buildingUpdate);*/
         pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
         return result;
     }
