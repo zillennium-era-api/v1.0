@@ -5,11 +5,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-/*@Configuration*/
+@Configuration
 public class EraSocket {
-    @Value("192.168.88.41")
+    @Value("eraapi.herokuapp.com")
     private String host;
-    @Value("9090")
+    @Value("$PORT")
     private Integer port;
     @Bean
     public SocketIOServer socketIOServer(){
