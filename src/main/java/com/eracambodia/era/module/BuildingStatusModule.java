@@ -8,10 +8,10 @@ import com.eracambodia.era.model.api_building_status_update.response.BuildingUpd
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
+/*@Component*/
 public class BuildingStatusModule {
     private SocketIONamespace socketIONamespace;
-    @Autowired
+    /*@Autowired*/
     public BuildingStatusModule(SocketIOServer socketIOServer){
         socketIOServer.start();
         socketIONamespace=socketIOServer.addNamespace("/era");
