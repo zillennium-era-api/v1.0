@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 public class EraSocket {
     @Value("${rt.server.host}")
     private String host;
-    @Value("80")
+    @Value("8080")
     private Integer port;
     @Bean
     public SocketIOServer socketIOServer(){
