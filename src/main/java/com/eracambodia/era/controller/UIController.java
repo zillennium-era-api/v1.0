@@ -19,4 +19,5 @@ public class UIController {
     public String swagger(){
         return "redirect:/swagger-ui.html";
     }
+
 }

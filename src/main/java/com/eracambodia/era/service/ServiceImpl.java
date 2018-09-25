@@ -17,6 +17,7 @@ import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
+import com.eracambodia.era.model.api_login.request.CheckPlayerId;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_noti_favoritor.Notification;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
@@ -48,11 +49,16 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import javax.mail.*;
+import javax.mail.internet.*;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 import java.util.Scanner;
 
 @org.springframework.stereotype.Service
@@ -83,7 +89,7 @@ public class ServiceImpl implements Service {
                 throw new CustomException(401, "account need to approve from admin.");
             }
             if(playerId!=null) {
-                List<String> pid = loginRepo.getPlayerId(userId);
+                /*List<String> pid = loginRepo.getPlayerId(userId);
                 if(pid.size()<1 || pid==null){
                     loginRepo.savePlayerId(userId, playerId);
                 }else {
@@ -91,6 +97,17 @@ public class ServiceImpl implements Service {
                         if (!playerId.equalsIgnoreCase(playerId)) {
                             loginRepo.savePlayerId(userId, playerId);
                         }
+                    }
+                }*/
+                List<CheckPlayerId> checkPlayerIds=loginRepo.getPlayerId();
+                if(checkPlayerIds.size()<1 || checkPlayerIds==null){
+                    loginRepo.savePlayerId(userId,playerId);
+                }else {
+                    for (int i=0;i<checkPlayerIds.size();i++){
+                        if(!checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() != userId ){
+                            loginRepo.savePlayerId(userId,playerId);
+                        }
+                        break;
                     }
                 }
             }
@@ -153,8 +170,8 @@ public class ServiceImpl implements Service {
     // api building/status/update
     @Autowired
     private BuildingStatusUpdateRepo buildingStatusUpdateRepo;
-    /*@Autowired
-    private BuildingStatusModule buildingStatusModule;*/
+    @Autowired
+    private BuildingStatusModule buildingStatusModule;
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
@@ -168,7 +185,7 @@ public class ServiceImpl implements Service {
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
         BuildingUpdate buildingUpdate=buildingStatusUpdateRepo.getBuildingUpdate(buildingStatusUpdate.getOwnerId());
-       /* buildingStatusModule.broadcastEvent("update",buildingUpdate);*/
+        buildingStatusModule.broadcastEvent("changeStatus",buildingUpdate);
         pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
         return result;
     }
@@ -205,6 +222,13 @@ public class ServiceImpl implements Service {
             String email = DecodeJWT.getEmailFromJwt(jwtToken);
             Integer userId = registerRepo.getIdByEmail(email);
             Integer registerId=registerRepo.register(register,userId);
+            try {
+                sendMail(email);
+            } catch (MessagingException e) {
+                throw new CustomException(400,"Email not invalid.");
+            } catch (IOException e) {
+                throw new CustomException(400,"IOException");
+            }
             registerRepo.enable(register.getEmail());
             if(playerId!=null) {
                 registerRepo.savePlayerId(registerId, playerId);
@@ -215,6 +239,26 @@ public class ServiceImpl implements Service {
                 registerRepo.savePlayerId(registerId,playerId);
             }
         }
+    }
+    public void sendMail(String email) throws AddressException, MessagingException, IOException {
+        Properties properties = new Properties();
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.smtp.host", "smtp.gmail.com");
+        properties.put("mail.smtp.port", "587");
+        Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication("testmailoxford@gmail.com", "!@#$1234qwer");
+            }
+        });
+        Message msg = new MimeMessage(session);
+        msg.setFrom(new InternetAddress("testmailoxford@gmail.com", false));
+
+        msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
+        msg.setSubject("register approved");
+        msg.setContent("Your account that you register with era application has been approved by admin.", "text/html");
+        msg.setSentDate(new Date());
+        Transport.send(msg);
     }
 
     // api/user
@@ -463,7 +507,7 @@ public class ServiceImpl implements Service {
                         + "\"include_player_ids\" : " + arrayIds + ","
                         + "\"big_picture\": \"" + notification.getBigPicture() + "\","
                         + "\"headings\": {\"en\":\"" + notification.getTitle() + "\"},"
-                        + "\"data\": {\"type\": \"buildingDetail\", \"key\": \"" + buildingUUID + "\", \"date\": \"" + timestamp.getTime() + "\" }, "
+                        + "\"data\": {\"type\": \"buildingDetail\", \"key\": \"" + buildingUUID + "\", \"date\": \"" + timestamp.getTime() + "\" , \"profilePhoto\": \"" + profilePhoto + "\"  }, "
                         + "\"large_icon\": \"" + profilePhoto + "\","
                         + "\"contents\": {\"en\": \"" + notification.getContent() + "\"}"
                         + "}";

@@ -8,33 +8,30 @@ import com.eracambodia.era.model.api_building_status_update.response.BuildingUpd
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/*@Component*/
+@Component
 public class BuildingStatusModule {
     private SocketIONamespace socketIONamespace;
-    /*@Autowired*/
+    @Autowired
     public BuildingStatusModule(SocketIOServer socketIOServer){
         socketIOServer.start();
-        socketIONamespace=socketIOServer.addNamespace("/update");
+        socketIONamespace=socketIOServer.addNamespace("/era");
         socketIONamespace.addConnectListener(onConnected());
         socketIONamespace.addDisconnectListener(onDisconnected());
-        socketIONamespace.addEventListener("update", BuildingUpdate.class,onChatRetrieve());
-
+        //socketIONamespace.addEventListener("era", BuildingUpdate.class,onStatusChange());
     }
-    private DataListener<BuildingUpdate> onChatRetrieve(){
+    /*private DataListener<BuildingUpdate> onStatusChange(){
         return new DataListener<BuildingUpdate>() {
             @Override
             public void onData(SocketIOClient socketIOClient, BuildingUpdate buildingUpdate, AckRequest ackRequest) throws Exception {
-                System.out.println("ZZZZZ" + socketIOClient.getSessionId().toString() + "ZZZZZ" + buildingUpdate);
-                socketIONamespace.getBroadcastOperations().sendEvent("update", buildingUpdate);
+                socketIONamespace.getBroadcastOperations().sendEvent("era", buildingUpdate);
             }
         };
-    }
+    }*/
     private ConnectListener onConnected(){
         return new ConnectListener() {
             @Override
             public void onConnect(SocketIOClient socketIOClient) {
-                HandshakeData handshakeData=socketIOClient.getHandshakeData();
-                System.out.println("XXXXX"+socketIOClient.getSessionId().toString()+"XXXXX"+handshakeData.getUrl());
+                System.out.println("onConnected");
             }
         };
     }
@@ -42,7 +39,7 @@ public class BuildingStatusModule {
         return new DisconnectListener() {
             @Override
             public void onDisconnect(SocketIOClient socketIOClient) {
-                System.out.println("YYYYY" + socketIOClient.getSessionId().toString());
+                System.out.println("onDisconnected");
             }
         };
     }

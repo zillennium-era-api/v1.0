@@ -60,7 +60,7 @@ public interface BuildingUUIDRepo {
             "INNER JOIN transaction ON transaction.user_id=users.id " +
             "INNER JOIN building ON building.id=transaction.owner_id " +
             "WHERE transaction.owner_id=#{id} AND transaction.table_name = 'Building' AND transaction.status=building.status AND building.status NOT ILIKE 'available' " +
-            "ORDER BY transaction.id LIMIT 1")
+            "ORDER BY transaction.id DESC LIMIT 1")
     @Results({
             @Result(property = "name", column = "username"),
             @Result(property = "profilePhoto", column = "image")

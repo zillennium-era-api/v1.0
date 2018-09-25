@@ -2,6 +2,7 @@ package com.eracambodia.era.repository.api_login;
 
 import com.eracambodia.era.model.GrantedAuthorityImpl;
 import com.eracambodia.era.model.User;
+import com.eracambodia.era.model.api_login.request.CheckPlayerId;
 import com.eracambodia.era.model.api_login.request.Login;
 import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Repository;
@@ -40,8 +41,11 @@ public interface LoginRepo {
             "VALUES (#{userId},#{playerId}) ")
     int savePlayerId(@Param("userId")int userId,@Param("playerId")String playerId);
 
-    @Select("SELECT player_id " +
-            "FROM onesignal " +
-            "WHERE user_id=#{userId}")
-    List<String> getPlayerId(int userId);
+    @Select("SELECT player_id,user_id " +
+            "FROM onesignal ")
+    @Results({
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "playerId",column = "player_id")
+    })
+    List<CheckPlayerId> getPlayerId();
 }
