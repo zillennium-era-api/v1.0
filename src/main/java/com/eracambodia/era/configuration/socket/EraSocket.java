@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class EraSocket {
-    @Value("eraapi.herokuapp.com")
+    @Value("/")
     private String host;
     @Value("$PORT")
     private Integer port;
