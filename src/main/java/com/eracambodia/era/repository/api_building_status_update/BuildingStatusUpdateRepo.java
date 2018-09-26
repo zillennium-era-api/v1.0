@@ -11,8 +11,15 @@ import org.springframework.stereotype.Repository;
 public interface BuildingStatusUpdateRepo {
 
     @Select(value = "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
+    @Results({
+            @Result(property = "status",column = "rstatus"),
+            @Result(property = "agent.name",column = "rname"),
+            @Result(property = "agent.id",column = "rid"),
+            @Result(property = "agent.uuid",column = "ruuid"),
+            @Result(property = "agent.profilePhoto",column = "rimage")
+    })
     @Options(statementType = StatementType.CALLABLE)
-    Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
+    BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate);
 
     @Select("SELECT id " +
             "FROM building " +
@@ -48,4 +55,6 @@ public interface BuildingStatusUpdateRepo {
             @Result(property = "profilePhoto", column = "image")
     })
     Agent getAgent();
+
+
 }

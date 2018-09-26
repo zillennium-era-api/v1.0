@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_building_status_update.response;
 
+import com.eracambodia.era.setting.Default;
+
 public class Agent {
     private int id;
     private String uuid;
@@ -31,6 +33,8 @@ public class Agent {
     }
 
     public String getProfilePhoto() {
+        if(profilePhoto!=null)
+            return Default.profilePhoto+profilePhoto;
         return profilePhoto;
     }
 

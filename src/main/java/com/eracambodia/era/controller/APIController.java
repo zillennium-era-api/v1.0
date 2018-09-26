@@ -5,6 +5,7 @@ import com.eracambodia.era.model.api_agent_account_update.request.UpdateAgentAcc
 import com.eracambodia.era.model.api_agent_favorite_add.request.AgentAddFavorite;
 import com.eracambodia.era.model.api_agent_favorite_delete.request.AgentDeleteFavorite;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
+import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
 import com.eracambodia.era.model.api_user.response.User;
 import com.eracambodia.era.setting.Default;
 import com.eracambodia.era.exception.CustomException;
@@ -263,9 +264,9 @@ public class APIController {
 
     @PostMapping("/building/status/update")
     public ResponseEntity updateBuildingStatus(@RequestBody BuildingStatusUpdate buildingStatusUpdate, @ApiIgnore Principal principal) {
-        service.updateBuildingStatus(buildingStatusUpdate, principal.getName());
-        Response response = new Response(200);
-        return response.getResponseEntity();
+        BuildingUpdate buildingUpdate=service.updateBuildingStatus(buildingStatusUpdate, principal.getName());
+        Response response = new Response(200,buildingUpdate);
+        return response.getResponseEntity("data");
     }
 
     @GetMapping("/agent/transaction/{userUUID}/{status}")

@@ -13,6 +13,7 @@ import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
 import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
+import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_register.request.Register;
@@ -37,7 +38,7 @@ public interface Service {
     List<Buildings> findBuildings(Pagination pagination, String status);
 
     // api/building/status/update
-    Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email);
+    BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email);
 
     Integer findBuildingIdByIdOfBuildingStatusUpdate(int ownerId);
 

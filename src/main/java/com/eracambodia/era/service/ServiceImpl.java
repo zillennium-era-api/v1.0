@@ -175,13 +175,13 @@ public class ServiceImpl implements Service {
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
-    public Object updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email) {
+    public BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email) {
         int id = buildingStatusUpdateRepo.getUserEmail(email);
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
         buildingStatusUpdate.setUserId(id);
-        Object result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
+        BuildingUpdate result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
         /*BuildingUpdate buildingUpdate=buildingStatusUpdateRepo.getBuildingUpdate(buildingStatusUpdate.getOwnerId());
