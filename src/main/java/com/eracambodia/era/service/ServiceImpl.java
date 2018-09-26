@@ -106,8 +106,8 @@ public class ServiceImpl implements Service {
                     for (int i=0;i<checkPlayerIds.size();i++){
                         if(!checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() != userId ){
                             loginRepo.savePlayerId(userId,playerId);
+                            break;
                         }
-                        break;
                     }
                 }
             }
@@ -184,8 +184,6 @@ public class ServiceImpl implements Service {
         BuildingUpdate result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();
         notification.setBuildingID(buildingStatusUpdate.getOwnerId());
-        /*BuildingUpdate buildingUpdate=buildingStatusUpdateRepo.getBuildingUpdate(buildingStatusUpdate.getOwnerId());
-        buildingStatusModule.broadcastEvent("changeStatus",buildingUpdate);*/
         pushFavorite(notification,buildingStatusUpdate.getStatus(),email,id);
         return result;
     }
@@ -223,7 +221,7 @@ public class ServiceImpl implements Service {
             Integer userId = registerRepo.getIdByEmail(email);
             Integer registerId=registerRepo.register(register,userId);
             try {
-                sendMail(email);
+                sendMail(register.getEmail());
             } catch (MessagingException e) {
                 throw new CustomException(400,"Email not invalid.");
             } catch (IOException e) {

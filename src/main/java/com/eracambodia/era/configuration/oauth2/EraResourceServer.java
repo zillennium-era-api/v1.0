@@ -29,7 +29,7 @@ public class EraResourceServer extends ResourceServerConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/api/login", "/api/register", "/api/refresh_token", "/api/image/**", "/api/search/**", "/api/download/**","/api/send_mail").permitAll()
+                .antMatchers("/api/login", "/api/register", "/api/refresh_token", "/api/image/**", "/api/search/**", "/api/download/**").permitAll()
                 .antMatchers("/api/**").authenticated();
     }
 
