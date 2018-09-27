@@ -12,6 +12,7 @@ public interface BuildingStatusUpdateRepo {
 
     @Select(value = "{CALL update_building_status(#{ownerId},#{tableName},#{status},#{userId},#{bookingPrice})}")
     @Results({
+            @Result(property = "id",column = "rid"),
             @Result(property = "status",column = "rstatus"),
             @Result(property = "agent.name",column = "rname"),
             @Result(property = "agent.id",column = "rid"),
