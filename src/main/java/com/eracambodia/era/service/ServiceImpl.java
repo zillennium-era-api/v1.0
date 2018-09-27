@@ -88,27 +88,24 @@ public class ServiceImpl implements Service {
             if (userId == null) {
                 throw new CustomException(401, "account need to approve from admin.");
             }
+
+            //save player id when login
             if(playerId!=null) {
-                /*List<String> pid = loginRepo.getPlayerId(userId);
-                if(pid.size()<1 || pid==null){
-                    loginRepo.savePlayerId(userId, playerId);
-                }else {
-                    for (int i = 0; i < pid.size(); i++) {
-                        if (!playerId.equalsIgnoreCase(playerId)) {
-                            loginRepo.savePlayerId(userId, playerId);
-                        }
-                    }
-                }*/
                 List<CheckPlayerId> checkPlayerIds=loginRepo.getPlayerId();
                 if(checkPlayerIds.size()<1 || checkPlayerIds==null){
                     loginRepo.savePlayerId(userId,playerId);
                 }else {
+                    boolean playerIdExits=false;
                     for (int i=0;i<checkPlayerIds.size();i++){
-                        if(!checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() != userId ){
-                            loginRepo.savePlayerId(userId,playerId);
-                            break;
+                        if(checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() == userId ){
+                            playerIdExits = true;
+                        }else {
+                            playerIdExits = false;
                         }
                     }
+                    if(!playerIdExits)
+                        loginRepo.savePlayerId(userId,playerId);
+
                 }
             }
         }
@@ -528,6 +525,7 @@ public class ServiceImpl implements Service {
                     jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                     scanner.close();
                 }
+                System.out.println(jsonResponse+"AAAAAA");
             } catch (Throwable t) {
                 throw new CustomException(statusCode, jsonResponse.toString());
             }
