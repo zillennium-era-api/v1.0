@@ -99,6 +99,7 @@ public class ServiceImpl implements Service {
                     for (int i=0;i<checkPlayerIds.size();i++){
                         if(checkPlayerIds.get(i).getPlayerId().equalsIgnoreCase(playerId) && checkPlayerIds.get(i).getUserId() == userId ){
                             playerIdExits = true;
+                            break;
                         }else {
                             playerIdExits = false;
                         }
@@ -525,7 +526,6 @@ public class ServiceImpl implements Service {
                     jsonResponse = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
                     scanner.close();
                 }
-                System.out.println(jsonResponse+"AAAAAA");
             } catch (Throwable t) {
                 throw new CustomException(statusCode, jsonResponse.toString());
             }
