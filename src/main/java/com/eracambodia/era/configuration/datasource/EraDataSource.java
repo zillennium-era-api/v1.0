@@ -9,7 +9,7 @@ import javax.sql.DataSource;
 @Configuration
 public class EraDataSource {
 
-    @Bean(name = "dataSource")
+    /*@Bean(name = "dataSource")
     public DataSource dataSource() {
         return DataSourceBuilder
                 .create()
@@ -18,8 +18,8 @@ public class EraDataSource {
                 .password("eracambodiaadmin")
                 .driverClassName("org.postgresql.Driver")
                 .build();
-    }
-    /*@Bean(name = "dataSource")
+    }*/
+    @Bean(name = "dataSource")
     public DataSource dataSource() {
         return DataSourceBuilder
                 .create()
@@ -28,7 +28,7 @@ public class EraDataSource {
                 .password("c7980b63fb09912f6e4ac0bd0aeed0069ba6eb41e706b0bb23340e60c73d98e8")
                 .driverClassName("org.postgresql.Driver")
                 .build();
-    }*/
+    }
     /*@Bean(name = "dataSource")
     public DataSource dataSource(){
         return DataSourceBuilder
