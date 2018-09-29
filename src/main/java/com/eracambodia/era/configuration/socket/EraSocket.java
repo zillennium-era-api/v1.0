@@ -14,8 +14,8 @@ public class EraSocket {
     /*@Bean*/
     public SocketIOServer socketIOServer(){
         com.corundumstudio.socketio.Configuration configuration=new com.corundumstudio.socketio.Configuration();
-        /*configuration.setHostname(host);
-        configuration.setPort(port);*/
+        configuration.setHostname(host);
+        configuration.setPort(port);
         return new SocketIOServer(configuration);
     }
 }

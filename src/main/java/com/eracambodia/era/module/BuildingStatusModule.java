@@ -4,7 +4,8 @@ import com.corundumstudio.socketio.*;
 import com.corundumstudio.socketio.listener.ConnectListener;
 import com.corundumstudio.socketio.listener.DataListener;
 import com.corundumstudio.socketio.listener.DisconnectListener;
-import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
+import com.eracambodia.era.model.socket.BuildingUpdate;
+import com.eracambodia.era.model.socket.ResponseBuildingUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,13 +18,15 @@ public class BuildingStatusModule {
         socketIONamespace=socketIOServer.addNamespace("/era");
         socketIONamespace.addConnectListener(onConnected());
         socketIONamespace.addDisconnectListener(onDisconnected());
-        socketIONamespace.addEventListener("era", BuildingUpdate.class,onStatusChange());
+        socketIONamespace.addEventListener("listenChange", BuildingUpdate.class,onStatusChange());
     }
     private DataListener<BuildingUpdate> onStatusChange(){
         return new DataListener<BuildingUpdate>() {
             @Override
-            public void onData(SocketIOClient socketIOClient, BuildingUpdate buildingUpdate, AckRequest ackRequest) throws Exception {
-                socketIONamespace.getBroadcastOperations().sendEvent("era", buildingUpdate);
+            public void onData(SocketIOClient socketIOClient, BuildingUpdate buildingUpdate , AckRequest ackRequest) throws Exception {
+                ResponseBuildingUpdate responseBuildingUpdate=new ResponseBuildingUpdate();
+                responseBuildingUpdate.setData(buildingUpdate);
+                socketIONamespace.getBroadcastOperations().sendEvent("eventChange", responseBuildingUpdate);
             }
         };
     }
@@ -42,8 +45,5 @@ public class BuildingStatusModule {
                 System.out.println("onDisconnected");
             }
         };
-    }
-    public void broadcastEvent(String event, Object data){
-        this.socketIONamespace.getBroadcastOperations().sendEvent(event,data);
     }
 }
