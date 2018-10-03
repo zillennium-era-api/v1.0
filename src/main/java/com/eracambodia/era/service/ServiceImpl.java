@@ -267,7 +267,7 @@ public class ServiceImpl implements Service {
 
         msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email));
         msg.setSubject("register approved");
-        msg.setContent("Your account that you register with era application has been approved by admin.", "text/html");
+        msg.setContent("Your account that you register with era application has been approved by admin.<button>Hello</button>", "text/html");
         msg.setSentDate(new Date());
         Transport.send(msg);
     }
