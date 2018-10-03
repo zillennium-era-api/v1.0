@@ -17,6 +17,7 @@ import com.eracambodia.era.model.api_building_status_update.response.BuildingUpd
 import com.eracambodia.era.model.api_building_uuid.response.BuildingUUID;
 import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_register.request.Register;
+import com.eracambodia.era.model.api_users.Users;
 
 import java.util.List;
 
@@ -24,6 +25,7 @@ public interface Service {
 
     // api/login
     User findUserByEmailOfLogin(String email);
+    String getUserRole(String email);
 
     String checkLogin(Login login,String playerId);
 
@@ -92,4 +94,10 @@ public interface Service {
 
     // api/agent/transaction/total_commission
     AgentCommission commissionCalculator(String uuid);
+
+    // api/users
+    List<Users> getUsers(String role,Pagination pagination);
+
+    //api/user/upgrade_to_agent
+    void upgradeToAgent(int userId,Integer leaderId);
 }

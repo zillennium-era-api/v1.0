@@ -42,7 +42,6 @@ import java.util.*;
 @ControllerAdvice
 @RestController
 @RequestMapping("/api")
-@Api(description = "this api is use oauth 2 authentication and generate jwt token for era agent")
 public class APIController {
     @Autowired
     private Service service;
@@ -56,7 +55,7 @@ public class APIController {
     @PostMapping("/login")
     public ResponseEntity<Map<String, Object>> login(@RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
         service.checkLogin(login,playerId);
-
+        String role=service.getUserRole(login.getEmail());
         String clientCredential = "client:123";
         String basicAuth = new String(Base64.encodeBase64(clientCredential.getBytes()));
         HttpHeaders headers = new HttpHeaders();
@@ -75,7 +74,9 @@ public class APIController {
         //oauth string body response convert to json
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
-        Response response = new Response<Map>(200, token);
+        /*Map<String,Object> roles=new HashMap<>();
+        roles.put("role",role);*/
+        Response response = new Response<Map>(200,role, token);
         return response.getResponseEntity("data");
     }
 
@@ -151,7 +152,7 @@ public class APIController {
         Response response = new Response(200, downloadUri);
         return response.getResponseEntity("data");
     }
-
+    @ApiIgnore
     @GetMapping(value = "/image/user/{fileName:.+}")
     public ResponseEntity viewImage(@PathVariable(value = "fileName") String fileName, HttpServletRequest request) {
         //load image
@@ -176,6 +177,7 @@ public class APIController {
                 .body(resource);
     }
 
+    @ApiIgnore
     @GetMapping("/image/building/{fileName:.+}")
     public ResponseEntity imageBuilding(@PathVariable String fileName, HttpServletRequest request) {
         Resource resource = fileStorageService.loadFileAsResource(fileName, "building");
@@ -335,4 +337,5 @@ public class APIController {
         Response response = new Response(200, service.commissionCalculator(uuid));
         return response.getResponseEntity("data");
     }
+
 }

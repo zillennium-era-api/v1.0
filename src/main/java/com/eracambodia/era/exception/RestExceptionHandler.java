@@ -1,16 +1,20 @@
 package com.eracambodia.era.exception;
 
 import com.eracambodia.era.model.Response;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.HttpMediaTypeNotAcceptableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
+
+import javax.xml.transform.Result;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -29,5 +33,19 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         }
     }
 
+    //RequestParam exception
+    @Override
+    protected ResponseEntity handleMissingServletRequestParameter(MissingServletRequestParameterException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Response response=new Response(400);
+        response.setMessage(ex.getMessage());
+        return response.getResponseEntity();
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity dataIntegrity(Exception ex) {
+            Response response = new Response(403);
+            response.setMessage(ex.getMessage());
+            return response.getResponseEntity();
+    }
 
 }

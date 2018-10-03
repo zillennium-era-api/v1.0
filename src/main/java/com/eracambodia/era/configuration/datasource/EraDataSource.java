@@ -8,7 +8,7 @@ import javax.sql.DataSource;
 
 @Configuration
 public class EraDataSource {
-
+    //zillennium database
     /*@Bean(name = "dataSource")
     public DataSource dataSource() {
         return DataSourceBuilder
@@ -19,6 +19,7 @@ public class EraDataSource {
                 .driverClassName("org.postgresql.Driver")
                 .build();
     }*/
+    //heroku database
     @Bean(name = "dataSource")
     public DataSource dataSource() {
         return DataSourceBuilder
@@ -29,6 +30,8 @@ public class EraDataSource {
                 .driverClassName("org.postgresql.Driver")
                 .build();
     }
+
+    //local database
     /*@Bean(name = "dataSource")
     public DataSource dataSource(){
         return DataSourceBuilder

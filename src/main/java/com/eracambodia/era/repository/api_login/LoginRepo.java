@@ -48,4 +48,10 @@ public interface LoginRepo {
             @Result(property = "playerId",column = "player_id")
     })
     List<CheckPlayerId> getPlayerId();
+
+    @Select("SELECT name " +
+            "FROM authority " +
+            "INNER JOIN users ON authority.id=users.authority_id " +
+            "WHERE users.email = #{email}")
+    String getUserRole(String email);
 }

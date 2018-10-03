@@ -22,6 +22,7 @@ import com.eracambodia.era.model.api_login.request.Login;
 import com.eracambodia.era.model.api_noti_favoritor.Notification;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
+import com.eracambodia.era.model.api_users.Users;
 import com.eracambodia.era.module.BuildingStatusModule;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
@@ -42,6 +43,8 @@ import com.eracambodia.era.repository.api_noti_favoritor.NotiToFavoritorRepo;
 import com.eracambodia.era.repository.api_register.RegisterRepo;
 import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
+import com.eracambodia.era.repository.api_user_upgrade_to_agent.UserUpgradeRepo;
+import com.eracambodia.era.repository.api_users.UsersRepo;
 import com.eracambodia.era.setting.Default;
 import com.eracambodia.era.utils.DecodeJWT;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,7 +93,7 @@ public class ServiceImpl implements Service {
             }
 
             //save player id when login
-            if(playerId!=null) {
+            if(playerId!=null && playerId.length()>1) {
                 List<CheckPlayerId> checkPlayerIds=loginRepo.getPlayerId();
                 if(checkPlayerIds.size()<1 || checkPlayerIds==null){
                     loginRepo.savePlayerId(userId,playerId);
@@ -111,6 +114,11 @@ public class ServiceImpl implements Service {
             }
         }
         return password;
+    }
+
+    @Override
+    public String getUserRole(String email) {
+        return loginRepo.getUserRole(email);
     }
 
     // api/building/uuid
@@ -597,6 +605,28 @@ public class ServiceImpl implements Service {
         return amount;
     }
 
+    //api/users
+    @Autowired
+    private UsersRepo usersRepo;
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Override
+    public List<Users> getUsers(String role,Pagination pagination) {
+        List<Users> users=usersRepo.getUsers(role,pagination);
+        if(users==null || users.size()<1)
+            throw new CustomException(404,"No data.");
+        pagination.setTotalItem(usersRepo.countUsers(role));
+        return users;
+    }
 
+    //api/user/upgrade_to_agent
+    @Autowired
+    private UserUpgradeRepo userUpgradeRepo;
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @Override
+    public void upgradeToAgent(int userId, Integer leaderId) {
+        Integer id=userUpgradeRepo.upgradeToAgent(userId,leaderId);
+        if(id<1)
+            throw new CustomException(400,"Update Fails.");
+    }
 }
 
