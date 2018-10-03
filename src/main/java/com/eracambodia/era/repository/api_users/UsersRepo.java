@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface UsersRepo {
-    @Select("SELECT users.username,users.email,users.phonenumber,users.id,users.create_at " +
+    @Select("SELECT users.username,users.email,users.phonenumber,users.id,users.create_at,users.enable " +
             "FROM users " +
             "INNER JOIN authority on authority.id=users.authority_id " +
             "WHERE authority.name ILIKE #{role} " +
