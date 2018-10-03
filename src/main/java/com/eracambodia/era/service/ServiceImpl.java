@@ -384,6 +384,9 @@ public class ServiceImpl implements Service {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public void addFavorite(AgentAddFavorite agentAddFavorite, String email) {
         agentAddFavorite.setUserId(agentAddFavoriteRepo.getUserIdByEmail(email));
+        if(agentAddFavoriteRepo.buildingAvailable(agentAddFavorite.getOwnerId())<1){
+            throw new CustomException(404, "Cant not favorite.Building Not found.");
+        }
         if (agentAddFavoriteRepo.addFavorite(agentAddFavorite) < 1) {
             throw new CustomException(403, "No record has deleted");
         }
