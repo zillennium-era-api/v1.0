@@ -206,6 +206,13 @@ public class ServiceImpl implements Service {
 
     @Override
     public void register(Register register, String jwtToken,String playerId) {
+        try {
+            sendMail("aottraoxford@gmail.com");
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         String message = "";
         RegisterUniqueFields registerUniqueFields = new RegisterUniqueFields();
         if (registerRepo.getIdCard(register.getIdCard()) != null) {
@@ -226,13 +233,13 @@ public class ServiceImpl implements Service {
             String email = DecodeJWT.getEmailFromJwt(jwtToken);
             Integer userId = registerRepo.getIdByEmail(email);
             Integer registerId=registerRepo.register(register,userId);
-            try {
+           /* try {
                 sendMail(register.getEmail());
             } catch (MessagingException e) {
                 throw new CustomException(400,"Email not invalid.");
             } catch (IOException e) {
                 throw new CustomException(400,"IOException");
-            }
+            }*/
             registerRepo.enable(register.getEmail());
             if(playerId!=null) {
                 registerRepo.savePlayerId(registerId, playerId);
