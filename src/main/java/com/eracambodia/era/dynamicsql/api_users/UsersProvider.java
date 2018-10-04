@@ -10,7 +10,7 @@ public class UsersProvider {
         String searchName=s.replace(" ","%");
 
         return new SQL(){{
-            SELECT("users.username,users.email,users.phonenumber,users.id,users.create_at,users.enable");
+            SELECT("users.uuid,users.username,users.email,users.phonenumber,users.id,users.create_at,users.enable");
             FROM("users");
             INNER_JOIN("authority on authority.id=users.authority_id");
             if(name!=null)
