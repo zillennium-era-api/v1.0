@@ -1,7 +1,7 @@
 package com.eracambodia.era.configuration.fileupload;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-
+// for upload file to server
 @ConfigurationProperties(prefix = "file")
 public class FileStorageProperty {
     private String uploadDir;

@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
+// login to get access token
 @Configuration
 @EnableWebSecurity
 public class EraWebSecurity extends WebSecurityConfigurerAdapter {

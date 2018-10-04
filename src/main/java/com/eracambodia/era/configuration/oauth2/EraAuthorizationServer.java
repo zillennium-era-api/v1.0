@@ -27,7 +27,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 
 import javax.sql.DataSource;
 import java.util.Arrays;
-
+//generate token
 @Configuration
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 @EnableAuthorizationServer

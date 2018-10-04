@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-
+//connect to postgres database
 @Configuration
 public class EraDataSource {
     //zillennium database

@@ -13,6 +13,7 @@ import org.springframework.security.oauth2.provider.error.WebResponseExceptionTr
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.access.AccessDeniedHandler;
 
+//secure api
 @Configuration
 @EnableResourceServer
 public class EraResourceServer extends ResourceServerConfigurerAdapter {
