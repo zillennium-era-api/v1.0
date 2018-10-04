@@ -29,7 +29,7 @@ import javax.sql.DataSource;
 import java.util.Arrays;
 //generate token
 @Configuration
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+/*@EnableGlobalMethodSecurity(prePostEnabled = true)*/
 @EnableAuthorizationServer
 public class EraAuthorizationServer extends AuthorizationServerConfigurerAdapter {
     @Qualifier("dataSource")

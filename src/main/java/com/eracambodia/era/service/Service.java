@@ -96,7 +96,7 @@ public interface Service {
     AgentCommission commissionCalculator(String uuid);
 
     // api/users
-    List<Users> getUsers(String role,Pagination pagination);
+    List<Users> getUsers(String role,String name,Pagination pagination);
 
     //api/user/upgrade_to_agent
     void upgradeToAgent(int userId,Integer leaderId);

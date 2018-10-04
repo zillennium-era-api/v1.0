@@ -613,8 +613,8 @@ public class ServiceImpl implements Service {
     private UsersRepo usersRepo;
     @PreAuthorize("hasAuthority('ADMIN')")
     @Override
-    public List<Users> getUsers(String role,Pagination pagination) {
-        List<Users> users=usersRepo.getUsers(role,pagination);
+    public List<Users> getUsers(String role,String name,Pagination pagination) {
+        List<Users> users=usersRepo.getUsers(role,name,pagination);
         if(users==null || users.size()<1)
             throw new CustomException(404,"No data.");
         pagination.setTotalItem(usersRepo.countUsers(role));
