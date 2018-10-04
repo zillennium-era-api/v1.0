@@ -74,9 +74,8 @@ public class APIController {
         //oauth string body response convert to json
         JsonParser springParser = JsonParserFactory.getJsonParser();
         Map<String, Object> token = springParser.parseMap(responseEntity.getBody());
-        /*Map<String,Object> roles=new HashMap<>();
-        roles.put("role",role);*/
-        Response response = new Response<Map>(200,role, token);
+        Response response = new Response<Map>(200, token);
+        response.setRole(role);
         return response.getResponseEntity("data");
     }
 

@@ -44,4 +44,5 @@ public interface RegisterRepo {
             "FROM users " +
             "WHERE id=#{id}")
     Integer getEmailByUserId(int id);
+
 }

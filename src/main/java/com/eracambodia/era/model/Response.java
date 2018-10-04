@@ -1,5 +1,6 @@
 package com.eracambodia.era.model;
 
+import org.bouncycastle.math.ec.ScaleYPointMap;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -18,12 +19,6 @@ public class Response<T> {
     public Response(int code, T... data) {
         this.code = code;
         this.data = data;
-        statusCode(code);
-    }
-    public Response(int code,String role, T... data) {
-        this.code = code;
-        this.data = data;
-        this.role = role;
         statusCode(code);
     }
 
@@ -71,8 +66,9 @@ public class Response<T> {
         Map<String, Object> map = new HashMap<>();
         map.put("code", getCode());
         map.put("message", getMessage());
-        if(role!=null)
-            map.put("role",getRole());
+        if(role!=null) {
+            map.put("role", getRole());
+        }
         if (getData() != null && data.length > 0) {
             for (int i = 0; i < data.length; i++) {
                 map.put(type[i], data[i]);
