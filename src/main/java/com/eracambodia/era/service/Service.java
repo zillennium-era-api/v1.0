@@ -50,6 +50,9 @@ public interface Service {
     // api/user
     com.eracambodia.era.model.api_user.response.User findUserByUsernameOfUser(String username);
 
+    // api/user?id
+    com.eracambodia.era.model.api_userid.User findUserById(int id);
+
     // api/agent/profile/upload
     String findImageByUsernameOfUploadProfileAgent(String email);
 

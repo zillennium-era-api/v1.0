@@ -17,4 +17,5 @@ public interface UserRepo {
             @Result(property = "role", column = "authority_id")
     })
     User findUserByUsernameOfUser(String username);
+
 }

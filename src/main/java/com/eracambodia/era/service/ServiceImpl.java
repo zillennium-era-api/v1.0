@@ -43,6 +43,7 @@ import com.eracambodia.era.repository.api_noti_favoritor.NotiToFavoritorRepo;
 import com.eracambodia.era.repository.api_register.RegisterRepo;
 import com.eracambodia.era.repository.api_search.SearchRepo;
 import com.eracambodia.era.repository.api_user.UserRepo;
+import com.eracambodia.era.repository.api_user_id.UserIdRepo;
 import com.eracambodia.era.repository.api_user_upgrade_to_agent.UserUpgradeRepo;
 import com.eracambodia.era.repository.api_users.UsersRepo;
 import com.eracambodia.era.setting.Default;
@@ -630,6 +631,16 @@ public class ServiceImpl implements Service {
         Integer id=userUpgradeRepo.upgradeToAgent(userId,leaderId);
         if(id<1)
             throw new CustomException(400,"Update Fails.");
+    }
+    //api/user?id
+    @Autowired
+    private UserIdRepo userIdRepo;
+    @Override
+    public com.eracambodia.era.model.api_userid.User findUserById(int id) {
+        com.eracambodia.era.model.api_userid.User user=userIdRepo.findUserById(id);
+        if(user==null)
+            throw new CustomException(404,"User not exist");
+        return user;
     }
 }
 

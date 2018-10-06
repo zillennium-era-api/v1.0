@@ -24,4 +24,10 @@ public class AdminController {
         Response response=new Response(200);
         return response.getResponseEntity();
     }
+
+    @GetMapping("/userId")
+    public ResponseEntity getUserById(@RequestParam("id")int id){
+        Response response=new Response(200,service.findUserById(id));
+        return response.getResponseEntity("data");
+    }
 }
