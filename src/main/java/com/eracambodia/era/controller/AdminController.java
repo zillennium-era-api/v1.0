@@ -26,8 +26,8 @@ public class AdminController {
     }
 
     @GetMapping("/userId")
-    public ResponseEntity getUserById(@RequestParam("id")int id){
-        Response response=new Response(200,service.findUserById(id));
+    public ResponseEntity getUserById(@RequestParam("uuid")String uuid){
+        Response response=new Response(200,service.findUserById(uuid));
         return response.getResponseEntity("data");
     }
 }

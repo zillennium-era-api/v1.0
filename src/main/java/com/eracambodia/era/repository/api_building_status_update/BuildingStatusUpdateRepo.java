@@ -1,8 +1,10 @@
 package com.eracambodia.era.repository.api_building_status_update;
 
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
+import com.eracambodia.era.model.api_building_status_update.request.TransactionOwner;
 import com.eracambodia.era.model.api_building_status_update.response.Agent;
 import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
+import com.eracambodia.era.model.api_noti_favoritor.Transaction;
 import org.apache.ibatis.annotations.*;
 import org.apache.ibatis.mapping.StatementType;
 import org.springframework.stereotype.Repository;
@@ -57,5 +59,13 @@ public interface BuildingStatusUpdateRepo {
     })
     Agent getAgent();
 
-
+    @Select("SELECT status,owner_id,user_id " +
+            "FROM transaction " +
+            "WHERE owner_id=#{buildingId} " +
+            "ORDER BY DESC LIMIT 1")
+    @Results({
+            @Result(property = "userId",column = "user_id"),
+            @Result(property = "buildingId",column = "owner_id")
+    })
+    TransactionOwner checkTransactionOwner(Integer buildingId);
 }

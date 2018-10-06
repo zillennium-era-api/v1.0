@@ -2,6 +2,7 @@ package com.eracambodia.era.model.api_users;
 
 public class Users {
     private Integer id;
+    private String uuid;
     private Boolean enable;
     private String name;
     private String email;
@@ -14,6 +15,14 @@ public class Users {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public Boolean getEnable() {
@@ -60,6 +69,7 @@ public class Users {
     public String toString() {
         return "Users{" +
                 "id=" + id +
+                ", uuid='" + uuid + '\'' +
                 ", enable=" + enable +
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +

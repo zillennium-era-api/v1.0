@@ -11,15 +11,16 @@ import org.springframework.stereotype.Repository;
 public interface UserIdRepo {
     @Select("SELECT * " +
             "FROM users " +
-            "WHERE id=#{id}")
+            "WHERE uuid=#{uuid}")
     @Results({
             @Result(property = "idCard", column = "id_card"),
+            @Result(property = "uuid",column = "uuid"),
             @Result(property = "phone", column = "phonenumber"),
             @Result(property = "name", column = "username"),
             @Result(property = "profilePhoto", column = "image"),
             @Result(property = "role", column = "authority_id",one = @One(select = "getRole"))
     })
-    User findUserById(int id);
+    User findUserById(String uuid);
 
     @Select("SELECT name " +
             "FROM authority " +

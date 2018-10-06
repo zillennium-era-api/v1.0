@@ -35,6 +35,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import javax.mail.*;
 import javax.mail.internet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.*;
@@ -227,7 +228,7 @@ public class APIController {
     }
 
     @PutMapping("/agent/account/password")
-    public ResponseEntity updateAgentPassword(@RequestBody ChangePassword changePassword, @ApiIgnore Principal principal) {
+    public ResponseEntity updateAgentPassword(@Valid @RequestBody ChangePassword changePassword, @ApiIgnore Principal principal) {
         String password = service.getUserPasswordByEmail(principal.getName());
         if (!passwordEncoder.matches(changePassword.getOldPassword(), password)) {
             throw new CustomException(401, "password not match.");

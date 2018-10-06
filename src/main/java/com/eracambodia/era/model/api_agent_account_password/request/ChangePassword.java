@@ -1,7 +1,17 @@
 package com.eracambodia.era.model.api_agent_account_password.request;
 
+import javax.validation.constraints.*;
+
 public class ChangePassword {
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @Size(min = 8)
     private String oldPassword;
+    @NotNull
+    @NotEmpty
+    @NotBlank
+    @Size(min = 8)
     private String newPassword;
 
     public String getOldPassword() {

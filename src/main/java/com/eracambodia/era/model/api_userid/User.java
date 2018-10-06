@@ -83,18 +83,4 @@ public class User {
         this.enable = enable;
     }
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", role='" + role + '\'' +
-                ", uuid='" + uuid + '\'' +
-                ", email='" + email + '\'' +
-                ", phone='" + phone + '\'' +
-                ", idCard='" + idCard + '\'' +
-                ", profilePhoto='" + profilePhoto + '\'' +
-                ", enable=" + enable +
-                '}';
-    }
 }

@@ -12,9 +12,12 @@ import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.xml.transform.Result;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
@@ -46,6 +49,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
             Response response = new Response(403);
             response.setMessage(ex.getMessage());
             return response.getResponseEntity();
+    }
+
+    @Override
+    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        Response response=new Response(400);
+        response.setMessage(ex.getMessage());
+        return response.getResponseEntity();
     }
 
 }
