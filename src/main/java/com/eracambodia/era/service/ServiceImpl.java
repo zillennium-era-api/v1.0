@@ -185,16 +185,16 @@ public class ServiceImpl implements Service {
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
-        TransactionOwner transactionOwner=buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
+        /*TransactionOwner transactionOwner=buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
         if(transactionOwner!=null) {
-            if (!transactionOwner.getStatus().equalsIgnoreCase(buildingStatusUpdate.getStatus())) {
+            if (!transactionOwner.getStatus().equalsIgnoreCase("available") && transactionOwner.getUserId() != id) {
                 throw new CustomException(400, "Can not update this property because it hold by other agent.");
             } else {
                 if (transactionOwner.getUserId() != id) {
-                    throw new CustomException(400, "Can not update this property because it hold by other agent.");
+                    throw new CustomException(400, "update this property because it hold by other agent.");
                 }
             }
-        }
+        }*/
         buildingStatusUpdate.setUserId(id);
         BuildingUpdate result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();

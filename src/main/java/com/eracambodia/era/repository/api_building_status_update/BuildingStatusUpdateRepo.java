@@ -62,7 +62,7 @@ public interface BuildingStatusUpdateRepo {
     @Select("SELECT status,owner_id,user_id " +
             "FROM transaction " +
             "WHERE owner_id=#{buildingId} " +
-            "ORDER BY DESC LIMIT 1")
+            "ORDER BY id DESC LIMIT 1")
     @Results({
             @Result(property = "userId",column = "user_id"),
             @Result(property = "buildingId",column = "owner_id")
