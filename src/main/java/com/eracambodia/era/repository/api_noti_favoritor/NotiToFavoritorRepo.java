@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface NotiToFavoritorRepo {
 
-    @Select("SELECT player_id " +
+    @Select("SELECT DISTINCT(player_id) " +
             "FROM onesignal " +
             "INNER JOIN favorite ON onesignal.user_id=favorite.user_id " +
             "WHERE favorite.owner_id = #{buildingId} " +
@@ -49,4 +49,9 @@ public interface NotiToFavoritorRepo {
             "FROM building " +
             "WHERE id=#{id}")
     String getBuildingUUID(Integer id);
+
+    @Select("SELECT player_id " +
+            "FROM onesignal " +
+            "WHERE user_id=#{userId}")
+    String findSpecificPlayerId(int userId);
 }

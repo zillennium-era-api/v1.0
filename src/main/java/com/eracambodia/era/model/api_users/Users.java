@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_users;
 
+import com.eracambodia.era.setting.Default;
+
 public class Users {
     private Integer id;
     private String uuid;
@@ -8,6 +10,7 @@ public class Users {
     private String email;
     private String phone;
     private String registerDate;
+    private String profilePhoto;
 
     public Integer getId() {
         return id;
@@ -65,6 +68,16 @@ public class Users {
         this.registerDate = registerDate;
     }
 
+    public String getProfilePhoto() {
+        if(profilePhoto!=null)
+            return Default.profilePhoto;
+        return profilePhoto;
+    }
+
+    public void setProfilePhoto(String profilePhoto) {
+        this.profilePhoto = profilePhoto;
+    }
+
     @Override
     public String toString() {
         return "Users{" +
@@ -75,6 +88,7 @@ public class Users {
                 ", email='" + email + '\'' +
                 ", phone='" + phone + '\'' +
                 ", registerDate='" + registerDate + '\'' +
+                ", profilePhoto='" + profilePhoto + '\'' +
                 '}';
     }
 }

@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_userid;
 
+import com.eracambodia.era.setting.Default;
+
 public class User {
     private int id;
     private String name;
@@ -68,6 +70,8 @@ public class User {
     }
 
     public String getProfilePhoto() {
+        if(profilePhoto!=null)
+            return Default.profilePhoto+profilePhoto;
         return profilePhoto;
     }
 

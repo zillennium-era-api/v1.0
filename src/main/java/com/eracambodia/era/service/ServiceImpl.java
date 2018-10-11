@@ -460,11 +460,19 @@ public class ServiceImpl implements Service {
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<String> findPlayerId(String email,int ownerId,Integer agentId) {
-        List<String> playerId = notiToFavoritorRepo.findPlayerId(agentId, ownerId);
-        if (playerId == null || playerId.size() < 1) {
-            playerId=null;
+        List<String> playerIds = notiToFavoritorRepo.findPlayerId(agentId, ownerId);
+        if (playerIds == null || playerIds.size() < 1) {
+            playerIds=null;
         }
-        return playerId;
+        String playerId=notiToFavoritorRepo.findSpecificPlayerId(agentId);
+        if(playerId!=null){
+            for(int i=0;i<playerIds.size();i++){
+                if(playerIds.get(i)==playerId){
+                    playerIds.remove(i);
+                }
+            }
+        }
+        return playerIds;
     }
 
     private void pushFavorite(Notification notification,String status, String email,Integer agentId) {

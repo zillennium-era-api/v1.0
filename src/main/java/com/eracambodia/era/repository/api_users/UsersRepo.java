@@ -13,6 +13,7 @@ import java.util.List;
 public interface UsersRepo {
     @SelectProvider(type = UsersProvider.class,method = "getUsers")
     @Results({
+            @Result(property = "profilePhoto",column = "image"),
             @Result(property = "name", column = "username"),
             @Result(property = "registerDate", column = "create_at"),
             @Result(property = "phone", column = "phonenumber")
