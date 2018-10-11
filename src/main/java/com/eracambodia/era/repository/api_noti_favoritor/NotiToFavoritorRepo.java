@@ -53,5 +53,5 @@ public interface NotiToFavoritorRepo {
     @Select("SELECT player_id " +
             "FROM onesignal " +
             "WHERE user_id=#{userId}")
-    String findSpecificPlayerId(int userId);
+    List<String> findSpecificPlayerId(int userId);
 }

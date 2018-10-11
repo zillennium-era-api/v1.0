@@ -461,15 +461,10 @@ public class ServiceImpl implements Service {
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<String> findPlayerId(String email,int ownerId,Integer agentId) {
         List<String> playerIds = notiToFavoritorRepo.findPlayerId(agentId, ownerId);
-        String playerId=notiToFavoritorRepo.findSpecificPlayerId(agentId);
-        if(playerId!=null && playerIds!=null){
-            for(int i=0;i<playerIds.size();i++){
-                if(playerIds.get(i).contains(playerId)){
-                    playerIds.remove(i);
-                }
-            }
-        }
-        if (playerIds == null || playerIds.size() < 1) {
+        List<String> playerIdChanger=notiToFavoritorRepo.findSpecificPlayerId(agentId);
+        if(playerIds.size()>1&&playerIdChanger.size()>1)
+            playerIds.removeAll(playerIdChanger);
+        if (playerIds.size() < 1) {
             playerIds=null;
         }
         return playerIds;
