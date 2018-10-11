@@ -9,7 +9,7 @@ import java.util.List;
 
 @Repository
 public interface AgentRepo {
-    @Select("SELECT * FROM (SELECT DISTINCT ON(building.id) building.id as bid,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
+    @Select("SELECT * FROM (SELECT DISTINCT ON(building.id) building.id as bid,transaction.user_id,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
             "FROM building " +
             "INNER JOIN transaction ON building.id=transaction.owner_id " +
             "INNER JOIN users on users.id=transaction.user_id " +
@@ -25,7 +25,8 @@ public interface AgentRepo {
             @Result(property = "countryName", column = "country"),
             @Result(property = "street", column = "street_number_or_name"),
             @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
-            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
+            @Result(property = "userId",column = "user_id")
     })
     List<Agent> findAgentsProcess(@Param("status") String status, @Param("email") String email, @Param("pagination") Pagination pagination);
 
@@ -40,22 +41,13 @@ public interface AgentRepo {
             "ORDER BY id DESC LIMIT 1")
     String getFilePath();
 
-    @Select("SELECT count(bid) FROM (SELECT DISTINCT ON(building.id) building.id as bid,building.status " +
+    @Select("SELECT * FROM (SELECT DISTINCT ON(building.id) building.id as bid,transaction.user_id,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
             "FROM building " +
             "INNER JOIN transaction ON building.id=transaction.owner_id " +
             "INNER JOIN users on users.id=transaction.user_id " +
             "WHERE users.email=#{email} " +
-            "ORDER BY building.id,transaction.id DESC) " +
-            "building WHERE status ilike #{status}")
-
-    Integer countAgentProcess(@Param("email") String email, @Param("status") String status);
-
-    @Select("SELECT DISTINCT ON(building.id) building.id as bid,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
-            "FROM building " +
-            "INNER JOIN transaction ON building.id=transaction.owner_id " +
-            "INNER JOIN users ON users.id=transaction.user_id " +
-            "WHERE users.email=#{email} " +
-            "ORDER BY building.id,transaction.create_date DESC")
+            "ORDER BY building.id,transaction.id DESC)building " +
+            "WHERE status ilike #{status}")
     @Results({
             @Result(property = "id", column = "bid"),
             @Result(property = "totalCost", column = "bid", one = @One(select = "getTotalCost")),
@@ -65,17 +57,52 @@ public interface AgentRepo {
             @Result(property = "countryName", column = "country"),
             @Result(property = "street", column = "street_number_or_name"),
             @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
-            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince"))
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
+            @Result(property = "userId",column = "user_id")
     })
-    List<Agent> findAgentsAllProcess(@Param("email") String email, @Param("pagination") Pagination pagination);
+    List<Agent> countAgentProcess(@Param("email") String email, @Param("status") String status);
 
-    @Select("SELECT COUNT(*) FROM (SELECT DISTINCT ON(building.id) building.id " +
+    @Select("SELECT * FROM (SELECT DISTINCT ON(building.id) building.id as bid,transaction.user_id,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
             "FROM building " +
             "INNER JOIN transaction ON building.id=transaction.owner_id " +
             "INNER JOIN users on users.id=transaction.user_id " +
             "WHERE users.email=#{email} " +
-            "ORDER BY building.id) as tb")
-    Integer countAgentAllProcess(String email);
+            "ORDER BY building.id,transaction.id DESC " +
+            "LIMIT #{pagination.limit} OFFSET #{pagination.offset})building ")
+
+    @Results({
+            @Result(property = "id", column = "bid"),
+            @Result(property = "totalCost", column = "bid", one = @One(select = "getTotalCost")),
+            @Result(property = "filePath", column = "bid", one = @One(select = "getFilePath")),
+            @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
+            @Result(property = "commune", column = "commune_code", one = @One(select = "getCommune")),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "street", column = "street_number_or_name"),
+            @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
+            @Result(property = "userId",column = "user_id")
+    })
+    List<Agent> findAgentsAllProcess(@Param("email") String email, @Param("pagination") Pagination pagination);
+
+    @Select("SELECT * FROM (SELECT DISTINCT ON(building.id) building.id as bid,transaction.user_id,building.country,building.district_code,building.city_or_province,building.village_code,building.commune_code,building.street_number_or_name,building.name,building.uuid,building.status,building.type " +
+            "FROM building " +
+            "INNER JOIN transaction ON building.id=transaction.owner_id " +
+            "INNER JOIN users on users.id=transaction.user_id " +
+            "WHERE users.email=#{email} " +
+            "ORDER BY building.id,transaction.id DESC)building")
+    @Results({
+            @Result(property = "id", column = "bid"),
+            @Result(property = "totalCost", column = "bid", one = @One(select = "getTotalCost")),
+            @Result(property = "filePath", column = "bid", one = @One(select = "getFilePath")),
+            @Result(property = "village", column = "village_code", one = @One(select = "getVillage")),
+            @Result(property = "commune", column = "commune_code", one = @One(select = "getCommune")),
+            @Result(property = "countryName", column = "country"),
+            @Result(property = "street", column = "street_number_or_name"),
+            @Result(property = "district", column = "district_code", one = @One(select = "getDestrict")),
+            @Result(property = "cityOrProvince", column = "city_or_province", one = @One(select = "getCityOrProvince")),
+            @Result(property = "userId",column = "user_id")
+    })
+    List<Agent> countAgentAllProcess(String email);
 
     @Select("SELECT latin_name " +
             "FROM address " +
@@ -96,4 +123,11 @@ public interface AgentRepo {
             "FROM address " +
             "WHERE id=#{city_or_province}")
     String getCityOrProvince();
+
+    @Select("SELECT user_id " +
+            "FROM transaction " +
+            "WHERE owner_id=#{buildingId} " +
+            "ORDER BY id DESC " +
+            "LIMIT 1")
+    Integer checkAgentTransaction(int buildingId);
 }

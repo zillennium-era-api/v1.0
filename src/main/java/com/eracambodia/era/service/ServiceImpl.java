@@ -61,10 +61,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-import java.util.Scanner;
+import java.util.*;
 
 @org.springframework.stereotype.Service
 public class ServiceImpl implements Service {
@@ -185,16 +182,6 @@ public class ServiceImpl implements Service {
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
-        /*TransactionOwner transactionOwner=buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
-        if(transactionOwner!=null) {
-            if (!transactionOwner.getStatus().equalsIgnoreCase("available") && transactionOwner.getUserId() != id) {
-                throw new CustomException(400, "Can not update this property because it hold by other agent.");
-            } else {
-                if (transactionOwner.getUserId() != id) {
-                    throw new CustomException(400, "update this property because it hold by other agent.");
-                }
-            }
-        }*/
         buildingStatusUpdate.setUserId(id);
         BuildingUpdate result=buildingStatusUpdateRepo.updateBuildingStatus(buildingStatusUpdate);
         Notification notification=new Notification();
@@ -552,28 +539,50 @@ public class ServiceImpl implements Service {
         }
     }
 
-    // api/agent/status/{status}
+    // api/agent/building/status/{status}
     @Autowired
     private AgentRepo agentRepo;
 
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public List<Agent> findAgentProcess(String status, String email, Pagination pagination) {
+        List<Agent> newList=new ArrayList<>();
+        List<Agent> newListAgentCount=new ArrayList<>();
         if (status.equalsIgnoreCase("all")) {
             List<Agent> list = agentRepo.findAgentsAllProcess(email, pagination);
-            if (list.size() < 1) {
-                throw new CustomException(404, "No record.");
+            newList=listAgentProcess(list);
+            if (newList.size() < 1) {
+                throw new CustomException(404, "No record of "+status);
             }
-            pagination.setTotalItem(agentRepo.countAgentAllProcess(email));
-            return list;
+            List<Agent> listAgentCount=agentRepo.countAgentAllProcess(email);
+            newListAgentCount=listAgentProcess(listAgentCount);
+            pagination.setTotalItem(newListAgentCount.size());
+            return newList;
         } else {
             List<Agent> list = agentRepo.findAgentsProcess(status, email, pagination);
-            if (list.size() < 1) {
+
+            newList=listAgentProcess(list);
+
+            if (newList.size() < 1) {
                 throw new CustomException(404, "No record of " + status);
             }
-            pagination.setTotalItem(agentRepo.countAgentProcess(email, status));
-            return list;
+            List<Agent> listAgentCount=agentRepo.countAgentProcess(email,status);
+            newListAgentCount=listAgentProcess(listAgentCount);
+            pagination.setTotalItem(newListAgentCount.size());
+            return newList;
         }
+    }
+    private List<Agent> listAgentProcess(List<Agent>list){
+        List<Agent> newList=new ArrayList<>();
+        for(int i=0;i<list.size();i++){
+            Integer userId=agentRepo.checkAgentTransaction(list.get(i).getId());
+            if(userId!=null){
+                if(list.get(i).getUserId()==userId){
+                    newList.add(list.get(i));
+                }
+            }
+        }
+        return newList;
     }
 
     //api/agent/transaction/total_commission

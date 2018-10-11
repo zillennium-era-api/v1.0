@@ -1,6 +1,7 @@
 package com.eracambodia.era.model.api_agent_building_status_status.response;
 
 import com.eracambodia.era.setting.Default;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -19,6 +20,8 @@ public class Agent {
     private String cityOrProvince;
     private double totalCost = 0;
     private String filePath;
+    @JsonIgnore
+    private int userId;
 
     public int getId() {
         return id;
@@ -127,6 +130,14 @@ public class Agent {
         this.filePath = filePath;
     }
 
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
     @Override
     public String toString() {
         return "Agent{" +
@@ -143,6 +154,7 @@ public class Agent {
                 ", cityOrProvince='" + cityOrProvince + '\'' +
                 ", totalCost=" + totalCost +
                 ", filePath='" + filePath + '\'' +
+                ", userId=" + userId +
                 '}';
     }
 }
