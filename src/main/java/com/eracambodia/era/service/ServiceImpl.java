@@ -599,6 +599,9 @@ public class ServiceImpl implements Service {
         Double totalPrice = agentCommission.getBuildingCompleted();
         List<AgentGot> listAgentGot = agentCommissionRepo.getAgentCommissionAmount(uuid);
         agentCommission.setAgentGot(agentAmount(listAgentGot, totalPrice));
+        if(agentCommission.getCount()<1){
+            throw new CustomException(404,"Not found.");
+        }
         return agentCommission;
     }
 
