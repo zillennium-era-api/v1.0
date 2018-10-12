@@ -46,7 +46,7 @@ public interface AgentFavoriteRepo {
             "FROM users " +
             "INNER JOIN transaction ON transaction.user_id=users.id " +
             "WHERE transaction.owner_id = #{fbid} " +
-            "ORDER BY transaction.create_date LIMIT 1")
+            "ORDER BY transaction.id DESC LIMIT 1")
     @Results({
             @Result(property = "name", column = "username"),
             @Result(property = "profilePhoto", column = "image")

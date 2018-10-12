@@ -602,7 +602,7 @@ public class ServiceImpl implements Service {
         return agentCommission;
     }
 
-    private Double agentAmount(List<AgentGot> agentGotList, double totalPrice) {
+    private Double agentAmount(List<AgentGot> agentGotList, Double totalPrice) {
         double amount = 0;
         double witholding = agentCommissionRepo.getBusinessValue("witholding");
         double vats = agentCommissionRepo.getBusinessValue("vat");
