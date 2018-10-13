@@ -30,6 +30,7 @@ public class EraSwagger {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage("com.eracambodia.era.controller"))
                 .paths(PathSelectors.regex("/api.*"))
+                //.paths(PathSelectors.any())
                 .build()
                 .apiInfo(swaggerInfo())
                 .securityContexts(Collections.singletonList(securityContext()))
@@ -44,7 +45,7 @@ public class EraSwagger {
                 "Zillennium.com",
                 new Contact("Darong Vann", "https://www.facebook.com/darongvann44", "darongvann@gmail.com"),
                 "license by zillennium",
-                "zillenniuum.com",
+                "eracambodia.com",
                 Collections.emptyList()
         );
     }

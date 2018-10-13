@@ -3,15 +3,19 @@ package com.eracambodia.era.controller;
 import com.eracambodia.era.model.Pagination;
 import com.eracambodia.era.model.Response;
 import com.eracambodia.era.service.Service;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api")
+@Api(value = "ADMIN",description = "respone json data to backen")
 public class AdminController {
     @Autowired
     private Service service;
+
     @GetMapping("/users")
     public ResponseEntity listUser(@RequestParam("role")String role,@RequestParam(value = "name",required = false)String name,@RequestParam(value="page",defaultValue = "1")int page,@RequestParam(value = "limit",defaultValue = "10") int limit){
         Pagination pagination=new Pagination(page,limit);

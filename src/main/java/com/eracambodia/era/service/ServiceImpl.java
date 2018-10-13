@@ -24,7 +24,6 @@ import com.eracambodia.era.model.api_noti_favoritor.Notification;
 import com.eracambodia.era.model.api_register.RegisterUniqueFields;
 import com.eracambodia.era.model.api_register.request.Register;
 import com.eracambodia.era.model.api_users.Users;
-import com.eracambodia.era.module.BuildingStatusModule;
 import com.eracambodia.era.repository.api_agent_account_password.AgentChangePasswordRepo;
 import com.eracambodia.era.repository.api_agent_account_update.UpdateAgentAccountRepo;
 import com.eracambodia.era.repository.api_agent_favorite.AgentFavoriteRepo;
@@ -608,9 +607,9 @@ public class ServiceImpl implements Service {
     private Double agentAmount(List<AgentGot> agentGotList, Double totalPrice) {
         double amount = 0;
         double witholding = agentCommissionRepo.getBusinessValue("witholding");
-        double vats = agentCommissionRepo.getBusinessValue("vat");
+        //double vats = agentCommissionRepo.getBusinessValue("vat");
         double agentCommission = agentCommissionRepo.getBusinessValue("agent commission");
-        double leaderCommission = agentCommissionRepo.getBusinessValue("leader commission");
+        //double leaderCommission = agentCommissionRepo.getBusinessValue("leader commission");
         for (int i = 0; i < agentGotList.size(); i++) {
             double commission = totalPrice * agentGotList.get(i).getCommission();
             double netAfterTax = 0;
@@ -619,14 +618,14 @@ public class ServiceImpl implements Service {
             } else {
                 netAfterTax = commission;
             }
-            double vat = netAfterTax * vats;
+            //double vat = netAfterTax * vats;
             double commissionForAgent = netAfterTax * agentCommission;
             double withHolding = commissionForAgent * witholding;
             double agentAmount = commissionForAgent - withHolding;
-            double leaderIncome = agentAmount * leaderCommission;
-            double leaderAmount = leaderIncome - (leaderIncome * witholding);
-            double companyIncome = netAfterTax * 0.5;
-            double companyAmount = companyIncome - leaderIncome;
+            //double leaderIncome = agentAmount * leaderCommission;
+            //double leaderAmount = leaderIncome - (leaderIncome * witholding);
+            //double companyIncome = netAfterTax * 0.5;
+            //double companyAmount = companyIncome - leaderIncome;
             amount += agentAmount;
         }
         return amount;

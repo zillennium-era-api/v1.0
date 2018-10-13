@@ -18,7 +18,9 @@ import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.Service;
 import com.eracambodia.era.validate.ImageValidator;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Base64;
+import org.mapstruct.Context;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.boot.json.JsonParserFactory;
@@ -32,8 +34,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import springfox.documentation.annotations.ApiIgnore;
 
-import javax.mail.*;
-import javax.mail.internet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import java.io.IOException;
@@ -43,6 +43,7 @@ import java.util.*;
 @ControllerAdvice
 @RestController
 @RequestMapping("/api")
+@Api(value = "API",description = "response json data for mobile client")
 public class APIController {
     @Autowired
     private Service service;

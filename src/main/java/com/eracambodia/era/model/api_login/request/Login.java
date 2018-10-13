@@ -1,7 +1,11 @@
 package com.eracambodia.era.model.api_login.request;
 
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+
 public class Login {
+
     private String email;
     private String password;
 
