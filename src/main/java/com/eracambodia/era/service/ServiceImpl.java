@@ -179,7 +179,7 @@ public class ServiceImpl implements Service {
     public BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email) {
         TransactionOwner transactionOwner=buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
         int id = buildingStatusUpdateRepo.getUserEmail(email);
-        if(transactionOwner.getUserId()!=id && !transactionOwner.getStatus().equalsIgnoreCase("available")){
+        if(transactionOwner!=null && transactionOwner.getUserId()!=id && !transactionOwner.getStatus().equalsIgnoreCase("available")){
             throw new CustomException(403, "This property already has owner.");
         }
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {

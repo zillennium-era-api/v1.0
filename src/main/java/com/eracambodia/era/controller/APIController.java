@@ -18,7 +18,6 @@ import com.eracambodia.era.service.FileStorageService;
 import com.eracambodia.era.service.Service;
 import com.eracambodia.era.validate.ImageValidator;
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 import org.apache.commons.codec.binary.Base64;
 import org.mapstruct.Context;
 import org.springframework.beans.factory.annotation.Autowired;
