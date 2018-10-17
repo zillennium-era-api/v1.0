@@ -59,13 +59,12 @@ public interface BuildingStatusUpdateRepo {
     })
     Agent getAgent();
 
-    @Select("SELECT status,owner_id,user_id " +
+    @Select("SELECT status,user_id " +
             "FROM transaction " +
             "WHERE owner_id=#{buildingId} " +
             "ORDER BY id DESC LIMIT 1")
     @Results({
-            @Result(property = "userId",column = "user_id"),
-            @Result(property = "buildingId",column = "owner_id")
+            @Result(property = "userId",column = "user_id")
     })
     TransactionOwner checkTransactionOwner(Integer buildingId);
 }

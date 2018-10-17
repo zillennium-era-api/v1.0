@@ -177,7 +177,11 @@ public class ServiceImpl implements Service {
     @Override
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('AGENT')")
     public BuildingUpdate updateBuildingStatus(BuildingStatusUpdate buildingStatusUpdate, String email) {
+        TransactionOwner transactionOwner=buildingStatusUpdateRepo.checkTransactionOwner(buildingStatusUpdate.getOwnerId());
         int id = buildingStatusUpdateRepo.getUserEmail(email);
+        if(transactionOwner.getUserId()!=id && !transactionOwner.getStatus().equalsIgnoreCase("available")){
+            throw new CustomException(403, "This property already has owner.");
+        }
         if (buildingStatusUpdateRepo.findBuildingIdByIdOfBuildingStatusUpdate(buildingStatusUpdate.getOwnerId()) == null) {
             throw new CustomException(404, "Building not found");
         }
