@@ -5,9 +5,9 @@ import org.springframework.web.servlet.config.annotation.*;
 
 // disable because i can use validationo ex : @Notnull
 
-//@Configuration
+@Configuration
 //@EnableWebMvc
-public class EraWeb /*implements WebMvcConfigurer*/ {
+public class EraWeb implements WebMvcConfigurer {
  /*   private static final String[] RESOURCE_LOCATIONS = {
             "classpath:/META-INF/resources/", "classpath:/resources/",
             "classpath:/static/", "classpath:/public/"};

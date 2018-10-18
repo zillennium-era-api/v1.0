@@ -54,7 +54,7 @@ public class APIController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
+    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody Login login,@RequestParam(value = "playerId" ,required = false)String playerId) {
         service.checkLogin(login,playerId);
         String role=service.getUserRole(login.getEmail());
         String clientCredential = "client:123";

@@ -1,5 +1,6 @@
 package com.eracambodia.era.configuration.swagger;
 
+import com.eracambodia.era.EraApplication;
 import com.eracambodia.era.setting.Default;
 import org.hibernate.validator.internal.util.CollectionHelper;
 import org.springframework.context.annotation.Bean;
@@ -93,7 +94,7 @@ public class EraSwagger {
         authorizationScopeList.add(new AuthorizationScope("write", "access all"));
 
         List<GrantType> grantTypes = CollectionHelper.newArrayList();
-        GrantType passwordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant(Default.oauthTokenUrl);
+        GrantType passwordCredentialsGrant = new ResourceOwnerPasswordCredentialsGrant("/oauth/token");
         grantTypes.add(passwordCredentialsGrant);
 
         return new OAuth("oauth2", authorizationScopeList, grantTypes);
