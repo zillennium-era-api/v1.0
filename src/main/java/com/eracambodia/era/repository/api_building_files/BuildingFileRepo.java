@@ -14,6 +14,7 @@ public interface BuildingFileRepo {
             "FROM file " +
             "WHERE owner_id=#{buildingId} AND type='pdf' ")
     @Results({
+            @Result(property ="fileName",column = "paths"),
             @Result(property ="path",column = "paths")
     })
     List<File> getBuildingFiles(int buildingId);
