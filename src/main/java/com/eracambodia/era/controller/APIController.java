@@ -203,9 +203,9 @@ public class APIController {
     }
 
     @ApiIgnore
-    @GetMapping("/download/apk/{fileName:.+}")
-    public ResponseEntity downloadApk(@PathVariable String fileName, HttpServletRequest request) {
-        Resource resource = fileStorageService.loadFileAsResource(fileName, "apk");
+    @GetMapping("/download/file/{fileName:.+}")
+    public ResponseEntity downloadFile(@PathVariable String fileName, HttpServletRequest request) {
+        Resource resource = fileStorageService.loadFileAsResource(fileName, "file");
         if (resource == null) {
             throw new CustomException(404, "File not found.");
         }
@@ -335,6 +335,12 @@ public class APIController {
     @GetMapping("/agent/transaction/total_commission/{uuid}")
     public ResponseEntity agentTotalCommission(@PathVariable("uuid")String uuid) {
         Response response = new Response(200, service.commissionCalculator(uuid));
+        return response.getResponseEntity("data");
+    }
+
+    @GetMapping("/building/files")
+    public ResponseEntity buildingFiles(@RequestParam("buildingUUID")String buildingUUID){
+        Response response=new Response(200,service.getBuildingFiles(buildingUUID));
         return response.getResponseEntity("data");
     }
 

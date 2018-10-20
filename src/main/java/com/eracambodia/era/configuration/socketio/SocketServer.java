@@ -8,10 +8,10 @@ import org.springframework.context.annotation.Bean;
 
 /*@org.springframework.context.annotation.Configuration*/
 public class SocketServer {
-    @Value("0.0.0.0")
+    //@Value("0.0.0.0")
     private String host;
 
-    @Value("9090")
+    //@Value("9090")
     private Integer port;
 
     //@Bean

@@ -24,17 +24,17 @@ import java.util.UUID;
 public class FileStorageService {
     private Path path;
     private Path buildingImagePath;
-    private Path apkPath;
+    private Path filePath;
 
     @Autowired
     public FileStorageService(FileStorageProperty fileStorageProperties) {
         this.path = Paths.get(fileStorageProperties.getUploadDir()).toAbsolutePath().normalize();
         this.buildingImagePath = Paths.get(fileStorageProperties.getUploadBuildingDir()).toAbsolutePath().normalize();
-        this.apkPath = Paths.get(fileStorageProperties.getUploadApk()).toAbsolutePath().normalize();
+        this.filePath = Paths.get(fileStorageProperties.getUploadFile()).toAbsolutePath().normalize();
         try {
             Files.createDirectories(this.path);
             Files.createDirectories(this.buildingImagePath);
-            Files.createDirectories(this.apkPath);
+            Files.createDirectories(this.filePath);
         } catch (Exception ex) {
             throw new FileStorageException("Could not create the directory where the uploaded files will be stored.", ex);
         }
@@ -79,7 +79,7 @@ public class FileStorageService {
             }
         } else {
             try {
-                Path filePath = this.apkPath.resolve(fileName).normalize();
+                Path filePath = this.filePath.resolve(fileName).normalize();
 
                 Resource resource = new UrlResource(filePath.toUri());
                 return resource;

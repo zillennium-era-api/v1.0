@@ -13,6 +13,7 @@ import com.eracambodia.era.model.api_agent_building_status_status.response.Agent
 import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentGot;
+import com.eracambodia.era.model.api_building_files.File;
 import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_status_update.request.TransactionOwner;
@@ -35,6 +36,7 @@ import com.eracambodia.era.repository.api_agent_profile_upload.UploadProfileAgen
 import com.eracambodia.era.repository.api_agent_building_status_status.AgentRepo;
 import com.eracambodia.era.repository.api_agent_transaction_useruuid_status.AgentTransactionRepo;
 import com.eracambodia.era.repository.api_agent_trasaction_total_commission.AgentCommissionRepo;
+import com.eracambodia.era.repository.api_building_files.BuildingFileRepo;
 import com.eracambodia.era.repository.api_building_status_status.BuildingsRepo;
 import com.eracambodia.era.repository.api_building_status_update.BuildingStatusUpdateRepo;
 import com.eracambodia.era.repository.api_building_uuid.BuildingUUIDRepo;
@@ -667,6 +669,19 @@ public class ServiceImpl implements Service {
         if(user==null)
             throw new CustomException(404,"User not exist");
         return user;
+    }
+
+    //api/building/files
+    @Autowired
+    private BuildingFileRepo buildingFileRepo;
+    @Override
+    public List<File> getBuildingFiles(String uuid) {
+        int id=buildingFileRepo.buildingIdToUUID(uuid);
+        List<File> files=buildingFileRepo.getBuildingFiles(1);
+        if(files==null || files.size()<1){
+            throw new CustomException(404,"File not found.");
+        }
+        return files;
     }
 }
 

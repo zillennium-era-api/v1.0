@@ -11,6 +11,7 @@ import com.eracambodia.era.model.api_agent_members_direct_uuid.response.AgentMem
 import com.eracambodia.era.model.api_agent_building_status_status.response.Agent;
 import com.eracambodia.era.model.api_agent_transaction_useruuid_status.response.TransactionResponse;
 import com.eracambodia.era.model.api_agent_transaction_total_commission.response.AgentCommission;
+import com.eracambodia.era.model.api_building_files.File;
 import com.eracambodia.era.model.api_building_status_status.response.Buildings;
 import com.eracambodia.era.model.api_building_status_update.request.BuildingStatusUpdate;
 import com.eracambodia.era.model.api_building_status_update.response.BuildingUpdate;
@@ -103,4 +104,7 @@ public interface Service {
 
     //api/user/upgrade_to_agent
     void upgradeToAgent(int userId,Integer leaderId);
+
+    //api/building/files
+    List<File> getBuildingFiles(String uuid);
 }
