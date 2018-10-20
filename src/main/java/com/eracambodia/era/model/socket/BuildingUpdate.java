@@ -1,18 +1,9 @@
 package com.eracambodia.era.model.socket;
 
 public class BuildingUpdate {
-    private Integer id;
+    private int id;
     private String status;
     private Agent agent;
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
-
     public String getStatus() {
         return status;
     }
@@ -27,6 +18,14 @@ public class BuildingUpdate {
 
     public void setAgent(Agent agent) {
         this.agent = agent;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @Override

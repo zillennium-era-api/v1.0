@@ -81,7 +81,7 @@ public class APIController {
     }
 
     @PostMapping("/refresh_token")
-    public ResponseEntity refreshToken(@RequestBody RefreshToken refreshToken) {
+    public ResponseEntity refreshToken(@Valid @RequestBody RefreshToken refreshToken) {
 
         String clientCredential = "client:123";
         String basicAuth = new String(Base64.encodeBase64(clientCredential.getBytes()));
@@ -111,7 +111,7 @@ public class APIController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<Map<String, Object>> register(@RequestBody Register register,@RequestParam(value = "playerId",required = false)String playerId ,HttpServletRequest request) {
+    public ResponseEntity<Map<String, Object>> register(@Valid @RequestBody Register register,@RequestParam(value = "playerId",required = false)String playerId ,HttpServletRequest request) {
         String jwtToken = request.getHeader("Authorization");
         register.setPassword(passwordEncoder.encode(register.getPassword()));
         service.register(register, jwtToken,playerId);

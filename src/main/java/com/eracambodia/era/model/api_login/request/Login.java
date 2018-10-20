@@ -1,19 +1,11 @@
 package com.eracambodia.era.model.api_login.request;
 
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 public class Login {
-
-    @NotNull
-    @NotBlank
-    @NotEmpty
+    @Email(message = "email not valid.")
     private String email;
     @Size(min = 8,message = "password's length required > 7")
     private String password;
