@@ -1,5 +1,7 @@
 package com.eracambodia.era.model.api_agent_account_update.request;
 
+import javax.validation.constraints.*;
+
 public class UpdateAgentAccount {
     private String name;
     private String phone;

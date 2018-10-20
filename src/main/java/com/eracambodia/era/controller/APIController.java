@@ -251,7 +251,6 @@ public class APIController {
     public ResponseEntity buildings(@PathVariable(value = "status") String status, @RequestParam(value = "page", defaultValue = "1") int page, @RequestParam(value = "limit", defaultValue = "10") int limit) {
         Pagination pagination = new Pagination(page, limit);
         List<Buildings> buildings = service.findBuildings(pagination, status);
-
         Response response = new Response(200, buildings, pagination);
         return response.getResponseEntity("data", "pagination");
     }
@@ -259,7 +258,6 @@ public class APIController {
     @GetMapping("/building/{uuid}")
     public ResponseEntity buildingDetail(@PathVariable("uuid") String uuid, @ApiIgnore Principal principal) {
         BuildingUUID buildingUUID = service.findBuildingByUUID(uuid, principal.getName());
-
         Response response = new Response(200, buildingUUID);
         return response.getResponseEntity("data");
     }
