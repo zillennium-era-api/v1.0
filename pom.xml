@@ -5,11 +5,11 @@
 
     <groupId>com.eracambodia</groupId>
     <artifactId>era</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>war</packaging>
+    <version>1.0</version>
+    <packaging>jar</packaging>
 
     <name>era</name>
-    <description>Demo project for Spring Boot</description>
+    <description>ERA API</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
